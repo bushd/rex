@@ -1,0 +1,288 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		91C5D155131A34DB00D4DD73 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91C5D154131A34DB00D4DD73 /* Cocoa.framework */; };
+		91C5D15F131A34DB00D4DD73 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 91C5D15D131A34DB00D4DD73 /* InfoPlist.strings */; };
+		91C5D162131A34DB00D4DD73 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C5D161131A34DB00D4DD73 /* main.m */; };
+		91C5D165131A34DB00D4DD73 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 91C5D163131A34DB00D4DD73 /* Credits.rtf */; };
+		91C5D168131A34DB00D4DD73 /* reXAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C5D167131A34DB00D4DD73 /* reXAppDelegate.m */; };
+		91C5D16B131A34DB00D4DD73 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91C5D169131A34DB00D4DD73 /* MainMenu.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		91C5D150131A34DB00D4DD73 /* reX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reX.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		91C5D154131A34DB00D4DD73 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		91C5D157131A34DB00D4DD73 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		91C5D158131A34DB00D4DD73 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		91C5D159131A34DB00D4DD73 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		91C5D15C131A34DB00D4DD73 /* reX-Info.plist */ = {isa = PBXFileReference; path = "reX-Info.plist"; sourceTree = "<group>"; };
+		91C5D15E131A34DB00D4DD73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		91C5D160131A34DB00D4DD73 /* reX-Prefix.pch */ = {isa = PBXFileReference; path = "reX-Prefix.pch"; sourceTree = "<group>"; };
+		91C5D161131A34DB00D4DD73 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		91C5D164131A34DB00D4DD73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		91C5D166131A34DB00D4DD73 /* reXAppDelegate.h */ = {isa = PBXFileReference; path = reXAppDelegate.h; sourceTree = "<group>"; };
+		91C5D167131A34DB00D4DD73 /* reXAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = reXAppDelegate.m; sourceTree = "<group>"; };
+		91C5D16A131A34DB00D4DD73 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		91C5D14D131A34DB00D4DD73 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91C5D155131A34DB00D4DD73 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		91C5D145131A34DA00D4DD73 = {
+			isa = PBXGroup;
+			children = (
+				91C5D15A131A34DB00D4DD73 /* reX */,
+				91C5D153131A34DB00D4DD73 /* Frameworks */,
+				91C5D151131A34DB00D4DD73 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		91C5D151131A34DB00D4DD73 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				91C5D150131A34DB00D4DD73 /* reX.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		91C5D153131A34DB00D4DD73 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				91C5D154131A34DB00D4DD73 /* Cocoa.framework */,
+				91C5D156131A34DB00D4DD73 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		91C5D156131A34DB00D4DD73 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				91C5D157131A34DB00D4DD73 /* AppKit.framework */,
+				91C5D158131A34DB00D4DD73 /* CoreData.framework */,
+				91C5D159131A34DB00D4DD73 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		91C5D15A131A34DB00D4DD73 /* reX */ = {
+			isa = PBXGroup;
+			children = (
+				91C5D166131A34DB00D4DD73 /* reXAppDelegate.h */,
+				91C5D167131A34DB00D4DD73 /* reXAppDelegate.m */,
+				91C5D169131A34DB00D4DD73 /* MainMenu.xib */,
+				91C5D15B131A34DB00D4DD73 /* Supporting Files */,
+			);
+			path = reX;
+			sourceTree = "<group>";
+		};
+		91C5D15B131A34DB00D4DD73 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				91C5D15C131A34DB00D4DD73 /* reX-Info.plist */,
+				91C5D15D131A34DB00D4DD73 /* InfoPlist.strings */,
+				91C5D160131A34DB00D4DD73 /* reX-Prefix.pch */,
+				91C5D161131A34DB00D4DD73 /* main.m */,
+				91C5D163131A34DB00D4DD73 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		91C5D14F131A34DB00D4DD73 /* reX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 91C5D16E131A34DB00D4DD73 /* Build configuration list for PBXNativeTarget "reX" */;
+			buildPhases = (
+				91C5D14C131A34DB00D4DD73 /* Sources */,
+				91C5D14D131A34DB00D4DD73 /* Frameworks */,
+				91C5D14E131A34DB00D4DD73 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = reX;
+			productName = reX;
+			productReference = 91C5D150131A34DB00D4DD73 /* reX.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		91C5D147131A34DB00D4DD73 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "dmc digital media center GmbH";
+			};
+			buildConfigurationList = 91C5D14A131A34DB00D4DD73 /* Build configuration list for PBXProject "reX" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 91C5D145131A34DA00D4DD73;
+			productRefGroup = 91C5D151131A34DB00D4DD73 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				91C5D14F131A34DB00D4DD73 /* reX */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		91C5D14E131A34DB00D4DD73 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91C5D15F131A34DB00D4DD73 /* InfoPlist.strings in Resources */,
+				91C5D165131A34DB00D4DD73 /* Credits.rtf in Resources */,
+				91C5D16B131A34DB00D4DD73 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		91C5D14C131A34DB00D4DD73 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91C5D162131A34DB00D4DD73 /* main.m in Sources */,
+				91C5D168131A34DB00D4DD73 /* reXAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		91C5D15D131A34DB00D4DD73 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				91C5D15E131A34DB00D4DD73 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		91C5D163131A34DB00D4DD73 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				91C5D164131A34DB00D4DD73 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		91C5D169131A34DB00D4DD73 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				91C5D16A131A34DB00D4DD73 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		91C5D16C131A34DB00D4DD73 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		91C5D16D131A34DB00D4DD73 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		91C5D16F131A34DB00D4DD73 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "reX/reX-Prefix.pch";
+				INFOPLIST_FILE = "reX/reX-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		91C5D170131A34DB00D4DD73 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "reX/reX-Prefix.pch";
+				INFOPLIST_FILE = "reX/reX-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		91C5D14A131A34DB00D4DD73 /* Build configuration list for PBXProject "reX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				91C5D16C131A34DB00D4DD73 /* Debug */,
+				91C5D16D131A34DB00D4DD73 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		91C5D16E131A34DB00D4DD73 /* Build configuration list for PBXNativeTarget "reX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				91C5D16F131A34DB00D4DD73 /* Debug */,
+				91C5D170131A34DB00D4DD73 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 91C5D147131A34DB00D4DD73 /* Project object */;
+}
