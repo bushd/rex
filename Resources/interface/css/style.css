@@ -1,0 +1,110 @@
+body {
+	font-family: Helvetica;
+	color: #fff;
+}
+
+body {
+	width: 1280px;
+	height: 720px;
+	/*background-color: transparent;*/
+	background-color:black;
+}
+
+#listwrap {
+	position: absolute;
+	right: 20px;
+	width: 400px;
+	padding: 10px;
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+a, a:hover, a:visited, a:link, a:active {
+	font-variant: normal;
+	text-decoration: none;
+	font-weight: normal;
+	font-style: normal;
+} 
+
+li {
+	list-style-type: none;
+}
+
+li div {
+	margin: 5px
+	font-weight: bold;
+	color: #48b1f8;
+	font-size: 30px;
+	overflow-x: hidden;
+	display: inline;
+	white-space: nowrap
+}
+
+div#summary {	
+	font-size: 25px;
+	color: white;
+	position: fixed;
+	left: 20px;
+	width: 800px;
+	padding: 10px;
+	bottom: 20px;
+	max-height: 200px;
+	min-height: 200px;
+	overflow: hidden;
+	display: inline;
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+div#sectionart {
+	position: fixed;
+	left: -10px;
+	top: -10px;
+	padding: 0px;
+	margin: 0px;
+	visibility: visible;
+	overflow: hidden;
+	z-index: -2;
+}
+
+div#sectionart img {
+	width: 1280px;
+	height: 720px;
+}
+
+div#art {
+	position: fixed;
+	left: -10px;
+	top: -10px;
+	padding: 0px;
+	margin: 0px;
+	visibility: visible;
+	overflow: hidden;
+	z-index: -1;
+}
+
+div#art img {
+	width: 1280px;
+	height: 720px;
+}
+
+div#thumb {
+	position: fixed;
+	left: 50px;
+	width: 800px;
+	padding: 10px;
+	visibility: visible;
+	top: 100px;
+	overflow: hidden;
+}
+
+div#thumb img {
+	width: 200px;
+	height: 280px;
+}
+
+.fl {
+	float: left;
+}
+
+.fr {
+	float: right;
+}

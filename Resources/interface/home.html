@@ -1,0 +1,127 @@
+
+	<script type="text/javascript">
+		reX.ResourceManager.setCSS(['css/home.css']);
+		
+		var sections;
+		var scrolllist;
+
+        
+        menu = {
+            orientation: 'vertical',
+            items: [{
+                entry: 'static',
+                title: 'Movies',
+                items: []
+            }, {
+                entry: 'static',
+                title: 'Shows',
+                items: []
+            }, {
+                entry: 'static',
+                title: 'Settings',
+                url: ''
+            }],
+        };
+        
+        var homeMenu = new reX.HomeMenu({mainVertical:false});
+
+	
+		reX.state.events = {
+		
+			domready: function() {
+				homeMenu.build();
+			},
+			
+			menuDone: function(event) {
+				reX.state.section.json = homeMenu.getSections();
+							
+				reX.state.section.json.each(function(section) {
+					var div = new Element('div', {
+						'class':'reX_recently reX_recently_'+section['@key'] ,
+						'style': 'visibility:hidden'
+					}).inject($('skin'));
+				});
+				
+				reX.state.controls.select(1);
+				window.fireEvent('selectionChange', reX.state.controls.getSelection());
+				
+				// build sections recently added
+				reX.state.section.json.each(function(section) {
+					if(section['@type'] == 'movie' || section['@type'] == 'artist') {
+						mediaManager.getRecentlyAdded(section['@key'], function(list) {
+							var ul = new Element('ul').inject($$('.reX_recently_'+section['@key'])[0]);
+	
+							list.each(function(item) {
+								var li = new Element('li.preview').inject(ul);
+								(new Element('img', 
+									{src: 'http://localhost:32400{@thumb}'.substitute(item)
+								})).inject(li);
+							});
+						});
+					}
+					else if(section['@type'] == 'show') {
+						mediaManager.getRecentlyAdded(section['@key'], function(list) {
+							var ul = new Element('ul').inject($$('.reX_recently_'+section['@key'])[0]);
+	
+							list.each(function(item) {
+								mediaManager.getShow(item['@grandparentKey'], function(show) {
+									var li = new Element('li.preview').inject(ul);
+									(new Element('img', {
+										src: 'http://localhost:32400{@thumb}'.substitute(show[0])
+									})).inject(li);
+								});
+							});
+						});
+					}
+				});
+			},
+			
+			selectionChange: function(item) {			
+				var i = item.getProperty('idx');
+                rex.debug('[SELECT] index ' + i + ' with key ' + reX.state.section.json[i]['@key'], REX_INFO);
+	
+				$$('.reX_recently').setStyle('visibility', 'hidden');
+				$$('.reX_recently_'+reX.state.section.json[i]['@key']).setStyle('visibility', 'visible');
+				
+				var j2h = new reX.json2html({
+					html: '<div class="fanart"><img src="http://localhost:32400'+reX.state.section.json[i]['@art']+'"  onError="this.hide();"></div>'
+				});
+				
+				var html = j2h.convert(reX.state.section.json[i]);			
+				$('background').set('html', html);
+			},
+			
+			selectionEnter: function(item) {
+				var i = item.getProperty('idx');
+				reX.debug('[ENTER] index ' + i + ' ' + reX.state.section.json[i]['@title'], REX_DEBUG);
+				switch (reX.state.section.json[i]['@type']) {
+					case 'movie': 
+					case 'show': 
+						reX.load('media.html',reX.state.section.json[i]['@key']);
+						break;
+					case 'artist': 
+						reX.load('album.html',reX.state.section.json[i]['@key']);
+						break;
+				} 
+			},
+			
+			pressedDown: function(item) {
+				scrolllist.seekNext();
+			},
+			
+			pressedUp: function(item) {
+				scrolllist.seekPrev();
+			}
+		};
+		
+		window.addEvents(reX.state.events);
+	</script>
+
+
+	<div id="background">
+	</div>
+	<div id="main">
+		<div id="outerskin">
+			<div id="skin"></div>
+		</div>
+	</div>

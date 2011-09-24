@@ -1,0 +1,126 @@
+body {
+	background-color: #000000;
+}
+
+.listWrap {
+	overflow-x: hidden;
+	height: 1000px;
+	width:1280px;
+}
+
+.plex-list {
+	width: 90000px;
+	height: 1000px;
+}
+
+.coverWrap {
+	position: relative;
+}
+
+.plex-list li {
+	position: relative;
+	top:100px;
+	width: 384px;
+	height: 384px;
+	float:left;
+}
+
+.plex-list li.lower:not(:first-of-type) {
+	left:-250px;
+}
+
+.plex-list li.upper {
+	left:-250px;
+}
+
+.cover {
+	position: absolute;
+	width: 384px;
+	height: 384px;
+}
+
+.face
+{
+	position: absolute;
+	top: 0;
+	left:0;
+
+	/* We create the card by stacking two div elements at the exact same location. The back of the card 
+	   is shown when we rotated the card 180 degrees along the y-axis. Setting this property to hidden
+	   ensures that the "back side" is hidden when the card is flipped
+	*/
+	-webkit-backface-visibility: hidden;
+}
+
+.front {
+	width: 384px;
+	height: 384px;
+
+	-webkit-box-reflect: below 0px -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(.7, transparent), to(white)); 
+}
+
+.back 
+{
+	z-index:5;
+	width: 572px;
+	height:572px;
+
+	background-color: black;
+	border: 2px solid white;
+
+	/* Ensure the "back side" is flipped already */
+	-webkit-transform: rotateY(180deg);
+	-webkit-box-reflect: below 0px -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(.5, transparent), to(rgba(255,255,255, 0.9))); 
+}
+
+.innerheader {
+	display: inline-block;
+	padding: 6px;
+	float: right;
+	height: 84px;
+	width: 464px;
+	color: white;
+	font-size: 26px;
+	font-family: Arial;
+	background:-webkit-gradient(linear, left top, left bottom, from(#47608B), to(#29374F))
+}
+
+.innerheader p.title {
+	font-weight: bold;
+	margin-bottom: 2px;
+}
+
+.innerheader p.interpret {
+	margin-bottom: 2px;
+}
+
+.innerheader p.genre {
+	font-style: italic;
+}
+
+.innerlist {
+	width: 571px;
+	height: 474px;
+	font-size: 22px;
+	font-family: Arial;
+	color: white;
+}
+
+.innerlist li {
+	position: relative;
+	top:0;
+	height: 30px;
+	width: 571px;
+}
+
+.innerlist li.focus {
+	color: blue;
+}
+
+.innerlist li:nth-child(even) {
+	background-color: #1A1F25;
+}
+
+.innerlist li:nth-child(odd);{
+	background-color: black;
+}

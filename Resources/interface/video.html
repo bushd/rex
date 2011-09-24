@@ -1,0 +1,250 @@
+
+	<script>
+        reX.ResourceManager.setCSS(['css/video.css']);
+        reX.ResourceManager.setJS(['plugins/trakt/js/reX.trakt.plugin.js']);
+		
+        if (Player == undefined) Player = {}; 
+        
+		var visible;
+		var media;
+        var show;
+        var season;
+		var slider = undefined;
+		var scrobbled;
+		var traktTimer;
+	
+		reX.state.events = {
+			domready: function() {
+                console.log('player loaded');
+                reX.state.video = true;
+                //th Slider('slider_container', 'slider_knob', {steps: 5000});		
+        
+                //$('reX_control_wrapper').setStyle('opacity', '0.0');	
+                visible = false;
+                
+                mediaManager.getMedia(reX.state.section.key ,function(m) {
+                    media = m;
+                    
+                    if (media['@type'] == 'episode') {
+                        mediaManager.getShowByEpisodeKey(reX.state.section.key ,function(m) {
+                            show = m;
+                            
+                            mediaManager.getSeasonByEpisodeKey(media['@ratingKey'], function(s) {
+                                season = s;
+                                console.log(season);
+                                
+                                // start playing
+                                scrobbled = false;
+                                Player.play();
+                            });
+                        });
+                    }
+                    else {
+                        // start playing
+                        scrobbled = false;
+                        Player.play();
+                    }
+                });
+                
+                //var ctrl = new reX.Controls({index: 3});
+                
+                
+            },
+		
+        
+            selectionEnter: function(item) {
+                switch(item.getProperty('index')) {
+                    case '1': 
+                    case '2':
+                        Player.jumpBackward();
+                        break;
+                    case '3':
+                        Player.togglePlaymode();
+                        item.toggleClass('reX_play');
+                        item.toggleClass('reX_pause');
+                        break;
+                    case '4':
+                        Player.stop();
+                        reX.back();
+                        break;
+                    case '5':
+                        Player.jumpForward();
+                        break;
+                    case '6':
+                }
+            },
+		
+		
+            calledMenu: function() {
+                if(visible) {
+                    visible = false;
+                    
+                    $('reX_control_wrapper').fade('out');
+                }
+                else {
+                    visible = true;
+                    $('reX_control_wrapper').fade('in');
+                }
+            },
+            
+            pressedSpace: function() {
+                Player.togglePlaymode();
+            }
+        };
+        
+        window.addEvents(reX.state.events);
+
+		
+		function stateChanged(state) {
+			switch(state) {				
+				case 'beginPlaying':
+					var progress = Player.getProgress();
+					if(progress >= 98) { progress = 0; }
+					
+					console.log('begin playing @ ' + progress);
+					if(progress < 10) { 
+						scrobbled = false;
+					}
+
+                    traktProgress(progress);
+					if(!scrobbled) {
+						traktTimer = window.setInterval('traktProgress()', 600000);
+					}
+					break;
+				
+				case 'pausedPlaying':
+					console.log('paused playing @ ' + Player.getProgress());
+					this.mediaManager.setProgress(this.media['@ratingKey'], Player.getProgress(), function() {
+						traktProgress();
+					});
+					traktTimer = window.clearInterval(traktTimer);
+					break;
+					
+				case 'finishedPlaying':
+					console.log('finished playing');
+					traktTimer = window.clearInterval(traktTimer);
+					this.mediaManager.setWatched(this.media['@ratingKey'], function() {
+						traktProgress(100);
+						Player.stop();
+						reX.state.video = false;
+                        reX.back();
+					});
+					break;
+			}
+		}
+		
+		function traktProgress(progress) {
+			if(progress == undefined) { progress = Player.getProgress(); }
+			
+            console.log('called traktProgess');
+            console.log('already scrobbled: ' + scrobbled);
+            
+            if (!scrobbled) {
+                if (progress < 75) {
+                    console.log('watching at progress: ' + progress);
+                    if (this.media['@type'] == 'movie') {
+                        console.log('start scrobble movie');
+                        trakt.beginMovieScrobbling(
+                            this.media['@title'], 
+                            this.media['@year'], 
+                            this.media['@duration'], 
+                            progress, 
+                            function(json){
+                                console.log('trakt status: ' + json.status); 
+                                console.log('trakt message: '+ json.message);
+                            }
+                        );
+                    }
+                    else if (this.media['@type'] == 'episode') {                    
+                        console.log('start scrobble episode');
+                        console.log('trakt version: ');
+                        trakt.beginShowScrobbling(
+                            show['@title'], 
+                            show['@year'], 
+                            season,
+                            this.media['@index'],
+                            this.media['@duration'],
+                            progress, 
+                            function(json){
+                                console.log('trakt status: ' + json.status); 
+                                console.log('trakt message: '+ json.message);
+                            }
+                        );
+                    }
+                    else {
+                        console.log('unknown type ' + media['@type']);
+                    }
+                }
+                else {
+                    console.log('scrobble at progress: ' + progress);
+                    
+                    if (this.media['@type'] == 'movie') {
+                        console.log('scrobble movie');
+                        trakt.endMovieScrobbling(
+                            this.media['@title'], 
+                            this.media['@year'], 
+                            this.media['@duration'], 
+                            99, 
+                            function(json){
+                                console.log('trakt status: ' + json.status); 
+                                console.log('trakt message: '+ json.message);
+                                scrobbled = true;
+                            }
+                        );
+                    }
+                    else if (this.media['@type'] == 'episode') {
+                        console.log('scrobble episode');
+                        trakt.endShowScrobbling(
+                            show['@title'], 
+                            show['@year'], 
+                            season,
+                            this.media['@index'],  
+                            this.media['@duration'],
+                            99, 
+                            function(json){
+                                console.log('trakt status: ' + json.status); 
+                                console.log('trakt message: '+ json.message);
+                                scrobbled = true;
+                            }
+                        );
+                    }
+                    else {
+                        console.log('unknown type' +media['@type']);
+                    }
+                }
+            }
+            else {
+                console.log('unable to scrobble with TRAKT!');
+            }
+		}
+		
+		function updateSeekPosition(pos) {
+			/*if(this.slider) {
+				this.slider.set(parseInt(pos));
+				console.log('updated Seek Position to ' + pos);
+			}
+			else {
+				this.slider = new Slider('slider_container', 'slider_knob', {steps: 5000});	
+				console.log('reset slider: ' + this.slider);			
+			}*/
+		}
+	</script>
+
+	<div id="reX_control_wrapper" style="opacity: 0;">
+		<div id="controls">
+			<div class="slider_wrap">
+				<div id="slider_container">
+					<div id="slider_knob">
+					</div>
+				</div>
+			</div>
+			<div class="control_container">
+				<div class="reX_previous" left="6" right="2" index="1"></div>
+				<div class="reX_rewind" left="1" right="3" index="2"></div>
+				<div class="reX_play" left="2" right="4" index="3"></div>
+				<div class="reX_stop" left="3" right="5" index="4"></div>
+				<div class="reX_fastforward" left="4" right="6" index="5"></div>
+				<div class="reX_next" left="5" right="1" index="6"></div>
+			</div>
+		</div>
+	</div>

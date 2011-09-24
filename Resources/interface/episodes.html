@@ -1,0 +1,96 @@
+	<script type="text/javascript">
+        reX.ResourceManager.setCSS(['css/media.css']);        
+    
+		var sections;
+		var scrolllist;
+	
+		reX.state.events = {
+			domready: function() {		
+                mediaManager.getEpisodes(reX.state.section.key ,function(sec) {
+                    reX.state.section.json = sec;
+                    
+                    info = mediaManager.getSectionInformations();
+                                        
+                    $('background').set('html','<div class="fanart"><img src="http://localhost:32400'+ mediaManager.transcodeImage(info.art) +'"></div>');
+                    
+                    var j2h = new reX.json2html({
+                        html: '<span>{@index}. {@title}</span>'
+                    });
+				
+                    var menu = new reX.Menu(j2h.convert(reX.state.section.json));
+                    menu.build();
+                });
+            },
+		
+            menuDone: function(event) {	
+				scrolllist = new reX.Scrolllist('nav', {offset:3});
+				
+				reX.state.controls.select(1);
+                window.fireEvent('selectionChange', reX.state.controls.getSelection());
+            },
+		
+            selectionChange: function(item) {
+				var i = item.getProperty('idx');
+                reX.debug(reX.state.section.json[i]['@key'] + ' and type ' + reX.state.section.json[i]['@type'], REX_DEBUG);
+            
+                var j2h = new reX.json2html({
+                    html: '<div class="poster"><img src="http://localhost:32400'+mediaManager.transcodeImage(reX.state.section.json[i]['@thumb'])+'"></div>' +
+						(reX.state.section.json[i]['@viewCount'] ? '' : '<div class="watchedStatus"></div>') +
+						'<div class="metadata">'+
+                            '<div class="resolution_flag">{@videoResolution}</div>'+
+                            '<div class="ratio_flag">{@aspectRatio}</div>'+
+                            '<div class="video_flag">{@videoCodec}</div>'+
+                            '<div class="audio_flag">{@audioCodec}</div>'+
+                            '<div class="channel_flag">{@audioChannels}</div>'+
+                            '<div class="releasedAt">{@originallyAvailableAt}</div>'+
+                            '<div class="year">{@year}</div>'+
+                            '<div class="rating">{@rating}</div>'+
+                            '<p class="tagline">{@tagline}</p>' +
+							'<p class="summary">{@summary}</p>' +
+						'</div>'
+						
+                });
+			
+                var html = j2h.convert(Object.merge(reX.state.section.json[i], reX.state.section.json[i].Media));			
+                $('skin').set('html', html);
+            },
+		
+            selectionEnter: function(item) {
+                var i = item.getProperty('idx');
+		
+                mediaManager.getMedia(reX.state.section.json[i]['@key'], function(media) {
+                    this.media = media;
+                    if(this.media.Media.Part[0] != undefined) {
+                        Player.playVideos(this.media.Media.Part[0]["@file"], this.media["@key"]);
+                    }
+                    else { 
+                        Player.playVideo(this.media.Media.Part["@file"], this.media["@key"]);
+                    }
+                });
+            },
+			
+			pressedDown: function(item) {
+				scrolllist.seekNext();
+			},
+			
+			pressedUp: function(item) {
+				scrolllist.seekPrev();
+			},
+            	
+            wPressed: function(item) {
+                var i = item.getProperty('idx');
+                this.mediaManager.toggleWatched(reX.state.section.json[i]['@key'], function() {
+
+                });
+            }
+        };
+        
+        window.addEvents(reX.state.events);
+
+	</script>
+
+	<div id="background">
+	</div>
+	<div id="outerskin">
+		<div id="skin"></div>
+	</div>

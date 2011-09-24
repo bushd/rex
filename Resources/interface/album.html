@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="robots" content="" />
+	
+	<meta http-equiv="cache-control" content="no-cache"> <!-- tells browser not to cache -->
+	<meta http-equiv="expires" content="0"> <!-- says that the cache expires 'now' -->
+	<meta http-equiv="pragma" content="no-cache"> <!-- says not to use cached stuff, if there is any -->
+	
+	<script type="text/javascript" src="js/mootools.js"></script>
+	<script type="text/javascript" src="js/mootools.more.js"></script>
+	<script type="text/javascript" src="js/xml2json.js"></script>
+	<script type="text/javascript" src="js/mt.request.xml2json.js"></script>
+	<script type="text/javascript" src="js/reX.js"></script>
+	<script type="text/javascript" src="js/reX.json2html.js"></script>
+	<script type="text/javascript" src="js/reX.mediamanager.js"></script>
+	<script type="text/javascript" src="js/reX.controls.js"></script>
+	<script type="text/javascript" src="js/reX.menu.js"></script>
+	<script type="text/javascript">
+	
+		var sections, audio;
+		var ctrl;
+		var covers;
+		var mediaManager = new reX.MediaManager();
+		var build = false;
+		
+		function flip()
+		{
+			var item = $$('.flipped');
+			if(item.length == 0) {
+				$$('.focus')[0].getChildren('.cover')[0].addClass('flipped');
+			} 
+			else {
+				$$('.focus')[0].getParents('.cover')[0].removeClass('flipped');
+			}
+			/* Toggle the setting of the classname attribute */
+			
+			positionCovers();
+		}
+		
+		function positionCovers() {
+			
+			var i = 0;
+			$$('.lower').each(function(element) {
+				element.setStyle('left', (-i * 305) - 50 + (parseInt(element.getProperty('idx')) * 5) ) ;
+				i++;
+			});
+			$$('.reX-list > ul > li[idx="'+i+'"]').setStyle('left', (-i*300)+200);
+			i++;
+			$$('.upper').each(function(element) {
+				element.setStyle('left', (-(i - 1) * 300) + 150 );//+ (parseInt(element.getProperty('idx') - 1)));
+				i++;
+			});
+		}
+	
+		window.addEvent('domready', function() {		
+			
+			mediaManager.getGroupedAlbums(getUrlVars()['key'] ,function(sec) {
+				this.sections = sec;
+				this.sections.sort(sortByAfter('@title', '@parentTitle'));
+				var j2h = new reX.json2html({
+					html: '<div class="cover">'
+						+		'<div class="front face">'
+						+			'<img width="400" height="400" src="http://localhost:32400{@thumb}">'
+						+		'</div>'
+						+		'<div class="back face">'
+						+			'<div class="albumheader">'
+						+				'<img width="128" height="128" src="http://localhost:32400{@thumb}">'
+						+				'<div class="innerheader">'
+						+					'<p class="title">{@title}</p>'
+						+					'<p class="interpret">{@parentTitle} ({@year})</p>'
+						+					'<p class="genre"></p>'
+						+				'</div>'
+						+			'</div>'
+						+			'<div class="innerlist"></div>'
+						+		'</div>'
+						+ '</div>',
+					unescape: true
+				});
+				var vals =  j2h.convert(this.sections);
+				//vals = vals.slice(0,7)
+				
+				var menu = new reX.Menu(vals, {vertical:false, wrap: false});
+				
+				var arr = new reX.json2html({
+					html: 'http://localhost:32400{@thumb}'
+				});
+				covers = arr.convert(this.sections);
+				
+				menu.build();
+			}.bind(this));
+		}.bind(this)); 
+		
+		window.addEvent('menuDone', function(event) {		
+			if(!build) {	
+				ctrl = new reX.Controls({index: 1});
+				//ctrl.select(4);
+				$$('.reX-list  > ul > li[index]').each(function(element, i) {
+				/* if (element.getProperty('index') < 4) {
+				//		element.addClass('lower');
+				//	}
+					else*/ if (element.getProperty('index') > 1) {
+						element.addClass('upper');
+					}
+				});
+		
+				$$('.reX-list').setStyle('left', 250);
+				positionCovers();
+				
+				build = true;
+			}
+			else {
+				var i = $$('.focus')[0].getProperty('index');
+				ctrl.select((i*10000)+1);
+			}
+		});
+		
+		window.addEvent('selectionChange', function(item) {
+			
+		}.bind(this));
+		
+		window.addEvent('selectionEnter', function(item) {
+			var i = item.getProperty('index');
+			var key = item.getProperty('idx');
+			
+			if(item.getParents('.flipped').length != 0) {
+				mediaManager.getMedia(this.audio[key]['@key'], function(media) {
+					if(media.Part[0] != undefined) {
+						Player.playAudio(media.Part[0]["@file"]);
+					}
+					else { 
+						Player.playAudio(media.Part["@file"]);
+					}
+				}.bind(this));
+			}
+			else if(item.getChildren('.flipped').length == 0) {
+				flip();
+				if($$('.focus .back .innerlist')[0].getChildren().length == 0) {
+					mediaManager.getTracks(this.sections[key]['@key'] ,function(sec) {
+						this.audio = sec;
+						var j2h = new reX.json2html({
+							html: '<div>'
+								+		'<div>{@index}.</div>'
+								+		'<div>{@title}</div>'
+								+ '</div>',
+							unescape: true
+						});
+						var innermenu = new reX.Menu(j2h.convert(sec), {wrap: false, index: ((i*10000)+1), inject: '.focus .back .innerlist'});
+						$$('.focus').addClass('hasSelectable');
+						innermenu.build();
+					});
+				}
+				else {
+					ctrl.select((i*10000)+1);
+					mediaManager.getTracks(this.sections[key]['@key'] ,function(sec) {
+						this.audio = sec;
+					});
+				}
+			}
+			else {
+			}
+			
+		}.bind(this));
+		
+		window.addEvent('pressedBack', function() {
+			if($$('.flipped').length == 0) {
+				Player.goBack();
+			}
+			else {
+				flip();
+				ctrl.select(parseInt($$('.focus')[0].getProperty('index'))/10000);
+			}
+		}.bind(this));
+		
+		window.addEvent('pressedLeft', function(old) {
+			var flipped = $$('.flipped');
+			if(flipped.length != 0) {
+				flipped[0].getParent().addClass('upper');
+				flipped.removeClass('flipped');
+			}
+			else {
+				old.addClass('upper');
+			}
+			
+			$$('.focus').removeClass('lower');
+			
+			positionCovers();
+			var move = $$('.reX-list')[0];
+			var pos = parseInt(move.getStyle('left')) + 85;
+			move.setStyle('left', pos);
+		}.bind(this));
+		
+		window.addEvent('pressedRight', function(old) {
+			var flipped = $$('.flipped');
+			if(flipped.length != 0) {
+				flipped[0].getParent().addClass('lower');
+				flipped.removeClass('flipped');
+			}
+			else {
+				old.addClass('lower');
+			}
+			
+			$$('.focus').removeClass('upper');
+			
+			positionCovers();
+			var move = $$('.reX-list')[0];
+			var pos = parseInt(move.getStyle('left'))-85;
+			move.setStyle('left', pos);
+		}.bind(this));
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="css/reset.css">
+		<link rel="stylesheet" type="text/css" href="css/album.css">
+	</head>
+<body>
+	<div id="skin_header"></div>
+	<div class="animWrap">
+		<div class="listWrap">
+			<div class="reX-list hasSelectable"></div>
+		</div>
+	</div>
+	<div id="skin"></div>
+</body>
+</html>

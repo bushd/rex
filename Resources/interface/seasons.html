@@ -1,0 +1,65 @@
+	
+	<script type="text/javascript">
+        reX.ResourceManager.setCSS(['css/seasons.css']);        
+        
+		var sections, scrolllist;
+	
+		reX.state.events = {
+			domready: function() {	
+                mediaManager.getSeasons(reX.state.section.key ,function(sec) {
+                    reX.state.section.json = sec;
+
+                    if (reX.state.section.json.length == 1) {
+                        reX.load('episodes.html',reX.state.section.json[0]['@key']);
+                    }
+
+                    var j2h = new reX.json2html({
+                        html: '<span><b>{@title}</b></span>'
+                    });
+                            
+                    var menu = new reX.Menu(j2h.convert(reX.state.section.json));
+                    menu.build();
+                });
+			},
+			
+		
+            menuDone: function(event) {	
+				scrolllist = new reX.Scrolllist('nav', {offset:4});
+				
+				reX.state.controls.select(1);
+                window.fireEvent('selectionChange', reX.state.controls.getSelection());
+            },
+
+		
+            selectionChange: function(item) {
+				var i = item.getProperty('idx');
+                console.log(reX.state.section.json[i]['@key'] + ' and type ' + reX.state.section.json[i]['@type']);
+            },
+            
+            selectionEnter: function(item) {
+                var i = item.getProperty('idx');
+                console.log('entering ' + reX.state.section.json[i]['@title'] + ' with key ' + reX.state.section.json[i]['@key']);
+                switch (reX.state.section.json[i]['@type']) {
+                    case 'season': 
+                        reX.load('episodes.html',reX.state.section.json[i]['@key']);
+                        break;
+                }
+            },
+			
+			pressedDown: function(item) {
+				scrolllist.seekNext();
+			},
+			
+			pressedUp: function(item) {
+				scrolllist.seekPrev();
+			}
+        };
+        
+        window.addEvents(reX.state.events);
+	</script>
+
+	<div id="background">
+	</div>
+	<div id="outerskin">
+		<div id="skin"></div>
+	</div>

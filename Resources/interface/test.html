@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+  		<title>reX</title>
+  		
+  		<!-- mootools -->
+  		<script src="js/mootools/mootools.js"></script>
+  		<script src="js/mootools/mootools.more.js"></script>
+  		<script src="js/mootools/mt.class.singleton.js"></script>
+  		<script src="js/mootools/mt.request.xml2json.js"></script>
+  		<script src="js/mootools/mt.overwrites.js"></script>
+  		
+  		<!-- reX -->
+  		<script src="js/reX/reX.js"></script>
+  		<script src="js/reX/reX.controls.js"></script>
+  		<script src="js/reX/reX.json2html.js"></script>
+  		<script src="js/reX/reX.mediamanager.js"></script>
+  		<script src="js/reX/reX.menu.js"></script>
+  		<script src="js/reX/reX.plugin.js"></script>
+  		<script src="js/reX/reX.preferencemanager.js"></script>
+  		<script src="js/reX/reX.scrolllist.js"></script>
+  		
+  		<!-- JavaScript -->
+  		<script src="js/xml2json.js"></script>
+  		
+  		<!-- Cascading Style Sheets -->
+  		<link rel="stylesheet" href="css/reset.css" type="text/css">
+  	
+	</head>
+	<body>
+		<header>
+			<!-- header goes here -->
+		</header>
+		
+		<section id="outer">
+			<nav>
+				<!-- scrollable lists go here: homemenu, medialists, etc. -->
+			</nav>
+			
+			<section id="inner">
+				<!-- skins / sections load here -->
+			</section>
+			
+			<aside>
+				<section id="widgets">
+					<!-- widgets go here -->
+				</section>
+			</aside>
+		</section>
+		
+		<footer>
+			<!-- footer goes here -->
+		</footer>
+        
+        <script type="text/javascript">
+            var mediaManager = new reX.MediaManager();
+            
+            var Player = {
+                getProgress: function() {return 1;},
+            
+                play: function() {//stateChanged('beginPlaying');
+                },
+                
+                stop: function() {stateChanged('finishedPlaying');
+                }
+            };
+        
+            window.addEvent('domready', function() {
+				reX.state.controls = new reX.Controls();
+                reX.load('video.html', '/library/metadata/7835');
+            }.bind(this)); 
+            
+            window.addEvent('pressedBack', function() {
+                console.log('backspace pressed');
+                if (reX.state.section.key != undefined) {
+                    console.log('going back');
+                    
+                    if (reX.state.video == true) {
+                        reX.state.video = false;
+                        Player.stop();
+                    }
+                    //reX.back();
+                }
+            });
+        </script>
+	</body>
+<html>

@@ -1,0 +1,7 @@
+.lfloat {
+	float: left;
+}
+
+.horizontalList li{
+	display: inline;
+}
