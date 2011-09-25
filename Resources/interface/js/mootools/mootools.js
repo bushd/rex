@@ -650,7 +650,8 @@ String.implement({
 	substitute: function(object, regexp){
 		return this.replace(regexp || (/\\?\{([^{}]+)\}/g), function(match, name){
 			if (match.charAt(0) == '\\') return match.slice(1);
-			return (object[name] != null) ? object[name] : '';
+			var result = (object[name] != null) ? object[name] : '';
+            return result;
 		});
 	}
 

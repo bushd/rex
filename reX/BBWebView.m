@@ -79,15 +79,16 @@
     */
     
     NSString *msgLevel = [dictionary objectForKey:@"MessageLevel"];
-    NSString *msg = [NSString stringWithFormat:@"[JS]%@ (%@ @ %@)", 
-        [dictionary objectForKey:@"message"], 
-        [dictionary objectForKey:@"lineNumber"],
-        [dictionary objectForKey:@"sourceURL"]];
     
     if ([msgLevel isEqualToString:@"ErrorMessageLevel"]) {
+        NSString *msg = [NSString stringWithFormat:@"[JS]%@ (%@ @ %@)", 
+            [dictionary objectForKey:@"message"], 
+            [dictionary objectForKey:@"lineNumber"],
+            [dictionary objectForKey:@"sourceURL"]];
         asl_log(_client, NULL, ASL_LEVEL_ERR, "%s", [msg UTF8String]);
     }
     else {
+        NSString *msg = [NSString stringWithFormat:@"[JS]%@", [dictionary objectForKey:@"message"]];
         asl_log(_client, NULL, ASL_LEVEL_DEBUG, "%s", [msg UTF8String]);
     }
 }

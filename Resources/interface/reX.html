@@ -19,9 +19,10 @@
   		<script src="js/reX/reX.controls.js"></script>
   		<script src="js/reX/reX.json2html.js"></script>
   		<script src="js/reX/reX.mediamanager.js"></script>
+        <script src="js/reX/reX.skinmanager.js"></script>
+        <script src="js/reX/reX.preferencemanager.js"></script>
   		<script src="js/reX/reX.menu.js"></script>
   		<script src="js/reX/reX.plugin.js"></script>
-  		<script src="js/reX/reX.preferencemanager.js"></script>
   		<script src="js/reX/reX.scrolllist.js"></script>
   		
   		<!-- JavaScript -->
@@ -58,6 +59,7 @@
         
         <script type="text/javascript">
             var mediaManager = new reX.MediaManager();
+            var skinManager = new reX.SkinManager();
         
             window.addEvent('domready', function() {
 				reX.state.controls = new reX.Controls();

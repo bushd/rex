@@ -373,7 +373,8 @@ reX.MediaManager = new Class({
             art: this.current.MediaContainer['@art'],
             key: this.current.MediaContainer['@key'],
             thumb: this.current.MediaContainer['@thumb'],
-            title: this.current.MediaContainer['@title1']
+            title: this.current.MediaContainer['@title1'],
+            viewGroup: this.current.MediaContainer['@viewGroup'],
         };
         
         return result;

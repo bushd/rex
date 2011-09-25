@@ -1,5 +1,6 @@
 reX.preferences = {
-    widgets: {}
+    widgets: {},
+    skins: []
 };
 
 reX.PreferenceManager = new Singleton({

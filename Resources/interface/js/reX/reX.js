@@ -24,7 +24,7 @@ reX.state = {
         json: undefined,                // current section manager json
         history: undefined,             // last reX.section
         serie: undefined,               // series we are in (if any)
-        
+        season: undefined
 	},
 	events: {},                         // current set temp events
 	controls: undefined,                // ??
@@ -123,7 +123,10 @@ function localize(string) {
 Request.Load = new Class({
 	Extends: Request.HTML,
     method: 'get',
-    evalScripts: true,
+    evalScripts: false,
+    onRequest: function() {
+        reX.debug('[REQUEST] load url '+ reX.state.section.url, REX_DEBUG);
+    },
     onSuccess: function(responseTree, responseElements, responseHTML, responseJavaScript) {
         reX.debug('[SUCCESS] loaded url '+ reX.state.section.url, REX_INFO);
     	$('inner').set('html', responseHTML);

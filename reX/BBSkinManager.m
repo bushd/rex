@@ -7,7 +7,6 @@
 //
 
 #import "BBSkinManager.h"
-#import "JSON.h"
 #import "global.h"
 
 @implementation BBSkinManager

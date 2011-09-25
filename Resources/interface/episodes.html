@@ -6,7 +6,7 @@
 	
 		reX.state.events = {
 			domready: function() {		
-                mediaManager.getEpisodes(reX.state.section.key ,function(sec) {
+             /*   mediaManager.getEpisodes(reX.state.section.key ,function(sec) {
                     reX.state.section.json = sec;
                     
                     info = mediaManager.getSectionInformations();
@@ -19,7 +19,7 @@
 				
                     var menu = new reX.Menu(j2h.convert(reX.state.section.json));
                     menu.build();
-                });
+                });*/
             },
 		
             menuDone: function(event) {	
@@ -86,6 +86,29 @@
         };
         
         window.addEvents(reX.state.events);
+        
+        mediaManager.getEpisodes(reX.state.section.key ,function(sec) {
+                reX.state.section.json = sec;
+                
+                info = mediaManager.getSectionInformations();
+                                        
+                $('background').set('html','<div class="fanart"><img src="http://localhost:32400'+ mediaManager.transcodeImage(info.art) +'"></div>');
+                
+                var path = skinManager.getCurrentSkinForSection().path; 
+                
+                new Skin({
+                    templateURL: path + skinManager.getCurrentSkinForSection().templates.skin, //'skins/movie/default/template.default.html',
+                    update: 'inner'
+                });
+                
+                var menu = new reX.Menu({
+                    templateURL: path + skinManager.getCurrentSkinForSection().templates.navigation, //'skins/movie/default/navigation.default.html',
+                    sectionObject: reX.state.section.json
+                });
+                
+                menu.generateElements();
+                menu.build();
+            });
 
 	</script>
 

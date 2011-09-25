@@ -6,7 +6,7 @@
 	
 		reX.state.events = {
 			domready: function() {	
-                mediaManager.getSeasons(reX.state.section.key ,function(sec) {
+            /*    mediaManager.getSeasons(reX.state.section.key ,function(sec) {
                     reX.state.section.json = sec;
 
                     if (reX.state.section.json.length == 1) {
@@ -19,7 +19,7 @@
                             
                     var menu = new reX.Menu(j2h.convert(reX.state.section.json));
                     menu.build();
-                });
+                });*/
 			},
 			
 		
@@ -56,10 +56,27 @@
         };
         
         window.addEvents(reX.state.events);
+        
+         mediaManager.getSeasons(reX.state.section.key ,function(sec) {
+                reX.state.section.json = sec;
+                
+                if (reX.state.section.json.length == 1) {
+                        reX.load('episodes.html',reX.state.section.json[0]['@key']);
+                    }
+                
+                var path = skinManager.getCurrentSkinForSection().path; 
+                
+                new Skin({
+                    templateURL: path + skinManager.getCurrentSkinForSection().templates.skin, //'skins/movie/default/template.default.html',
+                    update: 'inner'
+                });
+                
+                var menu = new reX.Menu({
+                    templateURL: path + skinManager.getCurrentSkinForSection().templates.navigation, //'skins/movie/default/navigation.default.html',
+                    sectionObject: reX.state.section.json
+                });
+                
+                menu.generateElements();
+                menu.build();
+            });
 	</script>
-
-	<div id="background">
-	</div>
-	<div id="outerskin">
-		<div id="skin"></div>
-	</div>

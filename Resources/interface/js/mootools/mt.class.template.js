@@ -40,10 +40,10 @@
             
             // substitute
             reX.debug('[TEMPLATE][SUBSTITUTE] with ' + JSON.encode(options.substitute), REX_DEBUG);
-            options.template.substitute(options.substitute);
-            reX.debug('[TEMPLATE][SUBSTITUTE] ' + options.template, REX_DEBUG);
+            tmp = options.template.substitute(options.substitute);
+            reX.debug('[TEMPLATE][SUBSTITUTE] ' + tmp, REX_DEBUG);
             
-            var template = Elements.from(options.template, false);
+            var template = Elements.from(tmp, false);
             
             // insert sub-templates
         
@@ -55,9 +55,6 @@
             }
             else if (options.append) {
                 document.id(options.append).adopt(template);
-            }
-            else {
-                return false;
             }
 
             this.postInject();

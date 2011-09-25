@@ -24,7 +24,7 @@
 		912A25851412452E009AD4C2 /* album.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C7BE7D0133E280400D0EDEA /* album.html */; };
 		912A25861412452E009AD4C2 /* episodes.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C7BE7DA133E280400D0EDEA /* episodes.html */; };
 		912A25871412452E009AD4C2 /* home.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C7BE7DD133E280400D0EDEA /* home.html */; };
-		912A25881412452E009AD4C2 /* media.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C7BE7F0133E280400D0EDEA /* media.html */; };
+		912A25881412452E009AD4C2 /* media2.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C7BE7F0133E280400D0EDEA /* media2.html */; };
 		912A25891412452E009AD4C2 /* seasons.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C7BE7F6133E280400D0EDEA /* seasons.html */; };
 		912A258A1412452E009AD4C2 /* test.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C7BE7F7133E280400D0EDEA /* test.html */; };
 		912A258B1412452E009AD4C2 /* video.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C7BE7FC133E280400D0EDEA /* video.html */; };
@@ -85,20 +85,33 @@
 		91C5D1FD131A95BD00D4DD73 /* BBOverlayWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C5D1FC131A95BC00D4DD73 /* BBOverlayWindow.m */; };
 		91C5D200131AA50700D4DD73 /* BBWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C5D1FF131AA50700D4DD73 /* BBWebView.m */; };
 		91CF1AD9142F531800DE9140 /* BBSkinManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 91CF1AD8142F531800DE9140 /* BBSkinManager.m */; };
-		91CF1ADB142F5C8900DE9140 /* template.default.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91E41DC5142E09ED00816D73 /* template.default.html */; };
-		91CF1ADC142F5C8900DE9140 /* navigation.default.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91E6F8A6142EB06000C1B218 /* navigation.default.html */; };
-		91CF1ADD142F5D9000DE9140 /* default.skin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91E41DC4142E09ED00816D73 /* default.skin */; };
 		91CF1ADE142F5DA900DE9140 /* reX.skinmanager.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91E41DDB142E1FC400816D73 /* reX.skinmanager.js */; };
 		91CF1ADF142F5DB200DE9140 /* mt.class.skin.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91E41DDD142E227600816D73 /* mt.class.skin.js */; };
 		91CF1AE0142F5DB200DE9140 /* mt.class.template.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91E6F8A4142E81A000C1B218 /* mt.class.template.js */; };
+		91CF1AEC142FAAFD00DE9140 /* defaultMedia.css in Resources */ = {isa = PBXBuildFile; fileRef = 91CF1AE8142FAAFD00DE9140 /* defaultMedia.css */; };
+		91CF1AED142FAAFD00DE9140 /* defaultMedia.skin in Resources */ = {isa = PBXBuildFile; fileRef = 91CF1AE9142FAAFD00DE9140 /* defaultMedia.skin */; };
+		91CF1AEE142FAAFD00DE9140 /* navigation.defaultMedia.html in Resources */ = {isa = PBXBuildFile; fileRef = 91CF1AEA142FAAFD00DE9140 /* navigation.defaultMedia.html */; };
+		91CF1AEF142FAAFD00DE9140 /* template.defaultMedia.html in Resources */ = {isa = PBXBuildFile; fileRef = 91CF1AEB142FAAFD00DE9140 /* template.defaultMedia.html */; };
+		91CF1AF0142FABDC00DE9140 /* defaultMedia.skin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91CF1AE9142FAAFD00DE9140 /* defaultMedia.skin */; };
+		91CF1AF1142FABDC00DE9140 /* navigation.defaultMedia.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91CF1AEA142FAAFD00DE9140 /* navigation.defaultMedia.html */; };
+		91CF1AF2142FABDC00DE9140 /* template.defaultMedia.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91CF1AEB142FAAFD00DE9140 /* template.defaultMedia.html */; };
+		91CF1AF4142FAC2D00DE9140 /* defaultMedia.css in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91CF1AE8142FAAFD00DE9140 /* defaultMedia.css */; };
+		91CF1AF6142FB73700DE9140 /* metadata.defaultMedia.html in Resources */ = {isa = PBXBuildFile; fileRef = 91CF1AF5142FB73700DE9140 /* metadata.defaultMedia.html */; };
+		91CF1AFE142FC8B400DE9140 /* defaultSeasons.css in Resources */ = {isa = PBXBuildFile; fileRef = 91CF1AF9142FC8B400DE9140 /* defaultSeasons.css */; };
+		91CF1AFF142FC8B400DE9140 /* defaultSeasons.skin in Resources */ = {isa = PBXBuildFile; fileRef = 91CF1AFA142FC8B400DE9140 /* defaultSeasons.skin */; };
+		91CF1B00142FC8B400DE9140 /* metadata.defaultSeasons.html in Resources */ = {isa = PBXBuildFile; fileRef = 91CF1AFB142FC8B400DE9140 /* metadata.defaultSeasons.html */; };
+		91CF1B01142FC8B400DE9140 /* navigation.defaultSeasons.html in Resources */ = {isa = PBXBuildFile; fileRef = 91CF1AFC142FC8B400DE9140 /* navigation.defaultSeasons.html */; };
+		91CF1B02142FC8B400DE9140 /* template.defaultSeasons.html in Resources */ = {isa = PBXBuildFile; fileRef = 91CF1AFD142FC8B400DE9140 /* template.defaultSeasons.html */; };
+		91CF1B04142FCCDF00DE9140 /* defaultSeasons.skin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91CF1AFA142FC8B400DE9140 /* defaultSeasons.skin */; };
+		91CF1B05142FCCDF00DE9140 /* metadata.defaultSeasons.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91CF1AFB142FC8B400DE9140 /* metadata.defaultSeasons.html */; };
+		91CF1B06142FCCDF00DE9140 /* navigation.defaultSeasons.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91CF1AFC142FC8B400DE9140 /* navigation.defaultSeasons.html */; };
+		91CF1B07142FCCDF00DE9140 /* template.defaultSeasons.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91CF1AFD142FC8B400DE9140 /* template.defaultSeasons.html */; };
+		91CF1B09142FCD1600DE9140 /* defaultSeasons.css in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91CF1AF9142FC8B400DE9140 /* defaultSeasons.css */; };
 		91E41DBB142E03CB00816D73 /* Templated.js in Sources */ = {isa = PBXBuildFile; fileRef = 91E41DBA142E03CB00816D73 /* Templated.js */; };
-		91E41DD3142E09EE00816D73 /* default.skin in Sources */ = {isa = PBXBuildFile; fileRef = 91E41DC4142E09ED00816D73 /* default.skin */; };
-		91E41DD4142E09EE00816D73 /* template.default.html in Resources */ = {isa = PBXBuildFile; fileRef = 91E41DC5142E09ED00816D73 /* template.default.html */; };
 		91E41DDC142E1FC400816D73 /* reX.skinmanager.js in Sources */ = {isa = PBXBuildFile; fileRef = 91E41DDB142E1FC400816D73 /* reX.skinmanager.js */; };
 		91E41DDE142E227600816D73 /* mt.class.skin.js in Sources */ = {isa = PBXBuildFile; fileRef = 91E41DDD142E227600816D73 /* mt.class.skin.js */; };
-		91E6F8A2142E7E7700C1B218 /* media2.html in Resources */ = {isa = PBXBuildFile; fileRef = 91E6F8A1142E7E7700C1B218 /* media2.html */; };
+		91E6F8A2142E7E7700C1B218 /* media.html in Resources */ = {isa = PBXBuildFile; fileRef = 91E6F8A1142E7E7700C1B218 /* media.html */; };
 		91E6F8A5142E81A100C1B218 /* mt.class.template.js in Sources */ = {isa = PBXBuildFile; fileRef = 91E6F8A4142E81A000C1B218 /* mt.class.template.js */; };
-		91E6F8A7142EB06000C1B218 /* navigation.default.html in Resources */ = {isa = PBXBuildFile; fileRef = 91E6F8A6142EB06000C1B218 /* navigation.default.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -112,7 +125,7 @@
 				912A25851412452E009AD4C2 /* album.html in CopyFiles */,
 				912A25861412452E009AD4C2 /* episodes.html in CopyFiles */,
 				912A25871412452E009AD4C2 /* home.html in CopyFiles */,
-				912A25881412452E009AD4C2 /* media.html in CopyFiles */,
+				912A25881412452E009AD4C2 /* media2.html in CopyFiles */,
 				912A25891412452E009AD4C2 /* seasons.html in CopyFiles */,
 				912A258A1412452E009AD4C2 /* test.html in CopyFiles */,
 				912A258B1412452E009AD4C2 /* video.html in CopyFiles */,
@@ -221,12 +234,45 @@
 		91CF1ADA142F5BD500DE9140 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = interface/skins/movie;
+			dstPath = interface/skins/defaultMedia;
 			dstSubfolderSpec = 7;
 			files = (
-				91CF1ADD142F5D9000DE9140 /* default.skin in CopyFiles */,
-				91CF1ADB142F5C8900DE9140 /* template.default.html in CopyFiles */,
-				91CF1ADC142F5C8900DE9140 /* navigation.default.html in CopyFiles */,
+				91CF1AF0142FABDC00DE9140 /* defaultMedia.skin in CopyFiles */,
+				91CF1AF1142FABDC00DE9140 /* navigation.defaultMedia.html in CopyFiles */,
+				91CF1AF2142FABDC00DE9140 /* template.defaultMedia.html in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91CF1AF3142FABFC00DE9140 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = interface/skins/defaultMedia/css;
+			dstSubfolderSpec = 7;
+			files = (
+				91CF1AF4142FAC2D00DE9140 /* defaultMedia.css in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91CF1B03142FCCB400DE9140 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = interface/skins/defaultSeasons;
+			dstSubfolderSpec = 7;
+			files = (
+				91CF1B04142FCCDF00DE9140 /* defaultSeasons.skin in CopyFiles */,
+				91CF1B05142FCCDF00DE9140 /* metadata.defaultSeasons.html in CopyFiles */,
+				91CF1B06142FCCDF00DE9140 /* navigation.defaultSeasons.html in CopyFiles */,
+				91CF1B07142FCCDF00DE9140 /* template.defaultSeasons.html in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91CF1B08142FCCFC00DE9140 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = interface/skins/defaultSeasons/css;
+			dstSubfolderSpec = 7;
+			files = (
+				91CF1B09142FCD1600DE9140 /* defaultSeasons.css in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,7 +297,7 @@
 		3C7BE7DD133E280400D0EDEA /* home.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = home.html; sourceTree = "<group>"; };
 		3C7BE7DF133E280400D0EDEA /* defaultcover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultcover.png; sourceTree = "<group>"; };
 		3C7BE7EE133E280400D0EDEA /* xml2json.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = xml2json.js; sourceTree = "<group>"; };
-		3C7BE7F0133E280400D0EDEA /* media.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = media.html; sourceTree = "<group>"; };
+		3C7BE7F0133E280400D0EDEA /* media2.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = media2.html; sourceTree = "<group>"; };
 		3C7BE7F4133E280400D0EDEA /* reX.trakt.plugin.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = reX.trakt.plugin.js; sourceTree = "<group>"; };
 		3C7BE7F5133E280400D0EDEA /* test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
 		3C7BE7F6133E280400D0EDEA /* seasons.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = seasons.html; sourceTree = "<group>"; };
@@ -306,14 +352,21 @@
 		91C5D1FF131AA50700D4DD73 /* BBWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBWebView.m; sourceTree = "<group>"; };
 		91CF1AD7142F531800DE9140 /* BBSkinManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBSkinManager.h; sourceTree = "<group>"; };
 		91CF1AD8142F531800DE9140 /* BBSkinManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBSkinManager.m; sourceTree = "<group>"; };
+		91CF1AE8142FAAFD00DE9140 /* defaultMedia.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = defaultMedia.css; sourceTree = "<group>"; };
+		91CF1AE9142FAAFD00DE9140 /* defaultMedia.skin */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = defaultMedia.skin; sourceTree = "<group>"; };
+		91CF1AEA142FAAFD00DE9140 /* navigation.defaultMedia.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigation.defaultMedia.html; sourceTree = "<group>"; };
+		91CF1AEB142FAAFD00DE9140 /* template.defaultMedia.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = template.defaultMedia.html; sourceTree = "<group>"; };
+		91CF1AF5142FB73700DE9140 /* metadata.defaultMedia.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = metadata.defaultMedia.html; sourceTree = "<group>"; };
+		91CF1AF9142FC8B400DE9140 /* defaultSeasons.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = defaultSeasons.css; sourceTree = "<group>"; };
+		91CF1AFA142FC8B400DE9140 /* defaultSeasons.skin */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = defaultSeasons.skin; sourceTree = "<group>"; };
+		91CF1AFB142FC8B400DE9140 /* metadata.defaultSeasons.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = metadata.defaultSeasons.html; sourceTree = "<group>"; };
+		91CF1AFC142FC8B400DE9140 /* navigation.defaultSeasons.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigation.defaultSeasons.html; sourceTree = "<group>"; };
+		91CF1AFD142FC8B400DE9140 /* template.defaultSeasons.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = template.defaultSeasons.html; sourceTree = "<group>"; };
 		91E41DBA142E03CB00816D73 /* Templated.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Templated.js; sourceTree = "<group>"; };
-		91E41DC4142E09ED00816D73 /* default.skin */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = default.skin; sourceTree = "<group>"; };
-		91E41DC5142E09ED00816D73 /* template.default.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = template.default.html; sourceTree = "<group>"; };
 		91E41DDB142E1FC400816D73 /* reX.skinmanager.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = reX.skinmanager.js; sourceTree = "<group>"; };
 		91E41DDD142E227600816D73 /* mt.class.skin.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mt.class.skin.js; sourceTree = "<group>"; };
-		91E6F8A1142E7E7700C1B218 /* media2.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = media2.html; sourceTree = "<group>"; };
+		91E6F8A1142E7E7700C1B218 /* media.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = media.html; sourceTree = "<group>"; };
 		91E6F8A4142E81A000C1B218 /* mt.class.template.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mt.class.template.js; sourceTree = "<group>"; };
-		91E6F8A6142EB06000C1B218 /* navigation.default.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigation.default.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -372,11 +425,11 @@
 				3C7BE7D0133E280400D0EDEA /* album.html */,
 				3C7BE7DA133E280400D0EDEA /* episodes.html */,
 				3C7BE7DD133E280400D0EDEA /* home.html */,
-				3C7BE7F0133E280400D0EDEA /* media.html */,
+				3C7BE7F0133E280400D0EDEA /* media2.html */,
 				3C7BE7F6133E280400D0EDEA /* seasons.html */,
 				3C7BE7F7133E280400D0EDEA /* test.html */,
 				3C7BE7FC133E280400D0EDEA /* video.html */,
-				91E6F8A1142E7E7700C1B218 /* media2.html */,
+				91E6F8A1142E7E7700C1B218 /* media.html */,
 			);
 			path = interface;
 			sourceTree = "<group>";
@@ -631,62 +684,53 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		91CF1AE6142FAAFD00DE9140 /* defaultMedia */ = {
+			isa = PBXGroup;
+			children = (
+				91CF1AE7142FAAFD00DE9140 /* css */,
+				91CF1AE9142FAAFD00DE9140 /* defaultMedia.skin */,
+				91CF1AEA142FAAFD00DE9140 /* navigation.defaultMedia.html */,
+				91CF1AEB142FAAFD00DE9140 /* template.defaultMedia.html */,
+				91CF1AF5142FB73700DE9140 /* metadata.defaultMedia.html */,
+			);
+			path = defaultMedia;
+			sourceTree = "<group>";
+		};
+		91CF1AE7142FAAFD00DE9140 /* css */ = {
+			isa = PBXGroup;
+			children = (
+				91CF1AE8142FAAFD00DE9140 /* defaultMedia.css */,
+			);
+			path = css;
+			sourceTree = "<group>";
+		};
+		91CF1AF7142FC8B400DE9140 /* defaultSeasons */ = {
+			isa = PBXGroup;
+			children = (
+				91CF1AF8142FC8B400DE9140 /* css */,
+				91CF1AFA142FC8B400DE9140 /* defaultSeasons.skin */,
+				91CF1AFB142FC8B400DE9140 /* metadata.defaultSeasons.html */,
+				91CF1AFC142FC8B400DE9140 /* navigation.defaultSeasons.html */,
+				91CF1AFD142FC8B400DE9140 /* template.defaultSeasons.html */,
+			);
+			path = defaultSeasons;
+			sourceTree = "<group>";
+		};
+		91CF1AF8142FC8B400DE9140 /* css */ = {
+			isa = PBXGroup;
+			children = (
+				91CF1AF9142FC8B400DE9140 /* defaultSeasons.css */,
+			);
+			path = css;
+			sourceTree = "<group>";
+		};
 		91E41DC1142E09ED00816D73 /* skins */ = {
 			isa = PBXGroup;
 			children = (
-				91E41DC2142E09ED00816D73 /* movie */,
-				91E41DC6142E09ED00816D73 /* music */,
-				91E41DC7142E09ED00816D73 /* show */,
+				91CF1AF7142FC8B400DE9140 /* defaultSeasons */,
+				91CF1AE6142FAAFD00DE9140 /* defaultMedia */,
 			);
 			path = skins;
-			sourceTree = "<group>";
-		};
-		91E41DC2142E09ED00816D73 /* movie */ = {
-			isa = PBXGroup;
-			children = (
-				91E41DC3142E09ED00816D73 /* default */,
-			);
-			path = movie;
-			sourceTree = "<group>";
-		};
-		91E41DC3142E09ED00816D73 /* default */ = {
-			isa = PBXGroup;
-			children = (
-				91E41DC4142E09ED00816D73 /* default.skin */,
-				91E41DC5142E09ED00816D73 /* template.default.html */,
-				91E6F8A6142EB06000C1B218 /* navigation.default.html */,
-			);
-			path = default;
-			sourceTree = "<group>";
-		};
-		91E41DC6142E09ED00816D73 /* music */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = music;
-			sourceTree = "<group>";
-		};
-		91E41DC7142E09ED00816D73 /* show */ = {
-			isa = PBXGroup;
-			children = (
-				91E41DC8142E09ED00816D73 /* episode */,
-				91E41DC9142E09ED00816D73 /* season */,
-			);
-			path = show;
-			sourceTree = "<group>";
-		};
-		91E41DC8142E09ED00816D73 /* episode */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = episode;
-			sourceTree = "<group>";
-		};
-		91E41DC9142E09ED00816D73 /* season */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = season;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -708,6 +752,9 @@
 				9152E64414268B210006B009 /* CopyFiles */,
 				9152E65E142A79580006B009 /* CopyFiles */,
 				91CF1ADA142F5BD500DE9140 /* CopyFiles */,
+				91CF1AF3142FABFC00DE9140 /* CopyFiles */,
+				91CF1B03142FCCB400DE9140 /* CopyFiles */,
+				91CF1B08142FCCFC00DE9140 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -760,9 +807,17 @@
 				9152E658142A1CDC0006B009 /* background.jpg in Resources */,
 				9152E65C142A1E5A0006B009 /* backgroundTile.png in Resources */,
 				9152E65D142A1E5A0006B009 /* defaultdesktop.png in Resources */,
-				91E41DD4142E09EE00816D73 /* template.default.html in Resources */,
-				91E6F8A2142E7E7700C1B218 /* media2.html in Resources */,
-				91E6F8A7142EB06000C1B218 /* navigation.default.html in Resources */,
+				91E6F8A2142E7E7700C1B218 /* media.html in Resources */,
+				91CF1AEC142FAAFD00DE9140 /* defaultMedia.css in Resources */,
+				91CF1AED142FAAFD00DE9140 /* defaultMedia.skin in Resources */,
+				91CF1AEE142FAAFD00DE9140 /* navigation.defaultMedia.html in Resources */,
+				91CF1AEF142FAAFD00DE9140 /* template.defaultMedia.html in Resources */,
+				91CF1AF6142FB73700DE9140 /* metadata.defaultMedia.html in Resources */,
+				91CF1AFE142FC8B400DE9140 /* defaultSeasons.css in Resources */,
+				91CF1AFF142FC8B400DE9140 /* defaultSeasons.skin in Resources */,
+				91CF1B00142FC8B400DE9140 /* metadata.defaultSeasons.html in Resources */,
+				91CF1B01142FC8B400DE9140 /* navigation.defaultSeasons.html in Resources */,
+				91CF1B02142FC8B400DE9140 /* template.defaultSeasons.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -795,7 +850,6 @@
 				9135D8581412749300F28456 /* mt.overwrites.js in Sources */,
 				9152E64C14269A460006B009 /* widget.flags.js in Sources */,
 				91E41DBB142E03CB00816D73 /* Templated.js in Sources */,
-				91E41DD3142E09EE00816D73 /* default.skin in Sources */,
 				91E41DDC142E1FC400816D73 /* reX.skinmanager.js in Sources */,
 				91E41DDE142E227600816D73 /* mt.class.skin.js in Sources */,
 				91E6F8A5142E81A100C1B218 /* mt.class.template.js in Sources */,
