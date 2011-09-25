@@ -249,6 +249,10 @@
 	return (int)(current*100.0);
 }
 
+- (NSString *)getSkins {
+    return [skinManager skinDefinitionAsJSONString];
+};
+
 /*
  * Bind Javascript
  */ 
@@ -265,6 +269,7 @@
 	else if (sel == @selector(isPlaying)) return NO;
 	else if (sel == @selector(getProgress)) return NO;
 	else if (sel == @selector(play)) return NO;
+    else if (sel == @selector(getSkins)) return NO;
     else return YES;
 }
 
@@ -280,6 +285,7 @@
 	else if (sel == @selector(isPlaying)) return @"isPlaying";
 	else if (sel == @selector(getProgress)) return @"getProgress";
 	else if (sel == @selector(play)) return @"play";
+    else if (sel == @selector(getSkins)) return @"getSkins";
     else return nil;
 }
 

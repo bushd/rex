@@ -19,8 +19,9 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
     // init Resources
-    NSBundle *bundle = [NSBundle mainBundle];
-    resourcePath = [bundle resourcePath];
+    bundle = [NSBundle mainBundle];
+    
+     skinManager = [[BBSkinManager alloc] init]; 
     
 	// init windows
 	//[window setAspectRatio:NSMakeSize(16.0, 9.0)];
@@ -29,9 +30,9 @@
 	// init webview
 	[webView setApplicationNameForUserAgent:@"reX"];
 	[webView setDrawsBackground:NO];
-	//[webView loadURL:[NSURL URLWithString: [NSString stringWithFormat:@"%@/interface/reX.html", resourcePath]]];
+	//[webView loadURL:[NSURL URLWithString: [NSString stringWithFormat:@"%@/interface/reX.html", [bundle resourcePath]]]];
     // use this while developing:
-    [webView loadURL:[NSURL URLWithString: [NSString stringWithFormat:@"/Users/bastianbrodbeck/Documents/Code/Xcode/reX/reX/Resources/interface/reX.html", resourcePath]]];
+    [webView loadURL:[NSURL URLWithString: [NSString stringWithFormat:@"/Users/bastianbrodbeck/Documents/Code/Xcode/reX/reX/Resources/interface/reX.html", [bundle resourcePath]]]];
 	[[[webView mainFrame] frameView] setAllowsScrolling:NO];
 	[webView setVideoView: videoView];
 	

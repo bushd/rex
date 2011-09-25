@@ -1,65 +1,86 @@
 reX.Menu = new Class({
 
+    Extends: Template,
+
 	Implements: [Events, Options],
 
-	initialize: function(/*array*/ list, options) {
+    options: {
+        elements: [],
+        sectionObject: {}, 
+		index: 1,
+		vertical: true,
+		wrap: true,
+		inject: 'nav'
+	},
+
+	initialize: function(options) {
 		this.setOptions(options);
-		this.list = list;
+        
+        this.loadTemplate();
 	},
 	
 	/* appends elements to the list */
-	append: function(/*array*/ list) {
-		return this;
+	append: function(/*array*/ elements) {
+		this.options.elements.append(elements);
 	},
 	
 	/* prepends elements to the list */
 	prepend: function(/*array*/ list) {
-		return this;
+		elements.append(this.options.elements);
+        this.options.elements = elements;
 	},
 	
+    generateElements: function() {
+        var j2h = new reX.json2html({
+            html: this.options.template
+        });
+        
+        this.options.elements = j2h.convert(this.options.sectionObject);
+    },
+    
 	/* insterts the list intro the html code */
 	build: function() {
 		var ul = new Element('ul');
 
-		for(var i = 0; i < this.list.length; i++) {
+		for(var i = 0; i < this.options.elements.length; i++) {
 			li = undefined;
 						
 			if(this.options.vertical) {
-				if(this.list.length == 1) {
+				if(this.options.elements.length == 1) {
 					li = new Element('li', {
 						index: this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
 				else if(i == 0 && this.options.wrap) {
 					li = new Element('li', {
-						up: this.list.length - 1 + this.options.index, 
+						up: this.options.elements.length - 1 + this.options.index, 
 						down: i+this.options.index+1, 
 						index: i+this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
 				else if(i == 0 && !this.options.wrap) {
 					li = new Element('li', {
 						down: i+this.options.index+1, 
 						index: i+this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
-				else if(i == this.list.length-1 && this.options.wrap) {
+				else if(i == this.options.elements.length-1 && this.options.wrap) {
 					li = new Element('li', {
 						up: i+this.options.index-1, 
 						down: this.options.index, 
 						index: i+this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
-				else if(i == this.list.length-1 && !this.options.wrap) {
+				else if(i == this.options.elements.length-1 && !this.options.wrap) {
 					li = new Element('li', {
 						up: i+this.options.index-1,  
 						index: i+this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
 				else {
 					li = new Element('li', {
@@ -67,45 +88,45 @@ reX.Menu = new Class({
 						down: i+this.options.index+1, 
 						index: i+this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
 			} // end if vertival
 			else { // if horizontal
-				if(this.list.length == 1) {
+				if(this.options.elements.length == 1) {
 					li = new Element('li', {
 						index: this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
 				else if(i == 0 && this.options.wrap) {
 					li = new Element('li', {
-						left: this.list.length - 1 + this.options.index, 
+						left: this.options.elements.length - 1 + this.options.index, 
 						right: i+this.options.index+1, 
 						index: i+this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
 				else if(i == 0 && !this.options.wrap) {
 					li = new Element('li', {
 						right: i+this.options.index+1, 
 						index: i+this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
-				else if(i == this.list.length-1 && this.options.wrap) {
+				else if(i == this.options.elements.length-1 && this.options.wrap) {
 					li = new Element('li', {
 						left: i+this.options.index-1, 
 						right: this.options.index, 
 						index: i+this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
-				else if(i == this.list.length-1 && !this.options.wrap) {
+				else if(i == this.options.elements.length-1 && !this.options.wrap) {
 					li = new Element('li', {
 						left: i+this.options.index-1,  
 						index: i+this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
 				else {
 					li = new Element('li', {
@@ -113,7 +134,7 @@ reX.Menu = new Class({
 						right: i+this.options.index+1, 
 						index: i+this.options.index,
 						idx: i,
-						html: this.list[i]});
+						html: this.options.elements[i]});
 				}
 			}
 			
@@ -122,16 +143,7 @@ reX.Menu = new Class({
 		
 		ul.inject($$(this.options.inject)[0], 'top');
 		window.fireEvent('menuDone');
-	},
-	
-	options: {
-		index: 1,
-		vertical: true,
-		wrap: true,
-		inject: 'nav'
-	},
-
-	list: undefined
+	}
 });
 
 reX.HomeMenu = new Class({
@@ -163,19 +175,26 @@ reX.HomeMenu = new Class({
 				if(this.options.sections === undefined) {
 					mediaManager.getSections(function(sec) {
 						this.options.sections = sec;
-						var j2h = new reX.json2html({
-							html: '<span><b>{@title}</b></span>'
-						});
-						var menu = new reX.Menu(j2h.convert(this.options.sections), {vertical: this.options.mainVertical});
+						
+						var menu = new reX.Menu({
+                            vertical: this.options.mainVertical,
+                            template: '<span><b>{@title}</b></span>',
+                            sectionObject: this.options.sections
+                        });
+                        
+                        menu.generateElements();
 						menu.build();
-					}.bind(this));
+					}.bind(this))
 				}
 				else {
-					var j2h = new reX.json2html({
-						html: '<span><b>{@title}</b></span>'
-					});
-					var menu = new reX.Menu(j2h.convert(this.options.sections));
-					menu.build();
+					var menu = new reX.Menu({
+                        vertical: this.options.mainVertical,
+                        template: '<span><b>{@title}</b></span>',
+                        sectionObject: reX.state.section.json
+                    });
+                    
+                    menu.generateElements();
+                    menu.build();
 				}	
 				break;
 				

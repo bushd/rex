@@ -52,6 +52,7 @@
 - (void)jumpBackward;
 - (BOOL)isPlaying;
 - (int)getProgress;
+- (NSString *)getSkins;
 
 + (NSString *) webScriptNameForSelector:(SEL)sel;
 + (BOOL)isSelectorExcludedFromWebScript:(SEL)sel;

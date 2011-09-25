@@ -10,7 +10,10 @@
 #define reX_global_h
 
 #include <asl.h>
+#include "BBSkinManager.h"
 
 aslclient _client;
+NSBundle *bundle;
+BBSkinManager *skinManager;
 
 #endif

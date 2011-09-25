@@ -11,6 +11,7 @@
 #import <VLCKit/VLCKit.h>
 #import "BBOverlayWindow.h"
 #import "BBWebView.h"
+#import "BBSkinManager.h"
 
 @class BBWindowController;
 
@@ -29,8 +30,6 @@
 	BOOL floatingOnTop;
 	NSMenuItem *setSizeToFullscreen;
 	NSWindow *fullscreenWindow;
-    
-    NSString* resourcePath;
 }
 
 @property (assign) IBOutlet NSWindow *window;
