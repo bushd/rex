@@ -3,7 +3,9 @@
         reX.ResourceManager.setCSS(['css/video.css']);
         reX.ResourceManager.setJS(['plugins/trakt/js/reX.trakt.plugin.js']);
 		
-        if (Player == undefined) Player = {}; 
+        if (Player == undefined) { 
+            Player = {}; 
+        }
         
 		var visible;
 		var media;
@@ -11,84 +13,116 @@
         var season;
 		var slider = undefined;
 		var scrobbled;
-		var traktTimer;
+		var traktTimer, seeker;
+        var subVisible = false;
+        var audioVisible = false;
+        var subsLoaded = false;
+        var audioLoaded = false;
+        var subtitleIndex = 0;
+        var audiotrackIndex = 0;
 	
-		reX.state.events = {
+        reX.state.events = {
 			domready: function() {
                 console.log('player loaded');
                 reX.state.video = true;
-                //th Slider('slider_container', 'slider_knob', {steps: 5000});		
-        
-                //$('reX_control_wrapper').setStyle('opacity', '0.0');	
                 visible = false;
                 
                 mediaManager.getMedia(reX.state.section.key ,function(m) {
                     media = m;
                     
                     if (media['@type'] == 'episode') {
-                        mediaManager.getShowByEpisodeKey(reX.state.section.key ,function(m) {
-                            show = m;
-                            
-                            mediaManager.getSeasonByEpisodeKey(media['@ratingKey'], function(s) {
-                                season = s;
-                                console.log(season);
-                                
-                                // start playing
-                                scrobbled = false;
-                                Player.play();
-                            });
-                        });
+                                        
+                        show = reX.state.section.show;
+                        if (!reX.state.section.season) {
+                            season = '1';
+                        }
+                        else {
+                            season = reX.state.section.season['@index'];
+                        }
+                        scrobbled = false;
+                        Player.play();
                     }
                     else {
                         // start playing
                         scrobbled = false;
                         Player.play();
                     }
+                    
+                    new Skin({
+                        template:'<div><img src="http://localhost:32400{#transcode::{@thumb}}"><div>{@title}</div><div>{@summary}</div></div>', 
+                        update: 'info',
+                        substitute: media
+                    });
                 });
-                
-                //var ctrl = new reX.Controls({index: 3});
-                
-                
             },
-		
         
             selectionEnter: function(item) {
-                switch(item.getProperty('index')) {
-                    case '1': 
-                    case '2':
-                        Player.jumpBackward();
-                        break;
-                    case '3':
-                        Player.togglePlaymode();
-                        item.toggleClass('reX_play');
-                        item.toggleClass('reX_pause');
-                        break;
-                    case '4':
-                        Player.stop();
-                        reX.back();
-                        break;
-                    case '5':
-                        Player.jumpForward();
-                        break;
-                    case '6':
+                if (!visible) {
+                    window.fireEvent('pressedSpace');
+                } 
+                else {
+                    controlsBehavior(item);
                 }
+                    
             },
 		
-		
             calledMenu: function() {
-                if(visible) {
-                    visible = false;
-                    
-                    $('reX_control_wrapper').fade('out');
-                }
-                else {
-                    visible = true;
-                    $('reX_control_wrapper').fade('in');
+                toggleMenu();
+            },
+            
+            pressedDown: function() {
+                if (!visible) {
+                    Player.volumeDown();
+                    console.log(Player.getVolume());
                 }
             },
             
-            pressedSpace: function() {
+            pressedUp: function() {
+               if (!visible) {
+                    Player.volumeUp();
+                    console.log(Player.getVolume());
+               }
+            },
+            
+            pressedSpace: function() {                
                 Player.togglePlaymode();
+            },
+        
+            pressedBack: function() {
+                if (visible) {
+                    if (closeSubtitleMenu()) return;
+                    if (closeAudioMenu()) return;
+                    closeMenu();
+                }
+                else if (reX.state.section.key != undefined) {
+                    
+                    if (reX.state.video == true) {
+                        quitPlaying();
+                    }
+                    reX.back();
+                }
+                else {
+                    if (Player.getProgress >= 85) {
+                        this.mediaManager.setWatched(reX.state.section.key, function() {
+                            traktProgress(100);
+                            reX.state.video = false;
+                            Player.stop();
+                            rex.load('home.html', undefined);
+                            return;
+                        });
+                    }
+                    else {
+                        reX.state.video = false;
+                        Player.stop();
+                        rex.load('home.html', undefined);
+                        return;
+                    }
+            
+                }
+            },
+            
+            infoKeyPresses: function() {
+                $('section#info').toggle();
             }
         };
         
@@ -98,6 +132,12 @@
 		function stateChanged(state) {
 			switch(state) {				
 				case 'beginPlaying':
+                    seeker = window.setInterval('Player.getSeekPosition()', 1500);
+                    getSubtitles();
+                    getAudiotracks();
+                    
+                    Player.setSubtitle( subtitleIndex );
+                
 					var progress = Player.getProgress();
 					if(progress >= 98) { progress = 0; }
 					
@@ -118,17 +158,14 @@
 						traktProgress();
 					});
 					traktTimer = window.clearInterval(traktTimer);
+                    seeker = window.clearInterval(seeker);
 					break;
 					
 				case 'finishedPlaying':
 					console.log('finished playing');
 					traktTimer = window.clearInterval(traktTimer);
-					this.mediaManager.setWatched(this.media['@ratingKey'], function() {
-						traktProgress(100);
-						Player.stop();
-						reX.state.video = false;
-                        reX.back();
-					});
+                    seeker = window.clearInterval(seeker);
+					quitPlaying();
 					break;
 			}
 		}
@@ -145,6 +182,7 @@
                     if (this.media['@type'] == 'movie') {
                         console.log('start scrobble movie');
                         trakt.beginMovieScrobbling(
+                            reX.state.section.imdb,
                             this.media['@title'], 
                             this.media['@year'], 
                             this.media['@duration'], 
@@ -159,6 +197,7 @@
                         console.log('start scrobble episode');
                         console.log('trakt version: ');
                         trakt.beginShowScrobbling(
+                            reX.state.section.tvdb,
                             show['@title'], 
                             show['@year'], 
                             season,
@@ -181,6 +220,7 @@
                     if (this.media['@type'] == 'movie') {
                         console.log('scrobble movie');
                         trakt.endMovieScrobbling(
+                            reX.state.section.imdb,
                             this.media['@title'], 
                             this.media['@year'], 
                             this.media['@duration'], 
@@ -195,6 +235,7 @@
                     else if (this.media['@type'] == 'episode') {
                         console.log('scrobble episode');
                         trakt.endShowScrobbling(
+                            reX.state.section.tvdb,
                             show['@title'], 
                             show['@year'], 
                             season,
@@ -219,18 +260,173 @@
 		}
 		
 		function updateSeekPosition(pos) {
-			/*if(this.slider) {
+			if(this.slider) {
 				this.slider.set(parseInt(pos));
-				console.log('updated Seek Position to ' + pos);
 			}
 			else {
 				this.slider = new Slider('slider_container', 'slider_knob', {steps: 5000});	
-				console.log('reset slider: ' + this.slider);			
-			}*/
+            }
 		}
+        
+        function getSubtitles() {
+            
+            if (!subsLoaded) {
+                var subs = Player.getSubtitles();
+                
+                var menu = new reX.Menu({
+                    elements: subs,
+                    index: 1001,
+                    inject: 'nav#subtitle'
+                });
+                
+                menu.build();
+                subsLoaded = true;            
+            }
+        }
+        
+        function getAudiotracks() {
+            
+            if (!audioLoaded) {
+                var tracks = Player.getAudiotracks();
+                
+                var menu = new reX.Menu({
+                    elements: tracks,
+                    index: 2001,
+                    inject: 'nav#audio'
+                });
+                
+                menu.build();
+                audioLoaded = true;            
+            }
+        }
+        
+        function quitPlaying() {
+            if (Player.getProgress() >= 75) {
+                this.mediaManager.setWatched(reX.state.section.key, function() {
+                    reX.state.video = false;
+                    traktProgress(100);
+                    Player.stop();
+                    reX.back();
+                    return;
+                });
+            }
+            else {
+                this.mediaManager.setProgress(reX.state.section.key, Player.getProgress(), function() {
+                    reX.state.video = false;
+                    traktProgress();
+                    Player.stop();
+                    return;
+                });
+            }
+        }
+        
+        // close all control menus
+        function closeMenu() {
+            visible = false;
+            $('reX_control_wrapper').fade('out');
+            return true;
+        }
+        
+        function openMenu() {
+            visible = true;
+            $('reX_control_wrapper').fade('in');
+        }
+        
+        function toggleMenu() {
+            if(visible) {
+                closeSubtitleMenu();
+                closeAudioMenu();
+                closeMenu();
+            }
+            else {
+                openMenu();
+            }
+        }
+        
+        function openSubtitleMenu() {
+            if (!subVisible) {
+                $('sub_container').show();
+                subVisible = true;
+                $$('.focus').removeClass('focus');
+                $$('[index="'+(1000+subtitleIndex+1)+'"]')[0].addClass('focus'); 
+            }
+        }
+        
+        function closeSubtitleMenu() {
+            if (subVisible) {
+                subVisible = false;
+                $('sub_container').hide();
+                $$('.focus').removeClass('focus');
+                $$('[index="8"]')[0].addClass('focus');
+                return true;
+            }
+            return false;
+        }
+        
+        function openAudioMenu() {
+            if (!subVisible) {
+                $('audio_container').show();
+                audioVisible = true;
+                $$('.focus').removeClass('focus');
+                $$('[index="'+(2000+audiotrackIndex+1)+'"]')[0].addClass('focus'); 
+            }
+        }
+        
+        function closeAudioMenu() {
+            if (audioVisible) {
+                audioVisible = false;
+                $('audio_container').hide();
+                $$('.focus').removeClass('focus');
+                $$('[index="7"]')[0].addClass('focus');
+                return true;
+            }
+            return false;
+        }
+        
+        function controlsBehavior(item) {
+            var index = parseInt(item.getProperty('index'));
+            if (index < 1000) {
+                switch(item.getProperty('index')) {
+                    case '1': 
+                        break;
+                    case '2':
+                        Player.jumpBackward();
+                        break;
+                    case '3':
+                        Player.togglePlaymode();
+                        item.toggleClass('reX_play');
+                        item.toggleClass('reX_pause');
+                        break;
+                    case '4':
+                        Player.stop();
+                        reX.back();
+                        break;
+                    case '5':
+                        Player.jumpForward();
+                        break;
+                    case '6':
+                        break;
+                    case '7':
+                        openAudioMenu();
+                        break;
+                    case '8':
+                        openSubtitleMenu();
+                        break;
+                }
+            }
+            else if (subVisible && index > 1000 && index < 2000) {
+                subtitleIndex = item.getProperty('idx');
+                Player.setSubtitle( subtitleIndex );
+            }
+            else if (subVisible && index > 2000 && index < 3000) {
+                audiotrackIndex = item.getProperty('idx');
+                Player.setAudiotrack( audiotrackIndex );
+            }
+        }
+
 	</script>
 
-	<div id="reX_control_wrapper" style="opacity: 0;">
+	<div id="reX_control_wrapper" style="opacity: 0.0;">
 		<div id="controls">
 			<div class="slider_wrap">
 				<div id="slider_container">
@@ -238,13 +434,28 @@
 					</div>
 				</div>
 			</div>
-			<div class="control_container">
-				<div class="reX_previous" left="6" right="2" index="1"></div>
-				<div class="reX_rewind" left="1" right="3" index="2"></div>
-				<div class="reX_play" left="2" right="4" index="3"></div>
-				<div class="reX_stop" left="3" right="5" index="4"></div>
-				<div class="reX_fastforward" left="4" right="6" index="5"></div>
-				<div class="reX_next" left="5" right="1" index="6"></div>
-			</div>
+			<nav class="control_container">
+                <ul>
+                    <li class="reX_previous" left="8" right="2" index="1"></li>
+                    <li class="reX_rewind" left="1" right="3" index="2"></li>
+                    <li class="reX_play focus" left="2" right="4" index="3"></li>
+                    <li class="reX_stop" left="3" right="5" index="4"></li>
+                    <li class="reX_fastforward" left="4" right="6" index="5"></li>
+                    <li class="reX_next" left="5" right="7" index="6"></li>
+                    <li class="reX_audio" left="6" right="8" index="7">Audio</li>
+                    <li class="reX_sub" left="7" right="1" index="8">Sub</li>
+                <ul>
+			</nav>
 		</div>
 	</div>
+    
+    <aside id="sub_container">
+        <nav id="subtitle"></nav>
+    </aside>
+    
+    <aside id="audio_container">
+        <nav id="audio"></nav>
+    </aside>
+    
+    <section id="info">
+    </section> 
