@@ -3,14 +3,14 @@ reX.MediaManager = new Class({
     Implements: [Events, Options],
 
 	initialize: function(options) {
-        reX.debug('[MEDIAMANGER] initialize', REX_INFO);
+        reX.debug('[MEDIAMANAGER] initialize', REX_INFO);
         if(options != undefined) {
             this.setOptions(options);
         }
     },
     
 	getSections: function(callback) {
-        reX.debug('[MEDIAMANGER] get Sections', REX_INFO);
+        reX.debug('[MEDIAMANAGER] get Sections', REX_INFO);
     
 		var result = new Array();
 	
@@ -31,7 +31,7 @@ reX.MediaManager = new Class({
 	},
 	
 	getSectionsByType: function(type, callback) {
-        reX.debug('[MEDIAMANGER] get Sections by type ' + type, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get Sections by type ' + type, REX_INFO);
     
 		var result = new Array();
 		
@@ -46,9 +46,28 @@ reX.MediaManager = new Class({
 			callback(result);
 		});
 	},
+    
+    getByType: function(type, key, callback) {
+        switch (type) {
+            case 'movie':
+            case 'show':
+            case 'all':
+                this.getAll(key, callback);
+                break;
+                
+            case 'season':
+                this.getSeasons(key, callback);
+                break;
+                
+            case 'episode':
+                this.getEpisodes(key, callback);
+                break;
+        }
+    },
+    
 	
 	getAll: function(section, callback) {
-		reX.debug('[MEDIAMANGER] get all in section ' + section, REX_INFO);
+		reX.debug('[MEDIAMANAGER] get all in section ' + section, REX_INFO);
         
         var result = new Array();
 	
@@ -83,9 +102,53 @@ reX.MediaManager = new Class({
 		}).send();
 
 	},
+    
+    getonDeck: function(section, callback) {
+		reX.debug('[MEDIAMANAGER] get onDeck for section ' + section, REX_INFO);
+        
+        var result = new Array();
+	
+ 		if (arguments.length == 0){
+   			return result;  
+		}
+			
+		var request = new Request.XML2JSON({
+			url: this.options.baseurl+"/library/sections/" + section + "/onDeck", 
+			method: 'get',
+			onSuccess: function(json){ 
+                this.current = json;
+                if(json.MediaContainer.Video != undefined) {
+                    if(json.MediaContainer.Video[0] != undefined) {
+                        callback(json.MediaContainer.Video);
+                    }
+                    else {
+                        result.push(json.MediaContainer.Video);
+                        callback(result);
+                    }
+                }
+                else if(json.MediaContainer.Directory != undefined) {
+                    if(json.MediaContainer.Directory[0] != undefined) {
+                        callback(json.MediaContainer.Directory);
+                    }
+                    else {
+                        result.push(json.MediaContainer.Directory);
+                        callback(result);
+                    }
+                }
+                reX.debug('[MEDIAMANAGER][SUCCESS] get onDeck for section ' + section, REX_INFO);
+            }.bimd(this),
+            onRequest: function() {
+                reX.debug('[MEDIAMANAGER][REQUEST] get onDeck for section ' + sectiony, REX_DEBUG);
+            },
+            onFailure: function() {
+                reX.debug('[MEDIAMANAGER][FAILURE] unable to get onDeck for section ' + section, REX_ERROR);
+            }
+		}).send();
+
+	},
 	
 	getAllLeaves: function(key, callback) {
-        reX.debug('[MEDIAMANGER] get leaves for key ' + key, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get leaves for key ' + key, REX_INFO);
     
 		var result = new Array();
 	
@@ -118,11 +181,11 @@ reX.MediaManager = new Class({
    			amount = this.options.recentlyDefaultAmount;   
 		}
 		else if (arguments.length == 0){
-            reX.debug('[MEDIAMANGER] getRecentlyAdded without arguments', REX_WARN);
+            reX.debug('[MEDIAMANAGER] getRecentlyAdded without arguments', REX_WARN);
    			return result;  
 		}
         
-        reX.debug('[MEDIAMANGER] get last ' + amount + ' recently added of section ' + section, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get last ' + amount + ' recently added of section ' + section, REX_INFO);
 			
 		var request = new Request.XML2JSON({
 			url: this.options.baseurl+"/library/sections/" + section + "/recentlyAdded", 
@@ -151,7 +214,7 @@ reX.MediaManager = new Class({
 	},
 	
 	getShow: function(key, callback) {
-        reX.debug('[MEDIAMANGER] get show with key ' + key, REX_INFO); 
+        reX.debug('[MEDIAMANAGER] get show with key ' + key, REX_INFO); 
            
 		var result = new Array();
 	
@@ -177,8 +240,38 @@ reX.MediaManager = new Class({
 		}).send();
 	},
 	
+    getTVDB: function(ratingKey) {
+        var tvdb;
+        var request = new Request.XML2JSON({
+			url: this.options.baseurl+'/library/metadata/'+ratingKey, 
+			method: 'get',
+            async: false,
+			onSuccess: function(json){ 
+                var guid = json.MediaContainer.Directory['@guid'];
+                tvdb = guid.match(/\d+/g);
+            }.bind(this)
+		}).send();
+    
+        return tvdb[0];
+    },
+    
+     getIMDB: function(ratingKey) {
+        var imdb;
+        var request = new Request.XML2JSON({
+			url: this.options.baseurl+'/library/metadata/'+ratingKey, 
+			method: 'get',
+            async: false,
+			onSuccess: function(json){ 
+                var guid = json.MediaContainer.Video['@guid'];
+                imdb = guid.match(/\d+/g);
+            }.bind(this)
+		}).send();
+    
+        return 'tt'+imdb[0];
+    },
+    
 	getSeasons: function(section, callback) {
-        reX.debug('[MEDIAMANGER] get seasons for section ' + section, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get seasons for section ' + section, REX_INFO);
         
 		var result = new Array();
 	
@@ -205,7 +298,7 @@ reX.MediaManager = new Class({
 	},
 	
 	getEpisodes: function(section, callback) {
-        reX.debug('[MEDIAMANGER] get episodes for section ' + section, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get episodes for section ' + section, REX_INFO);
     
 		var result = new Array();
 	
@@ -234,7 +327,7 @@ reX.MediaManager = new Class({
 	},
 	
 	getTracks: function(section, callback) {
-        reX.debug('[MEDIAMANGER] get tracks for section ' + section, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get tracks for section ' + section, REX_INFO);
     
 		var result = new Array();
 	
@@ -262,7 +355,7 @@ reX.MediaManager = new Class({
 	},
 	
 	getGroupedAlbums: function(section, callback) {
-        reX.debug('[MEDIAMANGER] get albums (grouped) for section ' + section, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get albums (grouped) for section ' + section, REX_INFO);
     
 		var result = new Array();
 		var albums = new Array();
@@ -299,7 +392,7 @@ reX.MediaManager = new Class({
 	},
 	
 	getMedia: function(key, callback) {
-        reX.debug('[MEDIAMANGER] get media for key ' + key, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get media for key ' + key, REX_INFO);
     
 		var result = new Array();
 	
@@ -319,7 +412,7 @@ reX.MediaManager = new Class({
 	},
 	
 	getShowByTitle: function(title, callback) {
-        reX.debug('[MEDIAMANGER] get show for title ' + title, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get show for title ' + title, REX_INFO);
 		this.getSectionsByType('show', function(sections) { 
 			sections.each(function(sec) {
 				this.getAll(sec['@key'], function(shows) {
@@ -334,7 +427,7 @@ reX.MediaManager = new Class({
 	},
 	
 	getShowByEpisodeKey: function(key, callback) {
-        reX.debug('[MEDIAMANGER] get show for episode key ' + key, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get show for episode key ' + key, REX_INFO);
 		this.getSectionsByType('show', function(sections) { 
 			sections.each(function(sec) {
 				this.getAll(sec['@key'], function(shows) {
@@ -354,7 +447,7 @@ reX.MediaManager = new Class({
 	},
     
     getSeasonByEpisodeKey: function(key, callback) {
-        reX.debug('[MEDIAMANGER] get season for episode key ' + key, REX_INFO);
+        reX.debug('[MEDIAMANAGER] get season for episode key ' + key, REX_INFO);
 		var request = new Request.XML2JSON({
 			url: this.options.baseurl+"/library/metadata/" + key + "/allLeaves", 
 			method: 'get',
@@ -367,47 +460,67 @@ reX.MediaManager = new Class({
         }).send();
 	},
     
-    getSectionInformations: function() {
-        reX.debug('[MEDIAMANGER] get informations for current section', REX_INFO);
-        var result = {
-            art: this.current.MediaContainer['@art'],
-            key: this.current.MediaContainer['@key'],
-            thumb: this.current.MediaContainer['@thumb'],
-            title: this.current.MediaContainer['@title1'],
-            viewGroup: this.current.MediaContainer['@viewGroup'],
-        };
+    getSectionInformations: function(key) {
+    
+        if(key) {
+            reX.debug('[MEDIAMANAGER] get informations for section ' + key, REX_INFO);
+            var result = {
+                art: this.current.MediaContainer['@art'],
+                key: this.current.MediaContainer['@key'],
+                thumb: this.current.MediaContainer['@thumb'],
+                title: this.current.MediaContainer['@title1'],
+                viewGroup: this.current.MediaContainer['@viewGroup'],
+            };
+        }
+        else {
+            reX.debug('[MEDIAMANAGER] get informations for current section', REX_INFO);
+            var result = {
+                art: this.current.MediaContainer['@art'],
+                key: this.current.MediaContainer['@key'],
+                thumb: this.current.MediaContainer['@thumb'],
+                title: this.current.MediaContainer['@title1'],
+                viewGroup: this.current.MediaContainer['@viewGroup'],
+            };
+        }
         
         return result;
     },
     
-    transcodeImage: function(url) {
-        result = '/photo/:/transcode?url=http://127.0.0.1:32400'+escape(url)+'&width=1920&height=1080';
-        reX.debug('[MEDIAMANGER][TRANSCODE] ' + url + ' to ' + result, REX_INFO);
+    transcodeImage: function(url, height, width) {
+        if (!height || !width) {
+            height = 1080;
+            width = 1920;
+        }
+        result = '/photo/:/transcode?url=http://127.0.0.1:32400'+escape(url)+'&width='+width+'&height='+height;
+        reX.debug('[MEDIAMANAGER][TRANSCODE] ' + url + ' to ' + result, REX_INFO);
         return result;
     },
 	
 	setWatched: function(key, callback) {
-        reX.debug('[MEDIAMANGER][WATCHED] ' + key, REX_INFO);
+        var matches = key.match(/\d+/g);
+        var simpleKey = matches[0];
+        
+        reX.debug('[MEDIAMANAGER][WATCHED] trying to mark media with key' + simpleKey +' as watched', REX_INFO);
     
 		if(!callback) { callback = function(){}; }
 		var request = new Request({
 			url: 'http://localhost:32400/:/scrobble', 
 			method: 'get',
 			onRequest: function() {
-				reX.debug('[REQUEST] mark Media with key '+key+' as watched', REX_DEBUG);
+				reX.debug('[MEDIAMANAGER][REQUEST] mark Media with key '+simpleKey+' as watched', REX_DEBUG);
 			},
 			onSuccess: function() {
-				reX.debug('[SUCCESS] marked Media with key '+key+' as watched', REX_INFO);
+				reX.debug('[MEDIAMANAGER][SUCCESS] marked Media with key '+simpleKey+' as watched', REX_INFO);
+                callback();
 			},
 			onFailure: function() {
-				reX.debug('[FAILURE] mark Media with key '+key+' as watched', REX_ERROR);
-			},
-			onComplete: function() { callback(); }
-		}).send('key='+key+'&identifier=com.plexapp.plugins.library');
+				reX.debug('[MEDIAMANAGER][FAILURE] mark Media with key '+simpleKey+' as watched', REX_ERROR);
+			}
+		}).send('key='+simpleKey+'&identifier=com.plexapp.plugins.library');
 	},
 	
 	setUnWatched: function(key, callback) {
-        reX.debug('[MEDIAMANGER][UNWATCHED] ' + key, REX_INFO);
+        reX.debug('[MEDIAMANAGER][UNWATCHED] ' + key, REX_INFO);
     
 		if(!callback) { callback = function(){}; }
 		var request = new Request({
@@ -418,21 +531,21 @@ reX.MediaManager = new Class({
 			},
 			onSuccess: function() {
 				reX.debugg('[SUCCESS] marked Media with key '+key+' as unwatched', REX_INFO);
+                callback(); 
 			},
 			onFailure: function() {
 				reX.debug('[FAILURE] mark Media with key '+key+' as unwatched', REX_ERROR);
-			},
-			onComplete: function() { callback(); }
+			}
 		}).send('key='+key+'&identifier=com.plexapp.plugins.library');
 	},
 	
 	toggleWatched: function(key, callback) {
 		this.getMedia(key, function(media) {
 			if(media['@viewCount']) {
-				this.setUnWatched(media['@ratingKey'], callback);
+				this.setUnWatched(media['@ratingKey'], callback('unwatched'));
 			}
 			else {
-				this.setWatched(media['@ratingKey'], callback);
+				this.setWatched(media['@ratingKey'], callback('watched'));
 			}
 		}.bind(this));
 	},
@@ -442,22 +555,26 @@ reX.MediaManager = new Class({
 		this.getMedia(key, function(media) {
 			var newProgress = media['@duration'] * (progress/100);
 			
-            reX.debug('[MEDIAMANGER][PROGRESS] set ' + newProgress, REX_INFO);
+            var matches = key.match(/\d+/g);
+            var simpleKey = matches[0];
+            
+            reX.debug('[MEDIAMANAGER][PROGRESS] set ' + newProgress + 'for key ' + simpleKey, REX_INFO);
+
             
 			new Request({
 				url: 'http://localhost:32400/:/progress', 
 				method: 'get',
 				onRequest: function() {
-					reX.debug('[REQUEST] update progress of media with key '+key, REX_DEBUG);
+					reX.debug('[REQUEST] update progress of media with key '+simpleKey, REX_DEBUG);
 				},
 				onSuccess: function() {
-					reX.debug('[SUCCESS] updated progress to '+newProgress+' of media with key '+key, REX_INFO);
+					reX.debug('[SUCCESS] updated progress to '+newProgress+' of media with key '+simpleKey, REX_INFO);
 				},
 				onFailure: function() {
-					reX.debug('[FAILURE] unable to update progress of media with key '+key, REX_ERROR);
+					reX.debug('[FAILURE] unable to update progress of media with key '+simpleKey, REX_ERROR);
 				},
 				onComplete: function() { callback(); }
-			}).send('key='+key+'&identifier=com.plexapp.plugins.library&time='+newProgress);
+			}).send('key='+simpleKey+'&identifier=com.plexapp.plugins.library&time='+newProgress);
 		}).send();
 	},
 	
