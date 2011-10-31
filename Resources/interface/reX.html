@@ -12,6 +12,7 @@
   		<script src="js/mootools/mt.class.singleton.js"></script>
         <script src="js/mootools/mt.class.skin.js"></script>
   		<script src="js/mootools/mt.request.xml2json.js"></script>
+        <script src="js/mootools/mt.class.lazyload.js"></script>
   		<script src="js/mootools/mt.overwrites.js"></script>
   		
   		<!-- reX -->
@@ -52,6 +53,9 @@
 				</section>
 			</aside>
 		</section>
+        
+        <section id="secondary">
+        </section>
 		
 		<footer>
 			<!-- footer goes here -->
@@ -65,17 +69,14 @@
 				reX.state.controls = new reX.Controls();
                 reX.load('home.html');
             }.bind(this)); 
-             
-            window.addEvent('pressedBack', function() {
-                if (reX.state.section.key != undefined) {
-                    
-                    if (reX.state.video == true) {
-                        reX.state.video = false;
-                        Player.stop();
-                    }
-                    reX.back();
+            
+            window.addEvent('selectionChange', function(item) {
+                if (!reX.state.video) {
+                    var i = item.getProperty('index');
+                    reX.state.section.selectionIndex  = i;
                 }
-            });
+            }.bind(this));
+             
         </script>
 	</body>
 <html>
