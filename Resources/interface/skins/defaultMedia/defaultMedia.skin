@@ -3,12 +3,16 @@
     version: '0.1',
     authors: 'Bastian Brodbeck',
     path: 'skins/defaultMedia/',
-    type: 'movie,show,episode',
+    type: 'show,episode',
     templates: {
         skin: 'template.defaultMedia.html',
         navigation: 'navigation.defaultMedia.html',
         metadata: 'metadata.defaultMedia.html'
     },
     javascript: '', // comma seperated list
-    css: 'skins/defaultMedia/css/defaultMedia.css' // comma seperated list
+    css: 'skins/defaultMedia/css/defaultMedia.css', // comma seperated list
+    scrolllist: {
+        offset: 2
+    },
+    menu: {}
 }

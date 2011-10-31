@@ -1,0 +1,144 @@
+body {
+	color: white;
+	font-family: Helvetica;
+}
+
+#skin {
+	position: absolute;
+    top:0;
+}
+
+nav {
+	margin-top: 15px;
+}
+
+nav .focus {
+	color: orange; /*#2abff9;*/
+	font-weight: bold;
+}
+
+nav li {
+	margin: 0px;
+	text-align: right;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.poster {
+	position: absolute;
+}
+
+.metadata {
+	position:absolute;
+	left:0;
+	bottom:0;
+}
+
+.summary {
+	overflow-y:hidden;
+}
+
+.fanart {
+	position: absolute;
+	left:0;
+	top:0;
+	z-index: -1;
+	background-color: black;
+}
+
+.fanart img {
+	opacity: 0.3;
+}
+	
+	.focus {
+		height: 120px;
+	}
+	
+	nav li {
+		padding:30px;
+		font-size:45px;
+	}
+	
+	.poster {
+		bottom: 60px;
+		left:80px;
+	}
+	
+	.poster img {
+		height: 300px;
+        width: 204px;
+		-webkit-box-shadow: 0 0 10px #222;
+	}
+	
+	.metadata {
+		width: 620px;
+		margin: 30px;
+	}
+	
+	.summary {
+		width: 600px;
+        height: 300px;
+		font-size:26px;
+        position: absolute;
+        left: 310px;
+        bottom: 60px;
+        text-align: justify;
+        line-height: 30px;
+	}
+    
+    li:not(.focus) .year {
+        display: none;
+    }
+    
+    .year {
+        font-size: 25px;
+        color: white;
+    }
+    
+    .year:before {
+        content: '(';
+        margin-left:30px;
+    }
+    
+    .year:after {
+        content: ')';
+    }
+    
+    .metaGroup {
+        font-size: 25px;
+        color: white;
+    }
+    
+    .metaGroup .rating {
+        position: absolute;
+        left: 80px;
+        bottom: 450px;
+    }
+    
+    .metaGroup .releasedAt {
+        position: absolute;
+        left: 80px;
+        bottom: 415px;
+    }
+    
+    .watched, .unwatched {
+        position: absolute;
+        left: 80px;
+        bottom: 380px;
+    }
+    
+    .hidden {
+        display: none;
+    }
+	
+    #skin,
+	.fanart,
+	.fanart img,
+	#main
+	{
+		width: 1920px;
+		height: 1080px;
+	}
+	
+}

@@ -1,0 +1,18 @@
+<div class="fanart"><img src="http://localhost:32400{#transcode::{@art}}"></div>
+
+<div class="flag resolution_flag">{@videoResolution}</div>
+<div class="flag ratio_flag">{@aspectRatio}</div>
+<div class="flag video_flag">{@videoCodec}</div>
+<div class="flag audio_flag">{@audioCodec}</div>
+<div class="flag channel_flag">{@audioChannels}</div>
+
+<div class="metaGroup">
+    <div class="releasedAt">First Aired: {@originallyAvailableAt}</div>
+    <div class="rating">Rating: {@rating}</div>
+    <div class="{#ifthenelse::{#equals::{@leafCount}::{@viewedLeafCount}}::watched::hidden}">watched</div>
+    <div class="{#ifthenelse::{#equals::{@leafCount}::{@viewedLeafCount}}::hidden::unwatched}">watched {@viewedLeafCount} of {@leafCount}</div>
+</div>
+
+<div id="poster" class="poster"><img src="http://localhost:32400{#transcode::{@thumb}}"></div>
+
+<div class="summary">{@summary}</div>
