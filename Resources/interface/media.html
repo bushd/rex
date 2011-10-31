@@ -1,17 +1,51 @@
-<script type="text/javascript">    
-    reX.ResourceManager.setCSS( skinManager.getCurrentSkinForSection().css.split(',') );
-
+<script type="text/javascript">  
+    var skin = {}; 
     var scrolllist, metadata;
+    var lazyload;
+    var type; 
+    var sectionInfo;
 
     reX.state.events = {
-        domready: function() {	
+        skinready: function() {	
+            metadata = new Template({
+                templateURL: skin.path + skin.templates.metadata, 
+                update: 'skin'
+            });
+                            
+            var menu = new reX.Menu(
+                Object.merge({
+                    templateURL: skin.path + skin.templates.navigation,
+                    sectionObject: reX.state.section.json,
+                    inject: 'nav#'+type
+                },
+                skin.menu)
+            );
+                            
+            menu.generateElements();
+            menu.build();
+
         },
         
         menuDone: function(event) {	
-            scrolllist = new reX.Scrolllist('nav', {offset:3});
+            scrolllist = new reX.Scrolllist('nav#'+type, skin.scrolllist);
             
-            reX.state.controls.select(1);
+            if (reX.state.section.selectionIndex == undefined) { 
+                reX.state.controls.select(1);
+            }
+            else {
+                reX.state.controls.select( reX.state.section.selectionIndex );
+            }
+            
             window.fireEvent('selectionChange', reX.state.controls.getSelection());
+            
+            lazyload = new LazyLoad({
+                range: 500, 
+                realSrcAttribute: "data-src", 
+                useFade: false, 
+                elements: 'img', 
+                container: $$('nav#'+type)[0],
+                mode: "horizontal",
+            });
         },
     
         selectionChange: function(item) {
@@ -20,21 +54,8 @@
 
             metadata.options.substitute = Object.merge(reX.state.section.json[i], reX.state.section.json[i].Media);
             metadata.parse();
-
-            var j2h = new reX.json2html({
-                html: '<img src="http://localhost:32400'+mediaManager.transcodeImage(reX.state.section.json[i]['@thumb'])+'">'
-            });
             
-            var html = j2h.convert(Object.merge(reX.state.section.json[i], reX.state.section.json[i].Media));			
-            $('poster').set('html', html);
-                        
-            j2h = new reX.json2html({
-                html: '<div class="fanart"><img src="http://localhost:32400'+mediaManager.transcodeImage(reX.state.section.json[i]['@art'])+'"></div>'
-            });
-            
-            html = j2h.convert(reX.state.section.json[i]);			
-            $('background').set('html', html);
-
+            scrolllist.move();
         },
         
         selectionEnter: function(item) {
@@ -42,61 +63,93 @@
             reX.debug('entering ' + reX.state.section.json[i]['@title'] + ' with key ' + reX.state.section.json[i]['@key'] + ' and type ' + reX.state.section.json[i]['@type'], REX_DEBUG);
             switch (reX.state.section.json[i]['@type']) {
                 case 'movie': 
+                    reX.state.section.imdb = mediaManager.getIMDB(reX.state.section.json[i]['@ratingKey']);
                 case 'episode': 
-                    reX.debug('trying to play "' + reX.state.section.json[i]['@title'] +'"', REX_DEBUG);
-                    reX.debug(JSON.encode(reX.state.section.json[i].Media), REX_DEBUG);
+                    var i = item.getProperty('idx');
+		
+                    mediaManager.getMedia(reX.state.section.json[i]['@key'], function(media) {
+                        this.media = media;
+                        if(this.media.Media.Part[0] != undefined) {
+                            Player.playVideos(this.media.Media.Part[0]["@file"], this.media["@key"]);
+                        }
+                        else { 
+                            Player.playVideo(this.media.Media.Part["@file"], this.media["@key"]);
+                        }
+                    });
+                    break;
                     
-                    // get video file
-                    if (reX.state.section.json[i].Media.Part[0] == undefined) {
-                        file = reX.state.section.json[i].Media.Part["@file"]
-                    }
-                    else {
-                        file = reX.state.section.json[i].Media.Part[0]["@file"];
-                    }
-                    
-                    reX.debug(file+' -- '+reX.state.section.json[i]["@key"], REX_DEBUG);
-                    Player.playVideo(file, reX.state.section.json[i]["@key"]);
+                case 'season': 
+                    reX.state.section.season = reX.state.section.json[i]
+                    reX.load('media.html',reX.state.section.json[i]['@key'], 'episode');
                     break;
                     
                 case 'show': 
-                    reX.load('seasons.html',reX.state.section.json[i]['@key']);
+                    reX.state.section.show = reX.state.section.json[i]
+                    reX.state.section.tvdb = mediaManager.getTVDB(reX.state.section.json[i]['@ratingKey']);
+                    reX.load('media.html',reX.state.section.json[i]['@key'], 'season');
                     break;
             } 
         },
         
-        pressedDown: function(item) {
-            scrolllist.seekNext();
+        pressedBack: function() {
+            if (reX.state.section.key != undefined) {
+                    
+                if (reX.state.video == true) {
+                    reX.state.video = false;
+                    Player.stop();
+                }
+                reX.back();
+            }
         },
-        
-        pressedUp: function(item) {
-            scrolllist.seekPrev();
+            
+        wPressed: function(item) {
+            i = item.getProperty('idx');
+            mediaManager.toggleWatched(reX.state.section.json[i]['@key'], function(state){ 
+                if (state === 'watched') {
+                    reX.state.section.json[i]['@viewCount'] = '1';
+                }
+                else {
+                    reX.state.section.json[i]['@viewCount'] = '0';
+                }
+                
+                window.fireEvent('selectionChange', item);
+            });
         }
     };
 
     window.addEvents(reX.state.events);
-    
-    mediaManager.getAll(reX.state.section.key ,function(sec) {
-                reX.state.section.json = sec;
-                                
-                var path = skinManager.getCurrentSkinForSection().path; 
-                                
-                new Skin({
-                    templateURL: path + skinManager.getCurrentSkinForSection().templates.skin, //'skins/movie/default/template.default.html',
-                    update: 'inner'
-                });
-                
-                metadata = new Template({
-                    templateURL: path + skinManager.getCurrentSkinForSection().templates.metadata, //'skins/movie/default/template.default.html',
-                    update: 'skin'
-                });
-                                
-                var menu = new reX.Menu({
-                    templateURL: path + skinManager.getCurrentSkinForSection().templates.navigation, //'skins/movie/default/navigation.default.html',
-                    sectionObject: reX.state.section.json
-                });
-                                
-                menu.generateElements();
-                menu.build();
-            });
+        
+    mediaManager.getByType(reX.state.section.type, reX.state.section.key ,function(sec) {
+        reX.state.section.json = sec;
+        type = reX.state.section.json[0]['@type']
+        
+        if (reX.state.section.json.length == 1 && type != 'episode') {
+            reX.load('media.html',reX.state.section.json[0]['@key'], 'episode');
+            return;
+        }
+        
+        sectionInfo = mediaManager.getSectionInformations();
+        
+        if (reX.state.section.type == undefined) {
+            type = 'media';
+        }
+        else {
+            type = reX.state.section.type;
+        }
+        
+        $$('nav')[0].setProperty('id', type);
+        
+        skin = skinManager.getCurrentSkinForSection(reX.state.section.key);
+                        
+        new Skin({
+            templateURL: skin.path + skinManager.getCurrentSkinForSection().templates.skin, 
+            update: 'inner',
+            substitute: {'@sectionArt': sectionInfo['art']}
+        });
+
+        reX.ResourceManager.setCSS( skin.css.split(','), function() {
+            window.fireEvent('skinready');
+        });
+    });
 
 </script>
