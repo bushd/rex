@@ -1,0 +1,18 @@
+{
+    name: 'Default Episode',
+    version: '0.1',
+    authors: 'Bastian Brodbeck',
+    path: 'skins/defaultEpisode/',
+    type: 'episode',
+    templates: {
+        skin: 'template.defaultEpisode.html',
+        navigation: 'navigation.defaultEpisode.html',
+        metadata: 'metadata.defaultEpisode.html'
+    },
+    javascript: '', // comma seperated list
+    css: 'skins/defaultEpisode/css/defaultEpisode.css', // comma seperated list
+    scrolllist: {
+        offset: 2
+    },
+    menu: {}
+}

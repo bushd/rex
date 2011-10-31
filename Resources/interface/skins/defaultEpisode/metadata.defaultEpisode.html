@@ -1,0 +1,21 @@
+<div id="poster" class="poster">
+    <img src="http://localhost:32400{#transcode::{@thumb}}">
+    <div class="{#ifthenelse::{@viewCount}::watched::unwatched}"><span class="watchedRibbonTriangle"></span>watched</div>
+</div>
+
+<div class="flagGroup">
+    <span class="flag resolution_flag">{@videoResolution}</span>
+    <span class="flag ratio_flag">{@aspectRatio}</span>
+    <span class="flag video_flag">{@videoCodec}</span>
+    <span class="flag audio_flag">{@audioCodec}</span>
+    <span class="flag channel_flag">{@audioChannels}</span>
+</div>
+
+<div class="metaGroup">
+    <div class="releasedAt"><em>Aired:</em> {@originallyAvailableAt}</div>
+    <div class="rating"><em>Rating:</em> {@rating}</div>
+    <div class="duration"><em>Duration:</em> {#toTime::{@duration}}</div>
+</div>
+
+
+<div class="summary">{@summary}</div>
