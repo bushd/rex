@@ -30,6 +30,8 @@
                 mediaManager.getMedia(reX.state.section.key ,function(m) {
                     media = m;
                     
+                    changeRefreshRate();
+                    
                     if (media['@type'] == 'episode') {
                                         
                         show = reX.state.section.show;
@@ -39,14 +41,11 @@
                         else {
                             season = reX.state.section.season['@index'];
                         }
-                        scrobbled = false;
-                        Player.play();
                     }
-                    else {
-                        // start playing
-                        scrobbled = false;
-                        Player.play();
-                    }
+                    
+                    // start playing
+                    scrobbled = false;
+                    Player.play();
                     
                     new Skin({
                         template:'<div><img src="http://localhost:32400{#transcode::{@thumb}}"><div>{@title}</div><div>{@summary}</div></div>', 
@@ -422,6 +421,27 @@
                 audiotrackIndex = item.getProperty('idx');
                 Player.setAudiotrack( audiotrackIndex );
             }
+        }
+        
+        function changeRefreshRate() {
+            var rate = 60;
+        
+            switch (media.Media['@videoFrameRate'].toLowerCase())
+            {
+                case '24p':
+                    rate = 24;
+                    break;
+                    
+                case 'pal':
+                    rate = 50;
+                    break;
+                
+                case 'ntsc': 
+                    rate = 60;
+                    break;
+            }
+            
+            Player.setRefreshRate(rate);
         }
 
 	</script>
