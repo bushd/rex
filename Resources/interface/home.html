@@ -4,24 +4,6 @@
 		
 		var sections;
 		var scrolllist;
-
-        
-        menu = {
-            orientation: 'vertical',
-            items: [{
-                entry: 'static',
-                title: 'Movies',
-                items: []
-            }, {
-                entry: 'static',
-                title: 'Shows',
-                items: []
-            }, {
-                entry: 'static',
-                title: 'Settings',
-                url: ''
-            }],
-        };
         
         var homeMenu = new reX.HomeMenu({mainVertical:false});
 
@@ -42,7 +24,13 @@
 					}).inject($('skin'));
 				});
 				
-				reX.state.controls.select(1);
+				if (reX.state.section.selectionIndex == undefined) { 
+                    reX.state.controls.select(1);
+                }
+                else {
+                    reX.state.controls.select( reX.state.section.selectionIndex );
+                }
+                
 				window.fireEvent('selectionChange', reX.state.controls.getSelection());
 				
 				// build sections recently added
@@ -103,14 +91,6 @@
 						reX.load('album.html',reX.state.section.json[i]['@key']);
 						break;
 				} 
-			},
-			
-			pressedDown: function(item) {
-				scrolllist.seekNext();
-			},
-			
-			pressedUp: function(item) {
-				scrolllist.seekPrev();
 			}
 		};
 		
