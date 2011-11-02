@@ -29,9 +29,10 @@ reX.Controls = new Class({
 					}
 				
 					if(typeOf(nindex[0]) == 'string') {
-						var old = $$('.focus')
+						var old = $$('.focus');
+                        window.fireEvent('selectionLeave', old);
 						old.removeClass('focus');
-						$$('[index="'+nindex[0].toInt()+'"]').addClass('focus').fireEvent('focus');	
+						$$('[index="'+nindex[0]+'"]').addClass('focus').fireEvent('focus');	
 						window.fireEvent('selectionChange', $$('.focus'));
 						window.fireEvent('pressedLeft', old);
 					}
@@ -52,12 +53,16 @@ reX.Controls = new Class({
 					}
 				
 					if(typeOf(nindex[0]) == 'string') {
-						var old = $$('.focus')
+						var old = $$('.focus');
+                        window.fireEvent('selectionLeave', old);
 						old.removeClass('focus');
-						$$('[index="'+nindex[0].toInt()+'"]').addClass('focus').fireEvent('focus');
+						$$('[index="'+nindex[0]+'"]').addClass('focus').fireEvent('focus');
 						window.fireEvent('selectionChange', $$('.focus'));	
 						window.fireEvent('pressedUp', old);
 					}
+                    else {
+                        window.fireEvent('pressedUp');
+                    }
 				}
 				else if(event.key == 'right') { //right
 					event.stop();
@@ -75,12 +80,13 @@ reX.Controls = new Class({
 					}
 				
 					if(typeOf(nindex[0]) == 'string') {
-						var old = $$('.focus')
+						var old = $$('.focus');
+                        window.fireEvent('selectionLeave', old);
 						old.removeClass('focus');
-						$$('[index="'+nindex[0].toInt()+'"]').addClass('focus').fireEvent('focus');	
+						$$('[index="'+nindex[0]+'"]').addClass('focus').fireEvent('focus');	
 						window.fireEvent('selectionChange', $$('.focus'));
 						window.fireEvent('pressedRight', old);
-					}
+					} 
 				}
 				else if(event.key == 'down') { //down
 					event.stop();
@@ -98,16 +104,20 @@ reX.Controls = new Class({
 					}
 				
 					if(typeOf(nindex[0]) == 'string') {
-						var old = $$('.focus')
+						var old = $$('.focus');
+                        window.fireEvent('selectionLeave', old);
 						old.removeClass('focus');
-						$$('[index="'+nindex[0].toInt()+'"]').addClass('focus').fireEvent('focus');	
+						$$('[index="'+nindex[0]+'"]').addClass('focus').fireEvent('focus');	
 						window.fireEvent('selectionChange', $$('.focus'));
 						window.fireEvent('pressedDown', old);	
 					}
+                    else {
+                        window.fireEvent('pressedDown');
+                    }
+                    
 				}
 				else if(event.key == 'enter') { //enter
 					event.stop();
-					$$('.focus')[0].fireEvent('click');
 					window.fireEvent('selectionEnter', $$('.focus')[0]);	
 				}
 				else if(event.key == 'backspace') { //<-
@@ -126,13 +136,20 @@ reX.Controls = new Class({
 					event.stop();
 					window.fireEvent('wPressed', $$('.focus')[0]);
 				}
+                else if(event.key == 'i') { //i
+					event.stop();
+					window.fireEvent('infoKeyPressed');
+				}
 			});
 		}
 	},
 	
 	select: function(index) {
+        reX.debug('[CONTROLS] select index '+index, REX_DEBUG);
 		$$('.focus').removeClass('focus');
-		$$('[index="'+index.toInt()+'"]').addClass('focus').fireEvent('focus');	
+		var elements = $$('[index="'+index+'"]');
+        reX.debug('[CONTROLS] select Elements '+elements, REX_DEBUG);
+        elements.addClass('focus').fireEvent('focus');	
 		window.fireEvent('selectionChange', $$('.focus'));
 	},
 	
@@ -142,6 +159,10 @@ reX.Controls = new Class({
 	
 	getSelectedIndex: function() {
 		return parseInt($$('.focus')[0].getProperty('index'));
+	},
+    
+    getSelectedItem: function() {
+		return parseInt($$('.focus')[0];
 	},
 	
 	options: {
