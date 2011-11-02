@@ -14,10 +14,6 @@
 - (id)init
 {
     self = [super init];
-    goneBack = NO;
-    resources = [NSBundle mainBundle];
-    resourcePath = [resources resourcePath];
-	
     return self;
 }
 
@@ -30,8 +26,23 @@
 
 - (void)setVideoView:aView {
     videoView = aView;
-    player = [[VLCMediaPlayer alloc] initWithVideoView:videoView];
-	[player setDelegate:self];
+    
+    mediaListPlayer = [[VLCMediaListPlayer alloc] init];
+    [[mediaListPlayer mediaPlayer] setVideoView:videoView];
+    [[mediaListPlayer mediaPlayer] setDelegate:self];
+    
+    //player = [[VLCMediaPlayer alloc] init];
+    //[player setVideoView:videoView];
+	//[player setDelegate:self];
+    
+    player = [mediaListPlayer mediaPlayer];
+    
+    goneBack = NO;
+    resources = [NSBundle mainBundle];
+    resourcePath = [resources resourcePath];
+    volume = 100;
+    volumeStep = 10;
+    [[player audio] setVolume:volume];
 }
 
 - (void)setWindow:(NSWindow *)w {
@@ -130,7 +141,7 @@
 		[[self windowScriptObject] evaluateWebScript:@"stateChanged('beginPlaying')"];
 	} 
 	else if (state == VLCMediaPlayerStatePaused) {
-		if([self getProgress] >= 99) {
+		if([self getProgress] >= 97) {
 			NSLog(@"PlayState: finished");
 			[[self windowScriptObject] evaluateWebScript:@"stateChanged('finishedPlaying')"];
 		}
@@ -170,16 +181,7 @@
 	*/
 }
 
-- (void)mediaPlayerTimeChanged:(NSNotification *)aNotification {
-	float current = [player position];
-	int progress = (int)(current*5000.0);
-
-	if(seekPosition != progress) {
-		seekPosition = progress;
-		//NSLog(@"Time Changed Event. Progress: %i", progress);
-		[scriptObject evaluateWebScript:[NSString stringWithFormat:@"updateSeekPosition(%i)", progress]];
-	}
-}
+- (void)mediaPlayerTimeChanged:(NSNotification *)aNotification {}
 
 /*
  * JavaScript
@@ -195,7 +197,8 @@
 - (void)playVideo:(NSString *)aPath withKey:(NSString *)key {
 	NSLog(@"Playing Video: %@", aPath);
 	seekPosition = 0;
-	[player setMedia:[VLCMedia mediaWithPath:aPath]];
+	[mediaListPlayer setRootMedia:[VLCMedia mediaWithPath:aPath]];
+
 //	[self loadURL:[NSURL URLWithString:[NSString stringWithFormat: @"%@/interface/video.html?key=%@", resourcePath, key]]];
     [scriptObject evaluateWebScript:[NSString stringWithFormat:@"reX.load('video.html', '%@');", key]];
 }
@@ -216,7 +219,7 @@
 }
 
 - (void)play {
-    [player play];
+    [mediaListPlayer play];
 }
 
 - (void)togglePlaymode {
@@ -224,12 +227,12 @@
         [player pause];
     }
     else {
-        [player play];
+        [mediaListPlayer play];
     }
 }
 
 - (void)stop {
-    [player stop];
+    [mediaListPlayer stop];
 }
 
 -(void)jumpForward {
@@ -238,6 +241,45 @@
 
 -(void)jumpBackward {
     [player mediumJumpBackward];
+}
+
+-(void)volumeUp {
+    if (volume <= 200 - volumeStep) {
+        NSLog(@"old volume: %lu", volume);
+        volume += volumeStep;
+        NSLog(@"new volume: %lu", volume);
+        [[player audio] setVolume:volume];
+    }
+}
+
+-(void)volumeDown {
+    if (volume >= volumeStep) {
+        NSLog(@"old volume: %lu", volume);
+        volume -= volumeStep;
+        NSLog(@"new volume: %lu", volume);
+        [[player audio] setVolume:volume];
+    }
+}
+
+-(void)toggleMute {
+    if ([[player audio] isMuted]) {
+        [[player audio] setMute:NO];
+    }
+    else {
+        [[player audio] setMute:YES];
+    }
+}
+
+- (BOOL)isMuted {
+    return [[player audio] isMuted];
+}
+
+- (void)setVolume:(NSUInteger)vol {
+    [[player audio] setVolume:vol];
+}
+
+- (NSUInteger)getVolume {
+    return [[player audio] volume];
 }
 
 - (BOOL)isPlaying {
@@ -254,6 +296,107 @@
     return [skinManager skinDefinitionAsJSONString];
 };
 
+- (NSArray *)getSubtitles {
+    if ([player state] == VLCMediaPlayerStatePlaying) {
+        return [player videoSubTitles];
+    }
+    else {
+        return nil;
+    }
+};
+
+- (void)setSubtitle:(NSUInteger)index {
+    if ([[player videoSubTitles] count] > 0) {
+        if ([player state] == VLCMediaPlayerStatePlaying) {
+            [player setCurrentVideoSubTitleIndex:index];
+        }
+    }
+};
+
+- (NSArray *)getAudiotracks {
+    if ([player state] == VLCMediaPlayerStatePlaying) {
+        return [player audioTracks];
+    }
+    else {
+        return nil;
+    }
+};
+
+- (void)setAudiotrack:(NSUInteger)index {
+    if ([player state] == VLCMediaPlayerStatePlaying) {
+        [player setCurrentAudioTrackIndex:index];
+    }
+};
+
+- (void)getSeekPosition {
+    float current = [player position];
+	int progress = (int)(current*5000.0);
+
+	if(seekPosition != progress) {
+		seekPosition = progress;
+		//NSLog(@"Time Changed Event. Progress: %i", progress);
+		[scriptObject evaluateWebScript:[NSString stringWithFormat:@"updateSeekPosition(%i)", progress]];
+	}
+}
+
+- (void)setPlayerFramePositionX:(float)x positionY:(float)y width:(float)w height:(float)h {
+    [videoView setFrame:NSMakeRect(x, y, w, h)];
+}
+
+-(BOOL) changeDisplaySettingsWithRefreshRate:(int)refresh {
+	CGDisplayConfigRef newConfig;
+	int i = 0;
+    CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(CGMainDisplayID());
+ 
+    unsigned long w = CGDisplayModeGetWidth(currentMode);
+    unsigned long h = CGDisplayModeGetHeight(currentMode);
+    CFStringRef e = CGDisplayModeCopyPixelEncoding(currentMode);
+
+	NSLog(@"called change display settings with w:%lu h:%lu e:%@", w, h, e);
+		
+    CFArrayRef modes = CGDisplayCopyAllDisplayModes(kCGDirectMainDisplay, NULL);
+    
+    for ( i = 0 ; i < CFArrayGetCount(modes) ; i++ )
+    {
+        CGDisplayModeRef m = (CGDisplayModeRef) CFArrayGetValueAtIndex(modes, i);
+            
+        //NSLog(@"Encoding: %@, %@", CGDisplayModeCopyPixelEncoding(m), (CFStringCompare(CGDisplayModeCopyPixelEncoding(m),e, 0) == kCFCompareEqualTo));
+        if ( CGDisplayModeGetWidth(m) == w 
+            && CGDisplayModeGetHeight(m) == h
+            && CFStringCompare(CGDisplayModeCopyPixelEncoding(m),e, 0) == kCFCompareEqualTo
+            && CGDisplayModeGetRefreshRate(m) == refresh )
+        {
+            CGDisplayFadeReservationToken token;
+            CGError err = CGAcquireDisplayFadeReservation(4, &token);
+            if ( kCGErrorSuccess == err )
+            {
+              //  CGDisplayFade(token, 1.0, kCGDisplayBlendNormal, kCGDisplayBlendSolidColor, 0.0, 0.0, 0.0, true);
+                err = CGBeginDisplayConfiguration(&newConfig);
+                if ( err )
+                    goto fail;
+                err = CGConfigureDisplayWithDisplayMode(newConfig, kCGDirectMainDisplay, m, NULL);
+                if ( err )
+                    goto fail;
+                err = CGCompleteDisplayConfiguration(newConfig, kCGConfigureForAppOnly);
+                if ( err )
+                    goto fail;
+                
+                return YES;
+                              
+            }
+            else
+                return NO;
+        }
+    }
+	
+	return YES;
+	
+fail:
+	NSLog(@"Unable to set display to width: %lu height %lu refresh: %d", w, h, refresh);
+	return NO;
+}
+
+
 /*
  * Bind Javascript
  */ 
@@ -269,8 +412,21 @@
     else if (sel == @selector(jumpBackward)) return NO;
 	else if (sel == @selector(isPlaying)) return NO;
 	else if (sel == @selector(getProgress)) return NO;
+    else if (sel == @selector(getSeekPosition)) return NO;
 	else if (sel == @selector(play)) return NO;
     else if (sel == @selector(getSkins)) return NO;
+    else if (sel == @selector(getSubtitles)) return NO;
+    else if (sel == @selector(setSubtitle:)) return NO;
+    else if (sel == @selector(getAudiotracks)) return NO;
+    else if (sel == @selector(setAudiotrack:)) return NO;
+    else if (sel == @selector(volumeUp)) return NO;
+    else if (sel == @selector(volumeDown)) return NO;
+    else if (sel == @selector(toggleMute)) return NO;
+    else if (sel == @selector(isMuted)) return NO;
+    else if (sel == @selector(setVolume:)) return NO;
+    else if (sel == @selector(getVolume)) return NO;
+    else if (sel == @selector(setPlayerFramePositionX:positionY:width:height:)) return NO;
+    else if (sel == @selector(changeDisplaySettingsWithRefreshRate:)) return NO;
     else return YES;
 }
 
@@ -285,15 +441,22 @@
     else if (sel == @selector(jumpBackward)) return @"jumpBackward";
 	else if (sel == @selector(isPlaying)) return @"isPlaying";
 	else if (sel == @selector(getProgress)) return @"getProgress";
+    else if (sel == @selector(getProgress)) return @"getSeekPosition";
 	else if (sel == @selector(play)) return @"play";
     else if (sel == @selector(getSkins)) return @"getSkins";
+    else if (sel == @selector(getSubtitles)) return @"getSubtitles";
+    else if (sel == @selector(setSubtitle:)) return @"setSubtitle";
+    else if (sel == @selector(getAudiotracks)) return @"getAudiotracks";
+    else if (sel == @selector(setAudiotrack:)) return @"setAudiotrack";
+    else if (sel == @selector(volumeUp)) return @"volumeUp";
+    else if (sel == @selector(volumeDown)) return @"volumeDown";
+    else if (sel == @selector(toggleMute)) return @"toggleMute";
+    else if (sel == @selector(isMuted)) return @"isMuted";
+    else if (sel == @selector(setVolume:)) return @"setVolume";
+    else if (sel == @selector(getVolume)) return @"getVolume";
+    else if (sel == @selector(setPlayerFramePositionX:positionY:width:height:)) return @"setFrame";
+    else if (sel == @selector(changeDisplaySettingsWithRefreshRate:)) return @"setRefreshRate";
     else return nil;
-}
-
-
-- (BOOL)mouseDownCanMoveWindow
-{
-    return YES;
 }
 
 @end

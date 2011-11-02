@@ -14,11 +14,14 @@
 @private
     VLCVideoView *videoView;
     VLCMediaPlayer *player;
+    VLCMediaListPlayer *mediaListPlayer;
     VLCAudio *audio;
 	NSBundle *resources;
     NSString *resourcePath;
     WebScriptObject *scriptObject;
 	NSWindow *window;
+    NSUInteger volume;
+    NSUInteger volumeStep;
 	
 	int seekPosition;
 	
@@ -50,9 +53,23 @@
 - (void)stop;
 - (void)jumpForward;
 - (void)jumpBackward;
+- (void)volumeUp;
+- (void)volumeDown;
+- (void)toggleMute;
+- (BOOL)isMuted;
+- (void)setVolume:(NSUInteger)vol;
+- (NSUInteger)getVolume;
 - (BOOL)isPlaying;
 - (int)getProgress;
 - (NSString *)getSkins;
+- (NSArray *)getSubtitles;
+- (void)setSubtitle:(NSUInteger)index;
+- (NSArray *)getAudiotracks;
+- (void)setAudiotrack:(NSUInteger)index;
+- (void)getSeekPosition;
+- (void)setPlayerFramePositionX:(float)x positionY:(float)y width:(float)w height:(float)h;
+- (BOOL)changeDisplaySettingsWithRefreshRate:(int)refresh;
+
 
 + (NSString *) webScriptNameForSelector:(SEL)sel;
 + (BOOL)isSelectorExcludedFromWebScript:(SEL)sel;
