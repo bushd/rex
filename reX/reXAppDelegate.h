@@ -12,10 +12,11 @@
 #import "BBOverlayWindow.h"
 #import "BBWebView.h"
 #import "BBSkinManager.h"
+#import "HIDRemote.h"
 
 @class BBWindowController;
 
-@interface reXAppDelegate : NSObject <NSApplicationDelegate> {
+@interface reXAppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate, HIDRemoteDelegate> {
 @private
 	BBWindowController *windowController;
 	
@@ -30,6 +31,8 @@
 	BOOL floatingOnTop;
 	NSMenuItem *setSizeToFullscreen;
 	NSWindow *fullscreenWindow;
+    
+    HIDRemote *hidRemote;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -42,8 +45,13 @@
 - (IBAction)setSizeTo1080p:(id)sender;
 - (IBAction)toggleFullscreen:(id)sender;
 - (IBAction)toggleFloatOnTop:(id)sender;
-- (IBAction)openPreferences:(id)sender;
 - (double) titleBarHeight;
+
+- (void)setupRemote;
+
+- (BOOL)startRemoteControl;
+- (void)stopRemoteControl;
+- (void)hidRemote:(HIDRemote *)hidRemote eventWithButton:(HIDRemoteButtonCode)buttonCode isPressed:(BOOL)isPressed fromHardwareWithAttributes:(NSMutableDictionary *)attributes;
 
 
 @end
