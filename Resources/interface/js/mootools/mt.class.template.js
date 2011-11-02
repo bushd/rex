@@ -10,7 +10,77 @@
             template: undefined,
             update: null,
             append: null,
-            substitute: {}
+            substitute: {},
+            functions: {
+                transcode: function(arg) { // one paramenter
+                    if (!arg) return '';
+                    
+                    if (arg.length >= 3)
+                        return mediaManager.transcodeImage(arg[0], arg[1], arg[2]);
+                    else 
+                        return mediaManager.transcodeImage(arg[0]);
+                },
+                
+                ifthenelse: function(args) { // three parameters
+                    if (args.length < 2) return '';
+                    
+                    var ifArgument = stringToBoolean(args[0]);
+                    var thenArgument = args[1];
+                    
+                    var elseArgument = '';
+                    if (args.length > 2) {
+                        elseArgument = args[2];
+                    }
+                    
+                    return (ifArgument ? thenArgument : elseArgument); 
+                },
+                
+                exists: function(arg) {
+                    return ((arg && arg[0] !== "") ? 'true' : 'false');
+                },
+                
+                notexists: function(arg) {
+                    return ((arg && arg[0] !== "") ? 'false' : 'true');
+                },
+                
+                equals: function(args) { // two parameters
+                    if (args.length < 2) return 'false';
+               
+                    var firstArgument = args[0];
+                    var secondArgument = args[1];
+               
+                    return ((firstArgument == secondArgument) ? 'true' : 'false'); 
+               },
+               
+               notequals: function(args) { // two parameters
+                    if (args.length < 2) return 'false';
+               
+                    var firstArgument = args[0];
+                    var secondArgument = args[1];
+               
+                    return ((firstArgument != secondArgument) ? 'true' : 'false'); 
+               },
+               
+               not: function(arg) { // one parameter
+                    if (!arg) return 'false';
+               
+                    return (stringToBoolean(arg[0]) ? 'false' : 'true');
+               },
+               
+               toTime: function(arg) {
+                    if (!arg) return '';
+                    
+                    var time = arg[0];
+                    var seconds = parseInt((time/1000)%60);
+                    var minutes = parseInt((time/(1000*60))%60);
+                    var hours = parseInt((time/(1000*60*60))%24);
+                    
+                    seconds = seconds.toString();
+                    minutes = minutes.toString();
+                    
+                    return hours + ':' + ((minutes.length) < 2 ? '0'+minutes : minutes) + ':' + ((seconds.length) < 2 ? '0'+seconds : seconds);
+               }
+            },
         },
         
         Implements: Options,
@@ -39,9 +109,7 @@
             this.preSubstitute();
             
             // substitute
-            reX.debug('[TEMPLATE][SUBSTITUTE] with ' + JSON.encode(options.substitute), REX_DEBUG);
-            tmp = options.template.substitute(options.substitute);
-            reX.debug('[TEMPLATE][SUBSTITUTE] ' + tmp, REX_DEBUG);
+            tmp = this.render();
             
             var template = Elements.from(tmp, false);
             
@@ -51,9 +119,11 @@
         
             // add templatze to DOM
             if (options.update) {
+                console.log(options.update);
                 document.id(options.update).empty().adopt(template);
             }
             else if (options.append) {
+                console.log(options.append);
                 document.id(options.append).adopt(template);
             }
 
@@ -68,7 +138,10 @@
         loadTemplate: function() {
             var options = this.options;
             
-             if (!options.template) {
+            if (!options.template && !options.templateURL) { 
+                // DO NOTHING
+            }
+            else if (!options.template) {
                 new Request({
                     async: false,
                     url: this.options.templateURL,
@@ -103,8 +176,17 @@
         
         postInject: function() {
             reX.debug('[TEMPLATE] postInject', REX_INFO);
-        }
+        },
         
+        render: function() {
+            reX.debug('[TEMPLATE][SUBSTITUTE] with ' + JSON.encode(this.options.substitute), REX_DEBUG);
+            tmp = this.options.template.substitute(this.options.substitute);
+            reX.debug('[TEMPLATE][SUBSTITUTE:FUNCTION] with ' + JSON.encode(this.options.functions), REX_DEBUG);
+            tmp = tmp.substituteFunction(this.options.functions);
+            tmp = tmp.substituteFunction(this.options.functions); // twice to account for stacking
+            reX.debug('[TEMPLATE][SUBSTITUTE] ' + tmp, REX_DEBUG);
+            return tmp;
+        }
     });
 
 })(this);
