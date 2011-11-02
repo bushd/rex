@@ -1,6 +1,6 @@
 <script type="text/javascript">  
     var skin = {}; 
-    var scrolllist, metadata;
+    var scrolllist, metadata, info;
     var lazyload;
     var type; 
     var sectionInfo;
@@ -10,6 +10,11 @@
             metadata = new Template({
                 templateURL: skin.path + skin.templates.metadata, 
                 update: 'skin'
+            });
+            
+            info = new Template({
+                templateURL: skin.path + skinManager.getCurrentSkinForSection().templates.info, 
+                update: 'info'
             });
                             
             var menu = new reX.Menu(
@@ -114,6 +119,16 @@
                 
                 window.fireEvent('selectionChange', item);
             });
+        },
+        
+        infoKeyPressed: function() {
+            i = reX.state.controls.getSelectedItem.getProperty('idx');
+            
+            info.options.substitute = Object.merge(reX.state.section.json[i], reX.state.section.json[i].Media);
+            info.parse();
+            
+            $('info').show();
+
         }
     };
 
@@ -140,12 +155,6 @@
         $$('nav')[0].setProperty('id', type);
         
         skin = skinManager.getCurrentSkinForSection(reX.state.section.key);
-                        
-        new Skin({
-            templateURL: skin.path + skinManager.getCurrentSkinForSection().templates.skin, 
-            update: 'inner',
-            substitute: {'@sectionArt': sectionInfo['art']}
-        });
 
         reX.ResourceManager.setCSS( skin.css.split(','), function() {
             window.fireEvent('skinready');

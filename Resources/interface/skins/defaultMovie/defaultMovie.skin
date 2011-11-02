@@ -7,7 +7,8 @@
     templates: {
         skin: 'template.defaultMovie.html',
         navigation: 'navigation.defaultMovie.html',
-        metadata: 'metadata.defaultMovie.html'
+        metadata: 'metadata.defaultMovie.html',
+        info: 'info.defaultMovie.html'
     },
     javascript: '', // comma seperated list
     css: 'skins/defaultMovie/css/defaultMovie.css', // comma seperated list
