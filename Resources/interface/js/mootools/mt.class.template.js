@@ -79,16 +79,52 @@
                     minutes = minutes.toString();
                     
                     return hours + ':' + ((minutes.length) < 2 ? '0'+minutes : minutes) + ':' + ((seconds.length) < 2 ? '0'+seconds : seconds);
+               },
+               
+               implode: function(args) { // two parameters
+                    if (args.length < 1) return '';
+               
+                    var key = args[0];
+                    var delimeter;               
+               
+                    if (!args[1]) {
+                        delimeter = ', ';
+                    }
+                    else {
+                        delimeter = args[1];
+                    }
+                                        
+                    var result = '';
+                    if (self.options.substitute[key]) {
+                        
+                        if (self.options.substitute[key][0] == undefined) {
+                            result = self.options.substitute[key]['@tag'];
+                        }
+                        else {
+                            self.options.substitute[key].each(function(item, index) {
+                                result += item['@tag'];
+                                
+                                console.log(item['@tag']);
+                                
+                                if (index < self.options.substitute[key].length-1) {
+                                    result += delimeter;
+                                }
+                            });
+                        }
+                    }
+                    
+                    return result;
                }
-            },
+            }
         },
         
         Implements: Options,
         
         initialize: function(options) {
             this.setOptions(options);
-            
             this.loadTemplate();
+            
+            self = this;
         },
             
         parse: function() {
@@ -180,13 +216,16 @@
         
         render: function() {
             reX.debug('[TEMPLATE][SUBSTITUTE] with ' + JSON.encode(this.options.substitute), REX_DEBUG);
-            tmp = this.options.template.substitute(this.options.substitute);
+            tmp = this.options.template.substitute(this.options.substitute, /\\?\{([^{}#]+)\}/g);
+            console.log(tmp);
             reX.debug('[TEMPLATE][SUBSTITUTE:FUNCTION] with ' + JSON.encode(this.options.functions), REX_DEBUG);
             tmp = tmp.substituteFunction(this.options.functions);
             tmp = tmp.substituteFunction(this.options.functions); // twice to account for stacking
             reX.debug('[TEMPLATE][SUBSTITUTE] ' + tmp, REX_DEBUG);
             return tmp;
-        }
+        },
+        
+        self: undefined
     });
 
 })(this);
