@@ -14,6 +14,18 @@ li {
 	list-style-type: none;
 }
 
+.homemenu {
+  background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 50%,rgba(181,198,208,1) 51%,rgba(224,239,249,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.focus .homemenu {
+  background: -webkit-linear-gradient(top, #ffd6a0 15%,#f99213 70%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 li div {
 	font-weight: bold;
 	color: #48B1F8;
@@ -45,7 +57,7 @@ nav li {
 	padding-right: 50px;
 	margin:0px;
 	text-align: center;
-    text-shadow: 0px 0px 20px #000;
+    /*text-shadow: 0px 0px 20px #000;*/
 }
 
 li.preview img {
@@ -103,6 +115,7 @@ li.preview {
 	{
 		width: 1920px;
 		height: 1080px;
+        -webkit-background-size: 1920px 1080px;
 	}
 }
 
@@ -131,12 +144,13 @@ li.preview {
 	{
 		width: 1280px;
 		height: 720px;
+        -webkit-background-size: 1280px 720px;
 	}
 }
 
 
 @media all and (max-height: 480px) {
-	
+
 	nav {
 		margin-top:256px;
 		height: 42px;
@@ -158,9 +172,6 @@ li.preview {
 	{
 		width: 853px;
 		height: 480px;
-	}
-	
-	.fanart {
-		background-size: 854px 480px
+        -webkit-background-size: 853px 480px;
 	}
 }

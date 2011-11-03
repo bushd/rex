@@ -1,5 +1,6 @@
 #controls {
-    margin: 640px auto 30px auto;
+   
+    margin: 0 auto 0 auto;
  	height: 60px;
 	width: 660px;
 	border: 2px solid #ffffff;
@@ -7,11 +8,17 @@
     background-color: rgba(0,0,0,0.5);
 }
 
+#reX_control_wrapper {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+}
+
 .control_container {
 	margin-left: 60px;
 }
 
-.control_container div {
+.control_container li {
 	margin:10px;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -23,12 +30,12 @@
 	display: inline;
 }
 
-.control_container div.focus {
-	color: #2abff9;
-}
+@font-face { 
+	font-family: record; src: url('../fonts/record.ttf'); 
+} 
 
 @font-face { 
-	font-family: record; src: url('../Fonts/record.ttf'); 
+	font-family: appleSymbol; src: url('file:///System/Library/Fonts/Apple Symbols.ttf'); 
 } 
 
 .reX_play:before {
@@ -38,8 +45,7 @@
 
 .reX_pause:before {
 	font-family: record;
-	content: '1';
-}
+	content: '1';}
 
 .reX_stop:before {
 	font-family: record;
@@ -66,6 +72,10 @@
 	content: '8';
 }
 
+.test {
+	font-family: appleSymbol;
+}
+
 #slider_container {
 	background-color: rgba(255, 255, 255, 0.2);
 	height: 10px;
@@ -79,4 +89,38 @@
 	height: 10px;
 	width: 10px;
 	-webkit-border-radius: 5px;
+}
+
+#audio_container,
+#sub_container {
+    display: none;
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    margin: 0 auto 0 auto;
+	border: 2px solid #ffffff;
+	border-radius: 20px;
+    background-color: rgba(0,0,0,0.5);
+}
+
+#audio li,
+#subtitle li {
+    margin:10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	background-color: transparent;
+	color: white;
+	font-size:20px;
+	height: 40px;
+}
+
+#audio li.focus,
+#subtitle li.focus,
+.control_container li.focus
+{
+	color: orange;
+}
+
+section#info {
+    display:none;
 }
