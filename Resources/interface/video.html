@@ -93,7 +93,7 @@
                     if (closeAudioMenu()) return;
                     closeMenu();
                 }
-                else if (reX.state.section.key != undefined) {
+                else if (reX.state.section.history.key != undefined) {
                     
                     if (reX.state.video == true) {
                         quitPlaying();
@@ -314,6 +314,7 @@
                     reX.state.video = false;
                     traktProgress();
                     Player.stop();
+                    reX.back();
                     return;
                 });
             }
