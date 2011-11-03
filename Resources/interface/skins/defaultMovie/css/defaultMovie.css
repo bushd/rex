@@ -175,4 +175,107 @@ nav li {
         width: 1920px;
         height: 200px;
 	}
+
+#info {
+    position: absolute;
+    top: 50px;
+    left: 360px;
+    background-color: rgba(0,0,0,0.8);
+    color: white;
+    padding: 30px;
+    width: 1200px;
+    height: 550px;
+    font-size: 20px;
+    line-height: 25px;
+    display: hidden;
+    -webkit-box-shadow: 0 0 30px #000;
+}
+
+#info .poster,
+#info .titleGroup,
+#info .summary,
+#info .metaGroup,
+#info .path,
+#info .flagGroup {
+    position: relative;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#info .leftColumn {
+    float: left;
+    width: 250;
+    display:block;
+}
+
+#info .rightColumn {
+    float: left;
+    min-width:920px;
+    max-width:920px;
+    margin-left: 30px;
+    display:block;
+}
+
+#info .poster {
+    padding-top: 0;
+    margin-top: 0;
+    width: 250px;
+    height: 368px;
+}
+
+#info .summary {
+    display: block;
+    height: 240px;
+    font-size: 20px;
+    margin-top: 20px;
+    padding-top: 20px;
+    line-height: 24px;
+    text-overflow: ellipsis;
+    clear: both;
+    text-align: justify;
+}
+
+#info .bottomLine {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+}
+
+#info .topLine {
+    border-top: 1px solid #aaa;
+    padding-top: 20px;
+}
+
+#info .metaGroup {
+    float: left;
+}
+
+#info .flagGroup {
+    float: right;
+}
+
+#info .title {
+    font-weight: bold;
+    
+}
+
+#info .titleGroup {
+    float: left;
+}
+
+#info .genre {
+    float: right;
+}
+
+#info .path {
+    padding-top: 20px;;
+}
+
+.clear {
+    clear:both;
+}
+
+#info em {
+    color: orange;
 }

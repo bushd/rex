@@ -1,28 +1,48 @@
-<div class="poster">
-    <img src="localhost:32400{#transcode::{@thumb}}">
-</div>
+<section class="leftColumn">
+    <div class="poster">
+        <img src="http://localhost:32400{#transcode::{@thumb}}">
+    </div>
+</section>
 
-<div class="titleGroup">
-	<span class="title">{@title}</span>
-	<span class="year">{@year}</span>
-</div>
+<section class="rightColumn">
+    <div class="titleGroup">
+        <span class="title">{@title}</span>
+        <span class="year">{@year}</span>
+    </div>
 
-<div class="summary">{@summary}</div>
+    <div class="genre">{#implode::Genre:: | }</div>
 
-<div class="metaGroup">
-    Rating: <span class="rating">{@rating}</span>
-    Duration: <span class="duration">{#toTime::{@duration}}</span>
-</div>
+    <div class="summary">
+        <em>Summary:</em><br/>
+        {@summary}
+    </div>
+
+    <div class="bottomLine"></div>
+    <div class="topLine"></div>
+
+    <div class="metaGroup">
+        <em>Rating:</em> <span class="rating">{@rating}</span>
+        <em>Duration:</em> <span class="duration">{#toTime::{@duration}}</span>
+    </div>
+    
+    <div class="flagGroup">
+        <span class="flag resolution_flag">{@videoResolution}</span>
+        <span class="flag ratio_flag">{@aspectRatio}</span>
+        <span class="flag video_flag">{@videoCodec}</span>
+        <span class="flag audio_flag">{@audioCodec}</span>
+        <span class="flag channel_flag">{@audioChannels}</span>
+        <span class="flag studio_flag">{@studio}</span>
+    </div>
+</section>
+
+<div class="bottomLine clear"></div>
+<div class="topLine"></div>
+
+<div class="country"><em>Country:</em> {#implode::Country}</div>
+<div class="writer"><em>Writer:</em> {#implode::Writer}</div>
+<div class="director"><em>Director:</em> {#implode::Director}</div>
+<div class="actors"><em>Actors:</em> {#implode::Role}</div>
 
 <div class="path">
-    File: <span>{@file}</span>
-</div>
-
-<div class="flagGroup">
-    <span class="flag resolution_flag">{@videoResolution}</span>
-    <span class="flag ratio_flag">{@aspectRatio}</span>
-    <span class="flag video_flag">{@videoCodec}</span>
-    <span class="flag audio_flag">{@audioCodec}</span>
-    <span class="flag channel_flag">{@audioChannels}</span>
-    <span class="flag studio_flag">{@studio}</span>
+    <em>File:</em> <span>{@file}</span>
 </div>
