@@ -162,7 +162,7 @@ reX.Controls = new Class({
 	},
     
     getSelectedItem: function() {
-		return parseInt($$('.focus')[0];
+		return $$('.focus')[0];
 	},
 	
 	options: {
