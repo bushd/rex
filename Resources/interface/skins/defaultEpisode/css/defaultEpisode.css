@@ -12,7 +12,7 @@ nav {
 	margin-top: 15px;
 }
 
-nav .focus {
+nav .focus .title {
 	color: orange; /*#2abff9;*/
 	font-weight: bold;
     text-align:left;
@@ -21,6 +21,12 @@ nav .focus {
     background: -webkit-linear-gradient(top, #ffd6a0 0%,#f99213 60%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.episode {
+    color: white;
+    font-size: 20px;
+    line-height: 24px;
 }
 
 .poster {
@@ -50,13 +56,16 @@ nav .focus {
 }	
 	nav li {
         padding: 30px 60px 60px 750px;
-		font-size:45px;
         margin: 0px;
         text-align: left;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
 	}
+    
+    .title {
+        font-size:45px;
+    } 
 	
 	.poster {
 		top: 120px;
