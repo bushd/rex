@@ -227,6 +227,23 @@ reX.ResourceManager = {
             reX.debug('[LOAD] css ' + file + ' with key ' + key, REX_INFO);
             Asset.stylesheet(file, {id: 'resource_'+key, onload: function(){++count;} });
 		});
+        
+        var delay = 100, counter = 0, maxAttempts = 1000;
+        this.checker = (function() {
+            clearInterval(this.timer);
+
+            if(files.length == count) {
+                onLoad();
+                return;
+            }
+            counter++;
+            if(counter >= maxAttempts) {
+                return;
+            }
+
+            this.timer = this.checker.delay(delay,this);
+        }.bind(this));
+        this.timer = this.checker.delay('',this);
 		
 		reX.state.section.resources.css = files;
 	},
