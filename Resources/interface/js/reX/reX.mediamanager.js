@@ -65,6 +65,42 @@ reX.MediaManager = new Class({
         }
     },
     
+    get: function(section, view, callback) {
+        reX.debug('[MEDIAMANAGER] get all in section ' + section, REX_INFO);
+        
+        var result = new Array();
+	
+ 		if (arguments.length < 2){
+   			return result;  
+		}
+			
+		var request = new Request.XML2JSON({
+			url: this.options.baseurl+"/library/sections/" + section + "/" + view, 
+			method: 'get',
+			onSuccess: function(json){ 
+                this.current = json;
+                if(json.MediaContainer.Video != undefined) {
+                    if(json.MediaContainer.Video[0] != undefined) {
+                        callback(json.MediaContainer.Video);
+                    }
+                    else {
+                        result.push(json.MediaContainer.Video);
+                        callback(result);
+                    }
+                }
+                else if(json.MediaContainer.Directory != undefined) {
+                    if(json.MediaContainer.Directory[0] != undefined) {
+                        callback(json.MediaContainer.Directory);
+                    }
+                    else {
+                        result.push(json.MediaContainer.Directory);
+                        callback(result);
+                    }
+                }
+            }.bind(this)
+        }).send();
+    },
+    
 	
 	getAll: function(section, callback) {
 		reX.debug('[MEDIAMANAGER] get all in section ' + section, REX_INFO);
@@ -103,7 +139,7 @@ reX.MediaManager = new Class({
 
 	},
     
-    getonDeck: function(section, callback) {
+    getOnDeck: function(section, callback) {
 		reX.debug('[MEDIAMANAGER] get onDeck for section ' + section, REX_INFO);
         
         var result = new Array();
@@ -136,9 +172,9 @@ reX.MediaManager = new Class({
                     }
                 }
                 reX.debug('[MEDIAMANAGER][SUCCESS] get onDeck for section ' + section, REX_INFO);
-            }.bimd(this),
+            }.bind(this),
             onRequest: function() {
-                reX.debug('[MEDIAMANAGER][REQUEST] get onDeck for section ' + sectiony, REX_DEBUG);
+                reX.debug('[MEDIAMANAGER][REQUEST] get onDeck for section ' + section, REX_DEBUG);
             },
             onFailure: function() {
                 reX.debug('[MEDIAMANAGER][FAILURE] unable to get onDeck for section ' + section, REX_ERROR);
@@ -578,6 +614,54 @@ reX.MediaManager = new Class({
 		}).send();
 	},
 	
+    getNextEpisodesToWatch: function(section, callback) {
+        reX.debug('[MEDIAMANAGER] get next Episodes to watch for section ' + section, REX_INFO);
+        
+        var lastSeen = new Array();
+	
+ 		if (arguments.length == 0){
+   			return result;  
+		}
+			
+		var request = new Request.XML2JSON({
+			url: this.options.baseurl+"/library/sections/" + section + "/recentlyViewed", 
+			method: 'get',
+            async: false,
+			onSuccess: function(json){ 
+                if(json.MediaContainer.Video != undefined) {
+                    if(json.MediaContainer.Video[0] != undefined) {
+                        lastSeen = json.MediaContainer.Video;
+                    }
+                    else {
+                        lastSeen.push(json.MediaContainer.Video);
+                    }
+                }
+                else if(json.MediaContainer.Directory != undefined) {
+                    if(json.MediaContainer.Directory[0] != undefined) {
+                        lastSeen = json.MediaContainer.Directory;
+                    }
+                    else {
+                        lastSeen.push(json.MediaContainer.Directory);
+                    }
+                }
+            }
+		}).send();
+                
+        var unique = new Array();
+        var lastSeenFiltered = lastSeen.filter(function(item, index){
+            if (item['@type'] == 'episode') {
+                if (!unique.contains(item['@grandparentKey'])) {
+                    unique.push(item['@grandparentKey']);
+                    return true;
+                }
+            }
+            return false;
+        },unique);
+        
+        console.log(unique);
+        return lastSeenFiltered;
+    }, 
+    
 	x2j: undefined,
 	
 	recentlyAddedCache: undefined,
