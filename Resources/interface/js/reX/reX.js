@@ -17,13 +17,17 @@ reX.state = {
 	section: {                         
 		key: undefined,                 // section key
         url: undefined,                 // ajax url
+        type: 'all',
 		resources: {
-			css: undefined,             // list of loaded css files    
+			css: [],             // list of loaded css files    
             js: undefined               // list of loaded js files
 		},
         json: undefined,                // current section manager json
+        selectionIndex: undefined,
         history: undefined,             // last reX.section
-        serie: undefined,               // series we are in (if any)
+        show: undefined,               // series we are in (if any)
+        tvdb: undefined,
+        imdb: undefined,
         season: undefined
 	},
 	events: {},                         // current set temp events
@@ -105,6 +109,26 @@ function getRandom( min, max ) {
     return( min + parseInt( Math.random() * ( max-min+1 ) ) );
 }
 
+function stringToBoolean(string) {
+    switch(string.toLowerCase()) {
+        case "true": 
+        case "yes": 
+        case "1": 
+            return true;
+            break;
+            
+        case "false": 
+        case "no": 
+        case "0": 
+        case null: 
+            return false;
+            break;
+        
+        default: 
+            return Boolean(string);
+    }
+}
+
 // localization
 
 function L10N(string) {
@@ -130,12 +154,11 @@ Request.Load = new Class({
     onSuccess: function(responseTree, responseElements, responseHTML, responseJavaScript) {
         reX.debug('[SUCCESS] loaded url '+ reX.state.section.url, REX_INFO);
     	$('inner').set('html', responseHTML);
-        fireEvent('skinready');
     }
 });
 
 // helper function for a request
-reX.load = function (url, key) {
+reX.load = function (url, key, type) {
 	reX.debug('[LOAD] url ' + url + ' with key ' + key, REX_INFO);
     
     // unset current page settinge
@@ -151,6 +174,14 @@ reX.load = function (url, key) {
     reX.state.section.history = Object.clone(reX.state.section);
     reX.state.section.url = url;
     reX.state.section.key = key;
+    reX.state.section.selectionIndex = undefined;
+    
+    if (type) {
+        reX.state.section.type = type;
+    }
+    else {
+        reX.state.section.type = 'all';
+    }
 	
     // load page
     var request = new Request.Load({
@@ -189,10 +220,12 @@ reX.back = function () {
 
 reX.ResourceManager = {
 	
-	setCSS: function(files) {
+	setCSS: function(files, onLoad) {
+        count = 0;
+    
 		Object.each(files, function(file, key) {
             reX.debug('[LOAD] css ' + file + ' with key ' + key, REX_INFO);
-            Asset.css(file, {id: 'resource_'+key});
+            Asset.stylesheet(file, {id: 'resource_'+key, onload: function(){++count;} });
 		});
 		
 		reX.state.section.resources.css = files;
@@ -204,7 +237,7 @@ reX.ResourceManager = {
 			$('resource_'+key).destroy();
 		});
 		
-		reX.state.section.resources.css = undefined;
+		reX.state.section.resources.css = [];
 	},
     
     setJS: function(files) {
@@ -264,6 +297,7 @@ reX.debug = function(msg, mode) {
             console.log('[NOTICE]' + msg);
             break;
     }
+    
 };
 
 reX.error = function(msg) {
