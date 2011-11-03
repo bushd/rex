@@ -1,3 +1,136 @@
+// check for Player
+try{
+    Player
+}catch(e) {
+    Player = {};
+};
+
+try{
+    Player.getSkins();
+}catch(e) {
+    Player.getSkins = function() {
+        return JSON.encode({ skins: {
+        defaultMedia: {
+            name: 'Default Media',
+            version: '0.1',
+            authors: 'Bastian Brodbeck',
+            path: 'skins/defaultMedia/',
+            type: 'show,episode',
+            templates: {
+                skin: 'template.defaultMedia.html',
+                navigation: 'navigation.defaultMedia.html',
+                metadata: 'metadata.defaultMedia.html'
+            },
+            javascript: '', // comma seperated list
+            css: 'skins/defaultMedia/css/defaultMedia.css', // comma seperated list
+            scrolllist: {
+                offset: 2
+            },
+            menu: {}
+        },
+        defaultSeasons: {
+            name: 'Default Seasons',
+            version: '0.1',
+            authors: 'Bastian Brodbeck',
+            path: 'skins/defaultSeasons/',
+            type: 'movie,show,episode',
+            templates: {
+                skin: 'template.defaultSeasons.html',
+                navigation: 'navigation.defaultSeasons.html',
+                metadata: 'metadata.defaultSeasons.html'
+            },
+            javascript: '', // comma seperated list
+            css: 'skins/defaultSeasons/css/defaultSeasons.css', // comma seperated list
+            scrolllist: {
+                offset: 1
+            },
+            menu: {}
+        },
+        defaultMovie: {
+            name: 'Default Movie',
+            version: '0.1',
+            authors: 'Bastian Brodbeck',
+            path: 'skins/defaultMovie/',
+            type: 'movie',
+            templates: {
+                skin: 'template.defaultMovie.html',
+                navigation: 'navigation.defaultMovie.html',
+                metadata: 'metadata.defaultMovie.html',
+                info: 'info.defaultMovie.html'
+            },
+            javascript: '', // comma seperated list
+            css: 'skins/defaultMovie/css/defaultMovie.css', // comma seperated list
+            scrolllist: {
+                offset: 1,
+                vertical: false
+            },
+            menu: {
+                vertical: false
+            }
+        },
+        defaultAlbum: {
+    name: 'Default Album',
+    version: '0.1',
+    authors: 'Bastian Brodbeck',
+    path: 'skins/defaultAlbum/',
+    type: 'album',
+    templates: {
+        skin: 'template.defaultAlbum.html',
+        navigation: 'navigation.defaultAlbum.html',
+        metadata: 'metadata.defaultAlbum.html'
+    },
+    javascript: '', // comma seperated list
+    css: 'skins/defaultAlbum/css/defaultAlbum.css', // comma seperated list
+    scrolllist: {
+        offset: 0,
+        vertical:false
+    },
+    menu: {
+        vertical:false,
+        wrap: false
+    }
+},
+   defaultEpisode: {
+    name: 'Default Episode',
+    version: '0.1',
+    authors: 'Bastian Brodbeck',
+    path: 'skins/defaultEpisode/',
+    type: 'episode',
+    templates: {
+        skin: 'template.defaultEpisode.html',
+        navigation: 'navigation.defaultEpisode.html',
+        metadata: 'metadata.defaultEpisode.html'
+    },
+    javascript: '', // comma seperated list
+    css: 'skins/defaultEpisode/css/defaultEpisode.css', // comma seperated list
+    scrolllist: {
+        offset: 2
+    },
+    menu: {}
+},
+defaultShow: {
+    name: 'Default Show',
+    version: '0.1',
+    authors: 'Bastian Brodbeck',
+    path: 'skins/defaultShow/',
+    type: 'show',
+    templates: {
+        skin: 'template.defaultShow.html',
+        navigation: 'navigation.defaultShow.html',
+        metadata: 'metadata.defaultShow.html'
+    },
+    javascript: '', // comma seperated list
+    css: 'skins/defaultShow/css/defaultShow.css', // comma seperated list
+    scrolllist: {
+        offset: 2
+    },
+    menu: {}
+}
+}});
+    };
+}
+
+
 reX.SkinManager = new Class({
     
     initialize: function() {
@@ -42,17 +175,18 @@ reX.SkinManager = new Class({
         if (!viewGroup) {
             viewGroup = reX.state.section.json[0]['@type'];
         }
-        reX.debug('[SKINMANAGER] load skin for current section ' + key + ' and viewGroup' + viewGroup, REX_DEBUG);
+        reX.debug('[SKINMANAGER] load skin for current section ' + key + ' and viewGroup ' + viewGroup, REX_DEBUG);
         return this.getCurrentSkinForSection(key, viewGroup);
     },
     
     skins: undefined,
     
     default: {
-        movie: 'defaultMedia',
-        show: 'defaultMedia',
+        movie: 'defaultMovie',
+        show: 'defaultShow',
         season: 'defaultSeasons',
-        episode: 'defaultMedia'
+        episode: 'defaultEpisode',
+        album: 'defaultAlbum'
     }
     
 });
