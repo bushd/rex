@@ -17,6 +17,8 @@
   		
   		<!-- reX -->
   		<script src="js/reX/reX.js"></script>
+        <script src="js/reX/reX.utility.js"></script>
+        <script src="js/reX/reX.mediaplayer.js"></script>
   		<script src="js/reX/reX.controls.js"></script>
   		<script src="js/reX/reX.json2html.js"></script>
   		<script src="js/reX/reX.mediamanager.js"></script>
@@ -38,21 +40,15 @@
 			<!-- header goes here -->
 		</header>
 		
-		<section id="outer">
-			<nav>
-				<!-- scrollable lists go here: homemenu, medialists, etc. -->
-			</nav>
-			
-			<section id="inner">
-				<!-- skins / sections load here -->
-			</section>
-			
-			<aside>
-				<section id="widgets">
-					<!-- widgets go here -->
-				</section>
-			</aside>
-		</section>
+        <section id="skin">
+            <!-- skins / sections load here -->
+        </section>
+        
+        <aside>
+            <section id="widgets">
+                <!-- widgets go here -->
+            </section>
+        </aside>
         
         <section id="secondary">
         </section>
@@ -64,6 +60,7 @@
         <script type="text/javascript">
             var mediaManager = new reX.MediaManager();
             var skinManager = new reX.SkinManager();
+            var Player = new reX.MediaPlayer();
         
             window.addEvent('domready', function() {
 				reX.state.controls = new reX.Controls();

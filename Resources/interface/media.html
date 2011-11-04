@@ -11,13 +11,15 @@
         skinready: function() {	
             metadata = new Template({
                 templateURL: skin.path + skin.templates.metadata, 
-                update: 'skin'
+                update: 'metadata'
             });
             
-            info = new Template({
-                templateURL: skin.path + skin.templates.info, 
-                update: 'info'
-            });
+            if (skin.templates.info) {
+                info = new Template({
+                    templateURL: skin.path + skin.templates.info, 
+                    update: 'info'
+                });
+            }
                             
             var menu = new reX.Menu(
                 Object.merge({
@@ -76,8 +78,9 @@
 		
                     mediaManager.getMedia(reX.state.section.json[i]['@key'], function(media) {
                         this.media = media;
+                        console.log('adding media to player')
                         if(this.media.Media.Part[0] != undefined) {
-                            Player.playVideos(this.media.Media.Part[0]["@file"], this.media["@key"]);
+                            Player.playVideo(this.media.Media.Part[0]["@file"], this.media["@key"]);
                         }
                         else { 
                             Player.playVideo(this.media.Media.Part["@file"], this.media["@key"]);
@@ -170,15 +173,15 @@
             type = reX.state.section.type;
         }
         
-        $$('nav')[0].setProperty('id', type);
-        
         skin = skinManager.getCurrentSkinForSection(reX.state.section.key);
 
         new Skin({
             templateURL: skin.path + skinManager.getCurrentSkinForSection().templates.skin, 
-            update: 'inner',
+            update: 'skin',
             substitute: {'@sectionArt': sectionInfo['art']}
         });
+        
+        $$('nav')[0].setProperty('id', type);
 
         reX.ResourceManager.setCSS( skin.css.split(','), function() {
             window.fireEvent('skinready');

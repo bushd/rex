@@ -3,7 +3,7 @@ body {
 	font-family: Helvetica;
 }
 
-#skin {
+#metadata {
 	position: absolute;
     top:0;
 }
@@ -132,7 +132,7 @@ nav li {
         display: none;
     }
 	
-    #skin,
+    #metadata,
 	.fanart,
 	.fanart img,
 	#main

@@ -3,7 +3,7 @@ body {
 	font-family: Helvetica;
 }
 
-#skin {
+#metadata {
     position: absolute;
     top:0;
 }
@@ -61,7 +61,7 @@ nav .focus {
         -webkit-transform: rotate3d(0, 1, 0, 25deg);
 	}
 	
-    #skin,
+    #metadata,
 	.fanart,
 	.fanart img,
 	#main

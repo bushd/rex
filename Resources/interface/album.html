@@ -1,31 +1,8 @@
-<!DOCTYPE html>
-<html lang="">
-<head>
-	<meta charset="utf-8">
-	<title></title>
-	<meta name="description" content="" />
-	<meta name="keywords" content="" />
-	<meta name="robots" content="" />
-	
-	<meta http-equiv="cache-control" content="no-cache"> <!-- tells browser not to cache -->
-	<meta http-equiv="expires" content="0"> <!-- says that the cache expires 'now' -->
-	<meta http-equiv="pragma" content="no-cache"> <!-- says not to use cached stuff, if there is any -->
-	
-	<script type="text/javascript" src="js/mootools.js"></script>
-	<script type="text/javascript" src="js/mootools.more.js"></script>
-	<script type="text/javascript" src="js/xml2json.js"></script>
-	<script type="text/javascript" src="js/mt.request.xml2json.js"></script>
-	<script type="text/javascript" src="js/reX.js"></script>
-	<script type="text/javascript" src="js/reX.json2html.js"></script>
-	<script type="text/javascript" src="js/reX.mediamanager.js"></script>
-	<script type="text/javascript" src="js/reX.controls.js"></script>
-	<script type="text/javascript" src="js/reX.menu.js"></script>
+
 	<script type="text/javascript">
 	
-		var sections, audio;
-		var ctrl;
+		var audio;
 		var covers;
-		var mediaManager = new reX.MediaManager();
 		var build = false;
 		
 		function flip()
@@ -49,7 +26,7 @@
 				element.setStyle('left', (-i * 305) - 50 + (parseInt(element.getProperty('idx')) * 5) ) ;
 				i++;
 			});
-			$$('.reX-list > ul > li[idx="'+i+'"]').setStyle('left', (-i*300)+200);
+			$$('nav > ul > li[idx="'+i+'"]').setStyle('left', (-i*300)+200);
 			i++;
 			$$('.upper').each(function(element) {
 				element.setStyle('left', (-(i - 1) * 300) + 150 );//+ (parseInt(element.getProperty('idx') - 1)));
@@ -57,49 +34,15 @@
 			});
 		}
 	
-		window.addEvent('domready', function() {		
-			
-			mediaManager.getGroupedAlbums(getUrlVars()['key'] ,function(sec) {
-				this.sections = sec;
-				this.sections.sort(sortByAfter('@title', '@parentTitle'));
-				var j2h = new reX.json2html({
-					html: '<div class="cover">'
-						+		'<div class="front face">'
-						+			'<img width="400" height="400" src="http://localhost:32400{@thumb}">'
-						+		'</div>'
-						+		'<div class="back face">'
-						+			'<div class="albumheader">'
-						+				'<img width="128" height="128" src="http://localhost:32400{@thumb}">'
-						+				'<div class="innerheader">'
-						+					'<p class="title">{@title}</p>'
-						+					'<p class="interpret">{@parentTitle} ({@year})</p>'
-						+					'<p class="genre"></p>'
-						+				'</div>'
-						+			'</div>'
-						+			'<div class="innerlist"></div>'
-						+		'</div>'
-						+ '</div>',
-					unescape: true
-				});
-				var vals =  j2h.convert(this.sections);
-				//vals = vals.slice(0,7)
-				
-				var menu = new reX.Menu(vals, {vertical:false, wrap: false});
-				
-				var arr = new reX.json2html({
-					html: 'http://localhost:32400{@thumb}'
-				});
-				covers = arr.convert(this.sections);
-				
-				menu.build();
-			}.bind(this));
-		}.bind(this)); 
+    reX.state.events = {
+
+        domready: function() {		
+		}, 
 		
-		window.addEvent('menuDone', function(event) {		
+		menuDone: function(event) {		
 			if(!build) {	
-				ctrl = new reX.Controls({index: 1});
-				//ctrl.select(4);
-				$$('.reX-list  > ul > li[index]').each(function(element, i) {
+				//reX.state.controls.select(4);
+				$$('nav  > ul > li[index]').each(function(element, i) {
 				/* if (element.getProperty('index') < 4) {
 				//		element.addClass('lower');
 				//	}
@@ -108,22 +51,23 @@
 					}
 				});
 		
-				$$('.reX-list').setStyle('left', 250);
+				$$('nav').setStyle('left', 250);
 				positionCovers();
 				
 				build = true;
+                $$('nav  > ul > li')[0].addClass('focus');
 			}
 			else {
 				var i = $$('.focus')[0].getProperty('index');
-				ctrl.select((i*10000)+1);
+				reX.state.controls.select((i*10000)+1);
 			}
-		});
+		},
 		
-		window.addEvent('selectionChange', function(item) {
+		selectionChange: function(item) {
 			
-		}.bind(this));
+		},
 		
-		window.addEvent('selectionEnter', function(item) {
+		selectionEnter: function(item) {
 			var i = item.getProperty('index');
 			var key = item.getProperty('idx');
 			
@@ -140,23 +84,28 @@
 			else if(item.getChildren('.flipped').length == 0) {
 				flip();
 				if($$('.focus .back .innerlist')[0].getChildren().length == 0) {
-					mediaManager.getTracks(this.sections[key]['@key'] ,function(sec) {
+					mediaManager.getTracks(reX.state.section.json[key]['@key'] ,function(sec) {
 						this.audio = sec;
-						var j2h = new reX.json2html({
-							html: '<div>'
+                        var innermenu = new reX.Menu({
+                            template: '<div>'
 								+		'<div>{@index}.</div>'
 								+		'<div>{@title}</div>'
 								+ '</div>',
-							unescape: true
-						});
-						var innermenu = new reX.Menu(j2h.convert(sec), {wrap: false, index: ((i*10000)+1), inject: '.focus .back .innerlist'});
-						$$('.focus').addClass('hasSelectable');
-						innermenu.build();
+                            sectionObject: this.audio,
+                            wrap: false, 
+                            index: ((i*10000)+1), 
+                            inject: '.focus .back .innerlist',
+                            update: '.focus .back .innerlist'
+                        });
+						
+                        $$('.focus').addClass('hasSelectable');
+                        innermenu.generateElements();
+                        innermenu.build();
 					});
 				}
 				else {
-					ctrl.select((i*10000)+1);
-					mediaManager.getTracks(this.sections[key]['@key'] ,function(sec) {
+					reX.state.controls.select((i*10000)+1);
+					mediaManager.getTracks(reX.state.section.json[key]['@key'] ,function(sec) {
 						this.audio = sec;
 					});
 				}
@@ -164,19 +113,20 @@
 			else {
 			}
 			
-		}.bind(this));
+		},
 		
-		window.addEvent('pressedBack', function() {
+		pressedBack: function(e) {
+            e.stop();
 			if($$('.flipped').length == 0) {
-				Player.goBack();
+				reX.back();
 			}
 			else {
 				flip();
-				ctrl.select(parseInt($$('.focus')[0].getProperty('index'))/10000);
+				reX.state.controls.select(parseInt($$('.focus')[0].getProperty('index'))/10000);
 			}
-		}.bind(this));
+		},
 		
-		window.addEvent('pressedLeft', function(old) {
+		pressedLeft: function(old) {
 			var flipped = $$('.flipped');
 			if(flipped.length != 0) {
 				flipped[0].getParent().addClass('upper');
@@ -189,12 +139,12 @@
 			$$('.focus').removeClass('lower');
 			
 			positionCovers();
-			var move = $$('.reX-list')[0];
+			var move = $$('nav')[0];
 			var pos = parseInt(move.getStyle('left')) + 85;
 			move.setStyle('left', pos);
-		}.bind(this));
+		},
 		
-		window.addEvent('pressedRight', function(old) {
+		pressedRight: function(old) {
 			var flipped = $$('.flipped');
 			if(flipped.length != 0) {
 				flipped[0].getParent().addClass('lower');
@@ -207,22 +157,41 @@
 			$$('.focus').removeClass('upper');
 			
 			positionCovers();
-			var move = $$('.reX-list')[0];
+			var move = $$('nav')[0];
 			var pos = parseInt(move.getStyle('left'))-85;
 			move.setStyle('left', pos);
-		}.bind(this));
-	</script>
-	
-		<link rel="stylesheet" type="text/css" href="css/reset.css">
-		<link rel="stylesheet" type="text/css" href="css/album.css">
-	</head>
-<body>
-	<div id="skin_header"></div>
-	<div class="animWrap">
-		<div class="listWrap">
-			<div class="reX-list hasSelectable"></div>
-		</div>
-	</div>
-	<div id="skin"></div>
-</body>
-</html>
+		}
+    };
+    
+    window.addEvents(reX.state.events);
+    
+    mediaManager.getGroupedAlbums(reX.state.section.key ,function(sec) {
+                reX.state.section.json = sec;
+                reX.state.section.json.sort(sortByAfter('@title', '@parentTitle'));
+                
+                skin = skinManager.getCurrentSkinForSection(reX.state.section.key);
+                                
+                new Skin({
+                    templateURL: skin.path + skinManager.getCurrentSkinForSection().templates.skin, //'skins/movie/default/template.default.html',
+                    update: 'skin'
+                });
+  
+                reX.ResourceManager.setCSS( skin.css.split(',') );
+                /*
+                metadata = new Template({
+                    templateURL: skin.path + skin.templates.metadata, //'skins/movie/default/template.default.html',
+                    update: 'skin'
+                });
+                  */              
+                var menu = new reX.Menu(
+                    Object.merge({
+                        templateURL: skin.path + skin.templates.navigation, //'skins/movie/default/navigation.default.html',
+                        sectionObject: reX.state.section.json
+                    },
+                    skin.menu)
+                );
+                                
+                menu.generateElements();
+                menu.build();
+    }.bind(this));
+</script>
