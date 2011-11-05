@@ -6,9 +6,20 @@
     var sectionInfo;
     
     var infoVisible = false;
+    
+    var preProc = {};
+    var postProc = {};
 
     reX.state.events = {
         skinready: function() {	
+            // pre process functions
+            if (preProc.skinready) {
+                preProc.skinready.each(function(fn, index) {
+                    reX.debug('calling preProc SkinReady ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        
             metadata = new Template({
                 templateURL: skin.path + skin.templates.metadata, 
                 update: 'metadata'
@@ -33,9 +44,24 @@
             menu.generateElements();
             menu.build();
 
+            // post process functions
+            if (postProc.skinready) {
+                postProc.skinready.each(function(fn, index) {
+                    reX.debug('calling postProc SkinReady ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
         },
         
         menuDone: function(event) {	
+            // pre process functions
+            if (preProc.menuDone) {
+                preProc.menuDone.each(function(fn, index) {
+                    reX.debug('calling preProc MenuDone ' + index, REX_DEBUG);
+                    fn(event);
+                });
+            }
+        
             scrolllist = new reX.Scrolllist('nav#'+type, skin.scrolllist);
             
             if (reX.state.section.selectionIndex == undefined) { 
@@ -55,9 +81,25 @@
                 container: $$('nav#'+type)[0],
                 mode: "horizontal",
             });
+            
+            // post process functions
+            if (postProc.menuDone) {
+                postProc.menuDone.each(function(fn, index) {
+                    reX.debug('calling postProc MenuDone ' + index, REX_DEBUG);
+                    fn(event);
+                });
+            }
         },
     
         selectionChange: function(item) {
+            // pre process functions
+            if (preProc.selectionChange) {
+                preProc.selectionChange.each(function(fn, index) {
+                    reX.debug('calling preProc SelectionChange ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+        
             var i = item.getProperty('idx');
             reX.debug('selecting ' + reX.state.section.json[i]['@key'] + ' with type ' + reX.state.section.json[i]['@type'], REX_DEBUG);
 
@@ -65,9 +107,25 @@
             metadata.parse();
             
             scrolllist.move();
+            
+            // post process functions
+            if (postProc.selectionChange) {
+                postProc.selectionChange.each(function(fn, index) {
+                    reX.debug('calling postProc SelectionChange ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
         },
         
         selectionEnter: function(item) {
+            // pre process functions
+            if (preProc.selectionEnter) {
+                preProc.selectionEnter.each(function(fn, index) {
+                    reX.debug('calling preProc SelectionEnter ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+        
             var i = item.getProperty('idx');
             reX.debug('entering ' + reX.state.section.json[i]['@title'] + ' with key ' + reX.state.section.json[i]['@key'] + ' and type ' + reX.state.section.json[i]['@type'], REX_DEBUG);
             switch (reX.state.section.json[i]['@type']) {
@@ -99,9 +157,25 @@
                     reX.load('media.html',reX.state.section.json[i]['@key'], 'season');
                     break;
             } 
+            
+            // post process functions
+            if (postProc.SelectionEnter) {
+                postProc.SelectionEnter.each(function(fn, index) {
+                    reX.debug('calling postProc SelectionEnter ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
         },
         
         pressedBack: function() {
+            // pre process functions
+            if (preProc.pressedBack) {
+                preProc.pressedBack.each(function(fn, index) {
+                    reX.debug('calling preProc PressedBack ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        
             if (reX.state.section.key != undefined) {
                     
                 if (reX.state.video == true) {
@@ -110,9 +184,25 @@
                 }
                 reX.back();
             }
+            
+            // post process functions
+            if (postProc.pressedBack) {
+                postProc.pressedBack.each(function(fn, index) {
+                    reX.debug('calling postProc PressedBack ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
         },
             
         wPressed: function(item) {
+            // pre process functions
+            if (preProc.wPressed) {
+                preProc.wPressed.each(function(fn, index) {
+                    reX.debug('calling preProc wPressed ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+        
             i = item.getProperty('idx');
             mediaManager.toggleWatched(reX.state.section.json[i]['@key'], function(state){ 
                 if (state === 'watched') {
@@ -124,9 +214,25 @@
                 
                 window.fireEvent('selectionChange', item);
             });
+            
+            // pre process functions
+            if (postProc.wPressed) {
+                postProc.wPressed.each(function(fn, index) {
+                    reX.debug('calling postProc wPressed ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
         },
         
         infoKeyPressed: function() {
+            // pre process functions
+            if (preProc.infoKeyPressed) {
+                preProc.infoKeyPressed.each(function(fn, index) {
+                    reX.debug('calling preProc InfoKeyPressed ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        
             if ($('info')) {
                 if (!infoVisible) {
                     i = reX.state.controls.getSelectedItem().getProperty('idx');
@@ -143,17 +249,43 @@
                     infoVisible = false;
                } 
            }
+           
+           // pre process functions
+            if (postProc.infoKeyPressed) {
+                postProc.infoKeyPressed.each(function(fn, index) {
+                    reX.debug('calling postProc InfoKeyPressed ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
         },
         
         selectionLeave: function() {
+            // pre process functions
+            if (preProc.selectionLeave) {
+                preProc.selectionLeave.each(function(fn, index) {
+                    reX.debug('calling preProc SelectionLeave ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+            
             if ($('info')) {
                 $('info').fade('hide');
                 infoVisible = false;
+            }
+            
+            // pre process functions
+            if (postProc.selectionLeave) {
+                postProc.selectionLeave.each(function(fn, index) {
+                    reX.debug('calling postProc SelectionLeave ' + index, REX_DEBUG);
+                    fn();
+                });
             }
         }
     };
 
     window.addEvents(reX.state.events);
+    
+    //preProc.selectionChange = Array.add( preProc.selectionChange, function(event) { console.log(event) } );
         
     mediaManager.getByType(reX.state.section.type, reX.state.section.key ,function(sec) {
         reX.state.section.json = sec;
@@ -174,6 +306,7 @@
         }
         
         skin = skinManager.getCurrentSkinForSection(reX.state.section.key);
+        reX.ResourceManager.setJS( skin.javascript.split(',') );
 
         new Skin({
             templateURL: skin.path + skinManager.getCurrentSkinForSection().templates.skin, 
@@ -182,7 +315,7 @@
         });
         
         $$('nav')[0].setProperty('id', type);
-
+                
         reX.ResourceManager.setCSS( skin.css.split(','), function() {
             window.fireEvent('skinready');
         });
