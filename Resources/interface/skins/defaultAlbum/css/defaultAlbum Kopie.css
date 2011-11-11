@@ -1,5 +1,5 @@
 body {
-	background-color: #000;
+	background-color: #000000;
 }
 
 .animWrap {
@@ -9,11 +9,14 @@ body {
 }
 
 nav {
-
+	/* We apply this property to the card so it can smoothly flip between its sides */
+	-webkit-transition-property: -webkit-transform, position, left, right;
+	/* Make the animation occur over a period of 1.0 seconds */
+	-webkit-transition-duration: 0.15s;
 }
 
 #outer {
-
+	-webkit-perspective: 2000;
 }
 
 nav {
@@ -29,19 +32,31 @@ nav li {
 	height: 384px;
 	display: inline-block;
 	/* We apply this property to the card so it can smoothly flip between its sides */
+	-webkit-transition-property: -webkit-transform, position, left, right;
 	/* Make the animation occur over a period of 1.0 seconds */
+	-webkit-transition-duration: 0.2s;
 }
 
-nav li.lower {}
+nav li.lower {
+	-webkit-transform: scale(0.7) rotateY(45deg) translate(80px,-40px);
+}
 
-nav li.upper {}
+nav li.upper {
+	-webkit-transform: scale(0.7) rotateY(-45deg) translate(-80px,-40px);
+}
 
 .cover {
 	position: absolute;
 	width: 384px;
 	height: 384px;
 
+	/* Ensure that the card lives correctly in 3D space */
+	-webkit-transform-style: preserve-3d;
 
+	/* We apply this property to the card so it can smoothly flip between its sides */
+	-webkit-transition-property: -webkit-transform;
+	/* Make the animation occur over a period of 1.0 seconds */
+	-webkit-transition-duration: 0.3s;
 
 }
 
