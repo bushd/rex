@@ -16,6 +16,7 @@
 
 .control_container {
 	margin-left: 60px;
+    clear: both;
 }
 
 .control_container li {
@@ -79,9 +80,10 @@
 #slider_container {
 	background-color: rgba(255, 255, 255, 0.2);
 	height: 10px;
-	width: 600px;
-	margin: 10px 0 10px 30px;
+	width: 500px;
+	margin: 14px 0 10px 0;
 	-webkit-border-radius: 5px;
+    float:left;
 }
 
 #slider_knob {
@@ -123,4 +125,21 @@
 
 section#info {
     display:none;
+}
+
+#seekTime {
+    margin: 10px 0 10px 30px;
+    width: 50px;
+    overflow: hidden;
+    float: left;
+    color: white;
+}
+
+#duration {
+    color: white;
+    float: right;
+    width: 50px;
+    overflow: hidden;
+    margin: 10px 30px 10px 0;
+    text-align:right;
 }
