@@ -4,6 +4,17 @@
 		var audio;
 		var covers;
 		var build = false;
+        
+        var skin = {}; 
+    var scrolllist, metadata, info;
+    var lazyload;
+    var type; 
+    var sectionInfo;
+    
+    var infoVisible = false;
+    
+    var preProc = {};
+    var postProc = {};
 		
 		function flip()
 		{
@@ -16,7 +27,7 @@
 			}
 			/* Toggle the setting of the classname attribute */
 			
-			positionCovers();
+			//positionCovers();
 		}
 		
 		function positionCovers() {
@@ -36,23 +47,91 @@
 	
     reX.state.events = {
 
-        domready: function() {		
-		}, 
+        skinready: function() {	
+            // pre process functions
+            if (preProc.skinready) {
+                preProc.skinready.each(function(fn, index) {
+                    reX.debug('calling preProc SkinReady ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        /*
+            metadata = new Template({
+                templateURL: skin.path + skin.templates.metadata, 
+                update: 'metadata'
+            });
+            
+            if (skin.templates.info) {
+                info = new Template({
+                    templateURL: skin.path + skin.templates.info, 
+                    update: 'info'
+                });
+            }*/                            
+                                          
+            var menu = new reX.Menu(
+                Object.merge({
+                    templateURL: skin.path + skin.templates.navigation,
+                    sectionObject: reX.state.section.json,
+                    inject: 'nav#'+type
+                },
+                skin.menu)
+            );
+                            
+            menu.generateElements();
+            menu.build();
+
+            // post process functions
+            if (postProc.skinready) {
+                postProc.skinready.each(function(fn, index) {
+                    reX.debug('calling postProc SkinReady ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        },
 		
-		menuDone: function(event) {		
-			if(!build) {	
+		menuDone: function(event) {	
+            // pre process functions
+            if (preProc.menuDone) {
+                preProc.menuDone.each(function(fn, index) {
+                    reX.debug('calling preProc MenuDone ' + index, REX_DEBUG);
+                    fn(event);
+                });
+            }
+            
+            if(!build) {
+        
+                scrolllist = new reX.Scrolllist('nav#'+type, skin.scrolllist);
+                
+                if (reX.state.section.selectionIndex == undefined) { 
+                    reX.state.controls.select(1);
+                }
+                else {
+                    reX.state.controls.select( reX.state.section.selectionIndex );
+                }
+                
+                window.fireEvent('selectionChange', reX.state.controls.getSelection());
+                
+                lazyload = new LazyLoad({
+                    range: 500, 
+                    realSrcAttribute: "data-src", 
+                    useFade: false, 
+                    elements: 'img', 
+                    container: $$('nav#'+type)[0],
+                    mode: "horizontal",
+                });
+                
 				//reX.state.controls.select(4);
-				$$('nav  > ul > li[index]').each(function(element, i) {
+			//	$$('nav  > ul > li[index]').each(function(element, i) {
 				/* if (element.getProperty('index') < 4) {
 				//		element.addClass('lower');
 				//	}
-					else*/ if (element.getProperty('index') > 1) {
-						element.addClass('upper');
-					}
-				});
+			//		else if (element.getProperty('index') > 1) {
+			//			element.addClass('upper');
+			//		}
+			//	});*/
 		
-				$$('nav').setStyle('left', 250);
-				positionCovers();
+				//$$('nav').setStyle('left', 250);
+				//positionCovers();
 				
 				build = true;
                 $$('nav  > ul > li')[0].addClass('focus');
@@ -61,10 +140,34 @@
 				var i = $$('.focus')[0].getProperty('index');
 				reX.state.controls.select((i*10000)+1);
 			}
+            
+            // post process functions
+            if (postProc.menuDone) {
+                postProc.menuDone.each(function(fn, index) {
+                    reX.debug('calling postProc MenuDone ' + index, REX_DEBUG);
+                    fn(event);
+                });
+            }
 		},
 		
 		selectionChange: function(item) {
-			
+            // pre process functions
+            if (preProc.selectionChange) {
+                preProc.selectionChange.each(function(fn, index) {
+                    reX.debug('calling preProc SelectionChange ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+            
+            scrolllist.move();
+            
+            // post process functions
+            if (postProc.selectionChange) {
+                postProc.selectionChange.each(function(fn, index) {
+                    reX.debug('calling postProc SelectionChange ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
 		},
 		
 		selectionEnter: function(item) {
@@ -115,8 +218,7 @@
 			
 		},
 		
-		pressedBack: function(e) {
-            e.stop();
+		pressedBack: function() {
 			if($$('.flipped').length == 0) {
 				reX.back();
 			}
@@ -129,19 +231,19 @@
 		pressedLeft: function(old) {
 			var flipped = $$('.flipped');
 			if(flipped.length != 0) {
-				flipped[0].getParent().addClass('upper');
+			//	flipped[0].getParent().addClass('upper');
 				flipped.removeClass('flipped');
 			}
 			else {
-				old.addClass('upper');
+			//	old.addClass('upper');
 			}
 			
-			$$('.focus').removeClass('lower');
+			//$$('.focus').removeClass('lower');
 			
-			positionCovers();
-			var move = $$('nav')[0];
-			var pos = parseInt(move.getStyle('left')) + 85;
-			move.setStyle('left', pos);
+		//	positionCovers();
+		//	var move = $$('nav')[0];
+		//	var pos = parseInt(move.getStyle('left')) + 85;
+		//	move.setStyle('left', pos);
 		},
 		
 		pressedRight: function(old) {
@@ -168,6 +270,8 @@
     mediaManager.getGroupedAlbums(reX.state.section.key ,function(sec) {
                 reX.state.section.json = sec;
                 reX.state.section.json.sort(sortByAfter('@title', '@parentTitle'));
+                type = reX.state.section.json[0]['@type'];
+                
                 
                 skin = skinManager.getCurrentSkinForSection(reX.state.section.key);
                                 
@@ -176,13 +280,17 @@
                     update: 'skin'
                 });
   
-                reX.ResourceManager.setCSS( skin.css.split(',') );
+                $$('nav')[0].setProperty('id', type);
+                
+                reX.ResourceManager.setCSS( skin.css.split(','), function() {
+                    window.fireEvent('skinready');
+                });
                 /*
                 metadata = new Template({
                     templateURL: skin.path + skin.templates.metadata, //'skins/movie/default/template.default.html',
                     update: 'skin'
                 });
-                  */              
+                                
                 var menu = new reX.Menu(
                     Object.merge({
                         templateURL: skin.path + skin.templates.navigation, //'skins/movie/default/navigation.default.html',
@@ -192,6 +300,6 @@
                 );
                                 
                 menu.generateElements();
-                menu.build();
+                menu.build();*/
     }.bind(this));
 </script>

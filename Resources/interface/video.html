@@ -27,6 +27,8 @@
                 reX.state.video = true;
                 visible = false;
                 
+                console.log('getting media infos');
+                
                 mediaManager.getMedia(reX.state.section.key ,function(m) {
                     media = m;
                     
@@ -45,6 +47,7 @@
                     
                     // start playing
                     scrobbled = false;
+                    console.log('trying to play');
                     Player.play();
                     
                     new Skin({
@@ -131,11 +134,12 @@
 		function stateChanged(state) {
 			switch(state) {				
 				case 'beginPlaying':
-                    seeker = window.setInterval('Player.getSeekPosition()', 1500);
+                    seeker = window.setInterval('Player.getSeekPosition()', 200);
                     getSubtitles();
                     getAudiotracks();
                     
                     Player.setSubtitle( subtitleIndex );
+                    setDuration();
                 
 					var progress = Player.getProgress();
 					if(progress >= 98) { progress = 0; }
@@ -259,13 +263,41 @@
 		}
 		
 		function updateSeekPosition(pos) {
-			if(this.slider) {
-				this.slider.set(parseInt(pos));
-			}
-			else {
-				this.slider = new Slider('slider_container', 'slider_knob', {steps: 5000});	
+			if (visible) {
+                if(this.slider) {
+                    this.slider.set(parseInt(pos));
+                }
+                else {
+                    this.slider = new Slider('slider_container', 'slider_knob', {steps: 5000});	
+                }
+                        
+                var time = Player.getPlaytime();
+                var seconds = parseInt((time/1000)%60);
+                var minutes = parseInt((time/(1000*60))%60);
+                var hours = parseInt((time/(1000*60*60))%24);
+                
+                seconds = seconds.toString();
+                minutes = minutes.toString();
+                
+                var timeString = hours + ':' + ((minutes.length) < 2 ? '0'+minutes : minutes) + ':' + ((seconds.length) < 2 ? '0'+seconds : seconds)
+
+                $('seekTime').set('text', timeString);
             }
 		}
+        
+        function setDuration() {
+            var time = media['@duration'];
+            var seconds = parseInt((time/1000)%60);
+            var minutes = parseInt((time/(1000*60))%60);
+            var hours = parseInt((time/(1000*60*60))%24);
+            
+            seconds = seconds.toString();
+            minutes = minutes.toString();
+            
+            var timeString = hours + ':' + ((minutes.length) < 2 ? '0'+minutes : minutes) + ':' + ((seconds.length) < 2 ? '0'+seconds : seconds)
+
+            $('duration').set('text', timeString);
+        }
         
         function getSubtitles() {
             
@@ -390,7 +422,7 @@
                     case '1': 
                         break;
                     case '2':
-                        Player.jumpBackward();
+                        Player.shortjumpBack();
                         break;
                     case '3':
                         Player.togglePlaymode();
@@ -402,7 +434,7 @@
                         reX.back();
                         break;
                     case '5':
-                        Player.jumpForward();
+                        Player.shortjumpForward();
                         break;
                     case '6':
                         break;
@@ -427,22 +459,28 @@
         function changeRefreshRate() {
             var rate = 60;
         
-            switch (media.Media['@videoFrameRate'].toLowerCase())
-            {
-                case '24p':
-                    rate = 24;
-                    break;
+            if (media.Media['@videoFrameRate']) {
+                console.log('trying to set refresh rate to '+media.Media['@videoFrameRate']);
+                switch (media.Media['@videoFrameRate'].toLowerCase())
+                {
+                    case '24p':
+                        rate = 24;
+                        break;
+                        
+                    case 'pal':
+                        rate = 50;
+                        break;
                     
-                case 'pal':
-                    rate = 50;
-                    break;
+                    case 'ntsc': 
+                        rate = 60;
+                        break;
+                        
+                    default:
+                        break;
+                }
                 
-                case 'ntsc': 
-                    rate = 60;
-                    break;
+                Utility.setRefreshRate(rate);
             }
-            
-            Player.setRefreshRate(rate);
         }
 
 	</script>
@@ -450,10 +488,12 @@
 	<div id="reX_control_wrapper" style="opacity: 0.0;">
 		<div id="controls">
 			<div class="slider_wrap">
+                <div id="seekTime">--:--:--</div>
 				<div id="slider_container">
 					<div id="slider_knob">
 					</div>
 				</div>
+                <div id="duration">--:--:--</div>
 			</div>
 			<nav class="control_container">
                 <ul>

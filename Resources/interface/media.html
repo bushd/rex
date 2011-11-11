@@ -284,12 +284,10 @@
     };
 
     window.addEvents(reX.state.events);
-    
-    //preProc.selectionChange = Array.add( preProc.selectionChange, function(event) { console.log(event) } );
-        
+            
     mediaManager.getByType(reX.state.section.type, reX.state.section.key ,function(sec) {
         reX.state.section.json = sec;
-        type = reX.state.section.json[0]['@type']
+        type = reX.state.section.json[0]['@type'];
         
         if (reX.state.section.json.length == 1 && type != 'episode') {
             reX.load('media.html',reX.state.section.json[0]['@key'], 'episode');
