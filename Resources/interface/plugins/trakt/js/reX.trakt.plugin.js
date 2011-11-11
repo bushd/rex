@@ -123,7 +123,7 @@ trakt.rateShow = function(show, year, rating) {
 
 /* MOVIE SCROBBLING */
 
-trakt.beginMovieScrobbling = function(title, year, duration, progress, callback) {
+trakt.beginMovieScrobbling = function(imdb, title, year, duration, progress, callback) {
 	var request = new Request.JSON({
 		url: 'http://api.trakt.tv/movie/watching/'+trakt.api,
 		method: 'post',
@@ -132,6 +132,7 @@ trakt.beginMovieScrobbling = function(title, year, duration, progress, callback)
 			}
 	}).send(JSON.encode({ "username": trakt.user, 
 					      "password": trakt.password,
+                          "imdb_id": imdb,
 						  "title": title,
 						  "year": year,
 						  "duration": (duration/60000),
@@ -141,7 +142,7 @@ trakt.beginMovieScrobbling = function(title, year, duration, progress, callback)
 						  "media_center_date": trakt.build}));
 }
 
-trakt.endMovieScrobbling = function(title, year, duration, progress, callback) {
+trakt.endMovieScrobbling = function(imdb, title, year, duration, progress, callback) {
 	var request = new Request.JSON({
 		url: 'http://api.trakt.tv/movie/scrobble/'+trakt.api,
 		method: 'post',
@@ -150,6 +151,7 @@ trakt.endMovieScrobbling = function(title, year, duration, progress, callback) {
 			}
 	}).send(JSON.encode({ "username": trakt.user, 
 					      "password": trakt.password,
+                          "imdb_id": imdb,
 						  "title": title,
 						  "year": year,
 						  "duration": (duration/60000),
@@ -159,7 +161,7 @@ trakt.endMovieScrobbling = function(title, year, duration, progress, callback) {
 						  "media_center_date": trakt.build}));
 }
 
-trakt.beginShowScrobbling = function(title, year, season, episode, duration, progress, callback) {    
+trakt.beginShowScrobbling = function(tvdb, title, year, season, episode, duration, progress, callback) {    
     var request = new Request.JSON({
 		url: 'http://api.trakt.tv/show/watching/'+trakt.api,
 		method: 'post',
@@ -167,13 +169,14 @@ trakt.beginShowScrobbling = function(title, year, season, episode, duration, pro
 				callback(json);
 			},
 		onRequest: function() {
-			reX.debug('[TRAKT][REQUEST] scrobble show '+ title +' ('+ year + ') s'+season+'e'+episode+ ' @ ' + (duration*progress/100), REX_DEBUG);
+			reX.debug('[TRAKT][REQUEST] scrobble show '+ title +' ('+ year + ') [tvdb:'+tvdb+'] s'+season+'e'+episode+ ' @ ' + (duration*progress/100), REX_DEBUG);
 			},
 		onFailure: function(xhr) {
 				reX.debug('[TRAKT][FAILURE] '+xhr.status+': unable to scrobble show', REX_ERROR);
 			}
 	}).send(JSON.encode({ "username": trakt.user, 
 					      "password": trakt.password,
+                          "tvdb_id": tvdb,
 						  "title": title,
 						  "season": season,
 						  "episode": episode,
@@ -185,7 +188,7 @@ trakt.beginShowScrobbling = function(title, year, season, episode, duration, pro
 						  "media_center_date": trakt.build}));
 }
 
-trakt.endShowScrobbling = function(title, year, season, episode, duration, progress, callback) {
+trakt.endShowScrobbling = function(tvdb, title, year, season, episode, duration, progress, callback) {
 	var request = new Request.JSON({
 		url: 'http://api.trakt.tv/show/scrobble/'+trakt.api,
 		method: 'post',
@@ -193,13 +196,14 @@ trakt.endShowScrobbling = function(title, year, season, episode, duration, progr
 				callback(json);
 			},
 		onRequest: function() {
-				reX.debug('[TRAKT][REQUEST] scrobble show '+ title +' ('+ year + ') s'+season+'e'+episode+ ' @ ' + (duration*progress/100), REX_DEBUG);
+				reX.debug('[TRAKT][REQUEST] scrobble show '+ title +' ('+ year + ') [tvdb:'+tvdb+'] s'+season+'e'+episode+ ' @ ' + (duration*progress/100), REX_DEBUG);
 			},
 		onFailure: function(xhr) {
 				reX.debug('[TRAKT][FAILURE] '+xhr.status+': unable to scrobble show', REX_ERROR);
 			}
 	}).send(JSON.encode({ "username": trakt.user, 
 					      "password": trakt.password,
+                          "tvdb_id": tvdb,
 						  "title": title,
 						  "season": season,
 						  "episode": episode,
