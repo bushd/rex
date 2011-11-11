@@ -15,6 +15,7 @@
 {
     self = [super init];
     return self;
+    playlistIndex = 0;
 }
 
 -(void)awakeFromNib {	
@@ -30,12 +31,10 @@
     mediaListPlayer = [[VLCMediaListPlayer alloc] init];
     [[mediaListPlayer mediaPlayer] setVideoView:videoView];
     [[mediaListPlayer mediaPlayer] setDelegate:self];
-    
-    //player = [[VLCMediaPlayer alloc] init];
-    //[player setVideoView:videoView];
-	//[player setDelegate:self];
-    
     player = [mediaListPlayer mediaPlayer];
+    
+    playlist = [[VLCMediaList alloc] init];
+    [mediaListPlayer setMediaList:playlist];
     
     goneBack = NO;
     resources = [NSBundle mainBundle];
@@ -74,8 +73,7 @@
 - (void)webView:(WebView *)webView windowScriptObjectAvailable:(WebScriptObject *)windowScriptObject {
     NSLog(@"js injected");
 	scriptObject = windowScriptObject;
-    [windowScriptObject setValue:self forKey:@"Player"];
-    //[windowScriptObject evaluateWebScript:@"console = { log: function(msg) { Player.debug(msg,5); }, error: function(msg) { Player.debug(msg,1); }}"];
+    [windowScriptObject setValue:self forKey:@"js2objcBridge"];
 }
 
 // intercept all messages to the consoel and print them to the ASL
@@ -208,14 +206,18 @@
 	[player setMedia:[VLCMedia mediaWithPath:aPath]];
 }
 
-- (void)addFileToPlaylist:(NSString *)aPath {}
-
-- (BOOL)playNextInPlaylist {
-    return false;
+- (void)addFileToPlaylist:(NSString *)aPath {
+    [playlist addMedia:[VLCMedia mediaWithPath:aPath]];
 }
 
-- (BOOL)playPrevInPlaylist {
-    return false;
+- (void)playNextInPlaylist {
+    if (playlistIndex + 1 >= [playlist count]) return;
+    else [player setMedia: [playlist mediaAtIndex:++playlistIndex]];
+}
+
+- (void)playPrevInPlaylist {
+    if (playlistIndex - 1 <= 0) return;
+    else [player setMedia: [playlist mediaAtIndex:--playlistIndex]];
 }
 
 - (void)play {
@@ -395,6 +397,9 @@ fail:
 	NSLog(@"Unable to set display to width: %lu height %lu refresh: %d", w, h, refresh);
 	return NO;
 }
+- (int)getPlaytime {
+    return [[player time] intValue];
+}
 
 
 /*
@@ -425,6 +430,7 @@ fail:
     else if (sel == @selector(isMuted)) return NO;
     else if (sel == @selector(setVolume:)) return NO;
     else if (sel == @selector(getVolume)) return NO;
+    else if (sel == @selector(getPlaytime)) return NO;
     else if (sel == @selector(setPlayerFramePositionX:positionY:width:height:)) return NO;
     else if (sel == @selector(changeDisplaySettingsWithRefreshRate:)) return NO;
     else return YES;
@@ -441,7 +447,7 @@ fail:
     else if (sel == @selector(jumpBackward)) return @"jumpBackward";
 	else if (sel == @selector(isPlaying)) return @"isPlaying";
 	else if (sel == @selector(getProgress)) return @"getProgress";
-    else if (sel == @selector(getProgress)) return @"getSeekPosition";
+    else if (sel == @selector(getSeekPosition)) return @"getSeekPosition";
 	else if (sel == @selector(play)) return @"play";
     else if (sel == @selector(getSkins)) return @"getSkins";
     else if (sel == @selector(getSubtitles)) return @"getSubtitles";
@@ -454,6 +460,7 @@ fail:
     else if (sel == @selector(isMuted)) return @"isMuted";
     else if (sel == @selector(setVolume:)) return @"setVolume";
     else if (sel == @selector(getVolume)) return @"getVolume";
+    else if (sel == @selector(getPlaytime)) return @"getPlaytime";
     else if (sel == @selector(setPlayerFramePositionX:positionY:width:height:)) return @"setFrame";
     else if (sel == @selector(changeDisplaySettingsWithRefreshRate:)) return @"setRefreshRate";
     else return nil;

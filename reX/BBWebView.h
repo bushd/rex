@@ -15,6 +15,7 @@
     VLCVideoView *videoView;
     VLCMediaPlayer *player;
     VLCMediaListPlayer *mediaListPlayer;
+    VLCMediaList *playlist;
     VLCAudio *audio;
 	NSBundle *resources;
     NSString *resourcePath;
@@ -22,6 +23,8 @@
 	NSWindow *window;
     NSUInteger volume;
     NSUInteger volumeStep;
+    
+    NSInteger playlistIndex;
 	
 	int seekPosition;
 	
@@ -47,8 +50,8 @@
 - (void)playAudio:(NSString *)aPath;
 - (void)playVideo:(NSString *)aPath withKey:(NSString *)key;
 - (void)addFileToPlaylist:(NSString *)aPath;
-- (BOOL)playNextInPlaylist;
-- (BOOL)playPrevInPlaylist;
+- (void)playNextInPlaylist;
+- (void)playPrevInPlaylist;
 - (void)togglePlaymode;
 - (void)stop;
 - (void)jumpForward;
@@ -69,6 +72,7 @@
 - (void)getSeekPosition;
 - (void)setPlayerFramePositionX:(float)x positionY:(float)y width:(float)w height:(float)h;
 - (BOOL)changeDisplaySettingsWithRefreshRate:(int)refresh;
+- (int)getPlaytime;
 
 
 + (NSString *) webScriptNameForSelector:(SEL)sel;

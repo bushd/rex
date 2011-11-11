@@ -13,13 +13,13 @@
 
 @interface BBRexView : NSView {
 @private
-    VLCMediaPlayer *player;
+    VLCMediaListPlayer *player;
     
     VLCVideoView *videoView;
     WebView *webView;
 }
 
-- (VLCMediaPlayer *)player;
+- (VLCMediaListPlayer *)player;
 - (WebView *)webView;
 
 @end

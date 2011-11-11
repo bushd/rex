@@ -24,17 +24,21 @@
 - (void)awakeFromNib {
     videoView = [[VLCVideoView alloc] initWithFrame:NSMakeRect(0,0,self.frame.size.width, self.frame.size.height)];
     [self addSubview:videoView];
-    [videoView release];
     
-    player = [[VLCMediaPlayer alloc] initWithVideoView:videoView];
+    player = [[VLCMediaListPlayer alloc] init];
+    [[player mediaPlayer] setVideoView:videoView];
     
     webView = [[NSView alloc] initWithFrame:NSMakeRect(0,0,self.frame.size.width, self.frame.size.height)];
     [self addSubview:webView];
     [webView setWantsLayer:YES];
     [webView.layer setBackgroundColor:CGColorCreateGenericRGB(1.0, 0.0, 0.0, 0.5)];   
+    
+    [videoView release];
+    [webView release];
+    [player release];
 }
 
-- (VLCMediaPlayer *)player {
+- (VLCMediaListPlayer *)player {
     return player;
 }
 
@@ -45,6 +49,9 @@
 
 - (void)dealloc
 {
+    [videoView release];
+    [webView release];
+    [player release];
     [super dealloc];
 }
 
