@@ -1,0 +1,197 @@
+
+	<script type="text/javascript">
+	
+		var audio;
+		var covers;
+		var build = false;
+		
+		function flip()
+		{
+			var item = $$('.flipped');
+			if(item.length == 0) {
+				$$('.focus')[0].getChildren('.cover')[0].addClass('flipped');
+			} 
+			else {
+				$$('.focus')[0].getParents('.cover')[0].removeClass('flipped');
+			}
+			/* Toggle the setting of the classname attribute */
+			
+			positionCovers();
+		}
+		
+		function positionCovers() {
+			
+			var i = 0;
+			$$('.lower').each(function(element) {
+				element.setStyle('left', (-i * 305) - 50 + (parseInt(element.getProperty('idx')) * 5) ) ;
+				i++;
+			});
+			$$('nav > ul > li[idx="'+i+'"]').setStyle('left', (-i*300)+200);
+			i++;
+			$$('.upper').each(function(element) {
+				element.setStyle('left', (-(i - 1) * 300) + 150 );//+ (parseInt(element.getProperty('idx') - 1)));
+				i++;
+			});
+		}
+	
+    reX.state.events = {
+
+        domready: function() {		
+		}, 
+		
+		menuDone: function(event) {		
+			if(!build) {	
+				//reX.state.controls.select(4);
+				$$('nav  > ul > li[index]').each(function(element, i) {
+				/* if (element.getProperty('index') < 4) {
+				//		element.addClass('lower');
+				//	}
+					else*/ if (element.getProperty('index') > 1) {
+						element.addClass('upper');
+					}
+				});
+		
+				$$('nav').setStyle('left', 250);
+				positionCovers();
+				
+				build = true;
+                $$('nav  > ul > li')[0].addClass('focus');
+			}
+			else {
+				var i = $$('.focus')[0].getProperty('index');
+				reX.state.controls.select((i*10000)+1);
+			}
+		},
+		
+		selectionChange: function(item) {
+			
+		},
+		
+		selectionEnter: function(item) {
+			var i = item.getProperty('index');
+			var key = item.getProperty('idx');
+			
+			if(item.getParents('.flipped').length != 0) {
+				mediaManager.getMedia(this.audio[key]['@key'], function(media) {
+					if(media.Part[0] != undefined) {
+						Player.playAudio(media.Part[0]["@file"]);
+					}
+					else { 
+						Player.playAudio(media.Part["@file"]);
+					}
+				}.bind(this));
+			}
+			else if(item.getChildren('.flipped').length == 0) {
+				flip();
+				if($$('.focus .back .innerlist')[0].getChildren().length == 0) {
+					mediaManager.getTracks(reX.state.section.json[key]['@key'] ,function(sec) {
+						this.audio = sec;
+                        var innermenu = new reX.Menu({
+                            template: '<div>'
+								+		'<div>{@index}.</div>'
+								+		'<div>{@title}</div>'
+								+ '</div>',
+                            sectionObject: this.audio,
+                            wrap: false, 
+                            index: ((i*10000)+1), 
+                            inject: '.focus .back .innerlist',
+                            update: '.focus .back .innerlist'
+                        });
+						
+                        $$('.focus').addClass('hasSelectable');
+                        innermenu.generateElements();
+                        innermenu.build();
+					});
+				}
+				else {
+					reX.state.controls.select((i*10000)+1);
+					mediaManager.getTracks(reX.state.section.json[key]['@key'] ,function(sec) {
+						this.audio = sec;
+					});
+				}
+			}
+			else {
+			}
+			
+		},
+		
+		pressedBack: function(e) {
+            e.stop();
+			if($$('.flipped').length == 0) {
+				reX.back();
+			}
+			else {
+				flip();
+				reX.state.controls.select(parseInt($$('.focus')[0].getProperty('index'))/10000);
+			}
+		},
+		
+		pressedLeft: function(old) {
+			var flipped = $$('.flipped');
+			if(flipped.length != 0) {
+				flipped[0].getParent().addClass('upper');
+				flipped.removeClass('flipped');
+			}
+			else {
+				old.addClass('upper');
+			}
+			
+			$$('.focus').removeClass('lower');
+			
+			positionCovers();
+			var move = $$('nav')[0];
+			var pos = parseInt(move.getStyle('left')) + 85;
+			move.setStyle('left', pos);
+		},
+		
+		pressedRight: function(old) {
+			var flipped = $$('.flipped');
+			if(flipped.length != 0) {
+				flipped[0].getParent().addClass('lower');
+				flipped.removeClass('flipped');
+			}
+			else {
+				old.addClass('lower');
+			}
+			
+			$$('.focus').removeClass('upper');
+			
+			positionCovers();
+			var move = $$('nav')[0];
+			var pos = parseInt(move.getStyle('left'))-85;
+			move.setStyle('left', pos);
+		}
+    };
+    
+    window.addEvents(reX.state.events);
+    
+    mediaManager.getGroupedAlbums(reX.state.section.key ,function(sec) {
+                reX.state.section.json = sec;
+                reX.state.section.json.sort(sortByAfter('@title', '@parentTitle'));
+                
+                skin = skinManager.getCurrentSkinForSection(reX.state.section.key);
+                                
+                new Skin({
+                    templateURL: skin.path + skinManager.getCurrentSkinForSection().templates.skin, //'skins/movie/default/template.default.html',
+                    update: 'skin'
+                });
+  
+                reX.ResourceManager.setCSS( skin.css.split(',') );
+                /*
+                metadata = new Template({
+                    templateURL: skin.path + skin.templates.metadata, //'skins/movie/default/template.default.html',
+                    update: 'skin'
+                });
+                  */              
+                var menu = new reX.Menu(
+                    Object.merge({
+                        templateURL: skin.path + skin.templates.navigation, //'skins/movie/default/navigation.default.html',
+                        sectionObject: reX.state.section.json
+                    },
+                    skin.menu)
+                );
+                                
+                menu.generateElements();
+                menu.build();
+    }.bind(this));
+</script>
