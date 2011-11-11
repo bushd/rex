@@ -80,3 +80,10 @@ Asset.stylesheet = function(path,options) {
     }.bind(this));
     this.timer = this.checker.delay(1,this);
   }
+  
+Array.add = function(arr, item){
+    if (arr == null)  arr = [];
+	if (item == null) return arr;
+    arr.push(item);
+    return arr;
+};
