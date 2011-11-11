@@ -16,6 +16,8 @@
   		
   		<!-- reX -->
   		<script src="js/reX/reX.js"></script>
+        <script src="js/reX/reX.utility.js"></script>
+        <script src="js/reX/reX.mediaplayer.js"></script>
   		<script src="js/reX/reX.controls.js"></script>
   		<script src="js/reX/reX.json2html.js"></script>
   		<script src="js/reX/reX.mediamanager.js"></script>
@@ -59,6 +61,8 @@
         
         <script type="text/javascript">
             var mediaManager = new reX.MediaManager();
+            var skinManager = new reX.SkinManager();
+            reX.state.controls = new reX.Controls();
             
             var Player = {
                 getProgress: function() {return 1;},
@@ -66,67 +70,14 @@
                 play: function() {//stateChanged('beginPlaying');
                 },
                 
-                stop: function() {stateChanged('finishedPlaying');
+                stop: function() {//stateChanged('finishedPlaying');
                 }
             };
         
             window.addEvent('domready', function() {
-				reX.state.controls = new reX.Controls();
-                //reX.load('video.html', '/library/metadata/7835');
-                var text = "{#ifthenelse::0::ok::nicht ok}";
+                reX.load('video.html', '/library/metadata/2284');
                 
-                obj = {
-                    ifthenelse: function(args) { // three parameters
-                        if (args.length < 2) return '';
-                        
-                        var ifArgument = stringToBoolean(args[0]);
-                        var thenArgument = args[1];
-                        
-                        var elseArgument = '';
-                        if (args.length > 2) {
-                            elseArgument = args[2];
-                        }
-                        
-                        return (ifArgument ? thenArgument : elseArgument); 
-                    },
-                    
-                    exists: function(arg) {
-                        return ((arg && arg[0] !== "") ? 'true' : 'false');
-                    },
-                    
-                    notexists: function(arg) {
-                        return ((arg && arg[0] !== "") ? 'false' : 'true');
-                    },
-                    
-                    equals: function(args) { // two parameters
-                        if (args.length < 2) return 'false';
-                        
-                        var firstArgument = args[0];
-                        var secondArgument = args[1];
-                        
-                        return ((firstArgument == secondArgument) ? 'true' : 'false'); 
-                    },
-                    
-                    notequals: function(args) { // two parameters
-                        if (args.length < 2) return 'false';
-                        
-                        var firstArgument = args[0];
-                        var secondArgument = args[1];
-                        
-                        return ((firstArgument != secondArgument) ? 'true' : 'false'); 
-                    },
-                    
-                    not: function(arg) {
-                        if (!arg) return 'false';
-                        
-                        return (stringToBoolean(arg[0]) ? 'false' : 'true');
-                    }
-                };
-                
-                console.log(mediaManager.getNextEpisodesToWatch('2')); 
-                
-                mediaManager.getOnDeck(2, function(result){console.log(result);}); 
-            });
+            }.bind(this)); 
             
             window.addEvent('pressedBack', function() {
                 console.log('backspace pressed');
