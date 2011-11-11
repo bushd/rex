@@ -23,6 +23,7 @@ reX.Controls = new Class({
 							nindex = item.getProperty('left');
 						
 							if(typeOf(nindex[0]) == 'string') {
+                                window.fireEvent('leaveElement');
 								return;
 							}
 						});
@@ -47,6 +48,7 @@ reX.Controls = new Class({
 							nindex = item.getProperty('up');
 						
 							if(typeOf(nindex[0]) == 'string') {
+                                window.fireEvent('leaveElement');
 								return;
 							}
 						});
@@ -74,6 +76,7 @@ reX.Controls = new Class({
 							nindex = item.getProperty('right');
 						
 							if(typeOf(nindex[0]) == 'string') {
+                                window.fireEvent('leaveElement');
 								return;
 							}
 						});
@@ -98,6 +101,7 @@ reX.Controls = new Class({
 							nindex = item.getProperty('down');
 						
 							if(typeOf(nindex[0]) == 'string') {
+                                window.fireEvent('leaveElement');
 								return;
 							}
 						});

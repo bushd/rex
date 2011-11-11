@@ -1,14 +1,8 @@
 // check for Player
 try{
-    Player
+    js2objcBridge
 }catch(e) {
-    Player = {};
-};
-
-try{
-    Player.getSkins();
-}catch(e) {
-    Player.getSkins = function() {
+    Utility.getSkins = function() {
         return JSON.encode({ skins: {
         defaultMedia: {
             name: 'Default Media',
@@ -125,6 +119,28 @@ defaultShow: {
         offset: 2
     },
     menu: {}
+},
+jimi: {
+    name: 'Jimi',
+    version: '0.1',
+    authors: 'Bastian Brodbeck',
+    path: 'skins/jimi/',
+    type: 'movie',
+    templates: {
+        skin: 'template.jimiMovie.html',
+        navigation: 'navigation.jimiMovie.html',
+        metadata: 'metadata.jimiMovie.html',
+        info: 'info.jimiMovie.html'
+    },
+    javascript: 'skins/jimi/js/jimi.js', // comma seperated list
+    css: 'skins/jimi/css/jimiMovie.css', // comma seperated list
+   scrolllist: {
+        offset: 1,
+        vertical: true
+    },
+    menu: {
+        vertical: true
+    }
 }
 }});
     };
@@ -138,9 +154,9 @@ reX.SkinManager = new Class({
     },
     
     getSkins: function() {
-        reX.debug('[SKINMANAGER] skin json: '+ JSON.encode(JSON.decode(Player.getSkins())), REX_DEBUG);
+        reX.debug('[SKINMANAGER] skin json: '+ JSON.encode(JSON.decode(Utility.getSkins())), REX_DEBUG);
     
-        return JSON.decode(Player.getSkins());
+        return JSON.decode(Utility.getSkins());
     },
     
     getCurrentSkinForSection: function(key, viewGroup) {

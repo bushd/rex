@@ -1,12 +1,5 @@
 if ( typeof(reX) == 'undefined' ) rex = reX = function() {};
 
-// check for Player
-try{
-    Player
-}catch(e) {
-    Player = {};
-};
-
 reX.version = '0.4alpha';
 reX.debugmode = true;
 reX.infomode = true;
@@ -44,57 +37,6 @@ REX_LOG    = 5
 REX_INFO   = 6
 
 window.fireEvent('reXready');
-
-// sorting
-
-function sortBy(field, primer){
-
-   return function(a,b){
-
-       a = a[field];
-       b = b[field];
-
-       if (typeof(primer) != 'undefined'){
-           a = primer(a);
-           b = primer(b);
-       }
-
-       if (a<b) { return -1; }
-       if (a>b) { return 1; }
-       return 0;
-	}
-}
-
-function sortByAfter(by, after, primerBy, primerAfter){
-	
-	return function(a,b){
-
-		var a1 = a[after];
-		var b1 = b[after];
-
-		if (typeof(primerAfter) != 'undefined'){
-			a1 = primerAfter(a1);
-			b1 = primerAfter(b1);
-		}
-
-		if (a1 < b1) return -1;
-		else if (a1 > b1) return 1;
-		else {
-
-			var a2 = a[by];
-			var b2 = b[by];
-
-			if (typeof(primerBy) != 'undefined'){
-				a2 = primerBy(a2);
-				b2 = primerBy(b2);
-			}
-
-			if (a2 < b2) return -1;
-			if (a2 > b2) return 1;
-			return 0;
-		}
-	}
-}
 
 // utility
 
@@ -153,7 +95,7 @@ Request.Load = new Class({
     },
     onSuccess: function(responseTree, responseElements, responseHTML, responseJavaScript) {
         reX.debug('[SUCCESS] loaded url '+ reX.state.section.url, REX_INFO);
-    	$('inner').set('html', responseHTML);
+    	$('skin').set('html', responseHTML);
     }
 });
 
@@ -168,7 +110,7 @@ reX.load = function (url, key, type) {
     reX.state.events = {};
     
     // unset custom html
-    $('inner').set('html', '');
+    $('skin').set('html', '');
 	$$('nav').set('html', '');
     
     reX.state.section.history = Object.clone(reX.state.section);
@@ -199,7 +141,7 @@ reX.back = function () {
     reX.state.events = {};
     
     // unset custom html
-    $('inner').set('html', '');
+    $('skin').set('html', '');
 	$$('nav').set('html', '');
     
     // get last seen page
@@ -259,8 +201,10 @@ reX.ResourceManager = {
     
     setJS: function(files) {
 		Object.each(files, function(file, key) {
-            reX.debug('[LOAD] js ' + file + ' with key ' + key, REX_INFO);
-			Asset.javascript(file, {id: 'js_resource_'+key});
+            if (file != '') {
+                reX.debug('[LOAD] js ' + file + ' with key ' + key, REX_INFO);
+                Asset.javascript(file, {id: 'js_resource_'+key});
+            }
 		});
 		
 		reX.state.section.resources.js = files;
@@ -268,8 +212,10 @@ reX.ResourceManager = {
 	
 	unsetJS: function() {
 		Object.each(reX.state.section.resources.js, function(file, key) {
-            reX.debug('[UNLOAD] js ' + file + ' with key ' + key, REX_INFO);
-			$('js_resource_'+key).destroy();
+            if (file != '') { 
+                reX.debug('[UNLOAD] js ' + file + ' with key ' + key, REX_INFO);
+                $('js_resource_'+key).destroy();
+            }
 		});
 		
 		reX.state.section.resources.js = undefined;

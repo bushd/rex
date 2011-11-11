@@ -10,7 +10,8 @@ reX.Menu = new Class({
 		index: 1,
 		vertical: true,
 		wrap: true,
-		inject: 'nav'
+		inject: 'nav',
+        noBuildEvent: false
 	},
 
 	initialize: function(options) {
@@ -31,11 +32,17 @@ reX.Menu = new Class({
 	},
 	
     generateElements: function() {
-        var j2h = new reX.json2html({
-            html: this.options.template
-        });
+        this.options.elements = [];
         
-        this.options.elements = j2h.convert(this.options.sectionObject);
+        if(typeOf(this.options.sectionObject) == 'array')	{
+			this.options.sectionObject.each(function(item){
+                this.options.substitute = item;
+                this.options.elements.push(this.render());
+			}.bind(this));	
+		}				
+		else {
+			this.options.elements.push(this.render(this.options.sectionObject));
+		}
     },
     
 	/* insterts the list intro the html code */
@@ -137,12 +144,13 @@ reX.Menu = new Class({
 						html: this.options.elements[i]});
 				}
 			}
-			
 			li.inject(ul);
 		}
-		
+
 		ul.inject($$(this.options.inject)[0], 'top');
-		window.fireEvent('menuDone');
+		if (!this.options.noBuildEvent) {
+            window.fireEvent('menuDone');
+        }
 	}
 });
 
@@ -178,7 +186,7 @@ reX.HomeMenu = new Class({
 						
 						var menu = new reX.Menu({
                             vertical: this.options.mainVertical,
-                            template: '<span><b>{@title}</b></span>',
+                            template: '<span class="homemenu"><b>{@title}</b></span>',
                             sectionObject: this.options.sections
                         });
                         
@@ -189,7 +197,7 @@ reX.HomeMenu = new Class({
 				else {
 					var menu = new reX.Menu({
                         vertical: this.options.mainVertical,
-                        template: '<span><b>{@title}</b></span>',
+                        template: '<span class="homemenu"><b>{@title}</b></span>',
                         sectionObject: reX.state.section.json
                     });
                     
