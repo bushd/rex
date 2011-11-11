@@ -1,0 +1,25 @@
+<div class="fanart"><img src="http://localhost:32400{#transcode::{@art}}"></div>
+
+<div class="title">{@title}</div>
+
+<div class="left">  
+    <div class="poster"><img src="http://localhost:32400{#transcode::{@thumb}}"></div>
+</div>
+
+<div class="right"> 
+    <div class="metaGroup">
+        <em>Year:</em> <span class="year">{@year}</span>
+        <em>Genre:</em> <span class="genre"></span>
+        <em>Duration:</em> <span class="duration">{#toTime::{@duration}}</span>
+
+        <div class="summary">{@summary}</div>
+    </div>
+</div>
+
+<div class="flagGroup clear">
+    <span class="flag resolution_flag">{@videoResolution}</span>
+    <span class="flag ratio_flag">{@aspectRatio}</span>
+    <span class="flag video_flag">{@videoCodec}</span>
+    <span class="flag audio_flag">{@audioCodec}</span>
+    <span class="flag channel_flag">{@audioChannels}</span>
+</div>
