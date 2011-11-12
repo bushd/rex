@@ -34,11 +34,18 @@
   		
   		<!-- Cascading Style Sheets -->
   		<link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/style.css" type="text/css">
   	
 	</head>
 	<body>
-		<header>
-			<!-- header goes here -->
+		<header id="titlebar">
+			<div id="reX_windowcontrols" class="reX_active">
+                <div id="reX_closebutton"></div>
+                <div id="reX_minimizebutton"></div>
+                <div id="reX_maximizebutton"></div>
+            </div>
+            <div id="reX_windowtitle">reX</div>
+            <div id="reX_fullscreen"><span id="reX_fullscreenbutton"></div>
 		</header>
 		
         <section id="skin">
@@ -64,6 +71,12 @@
             var Player = new reX.MediaPlayer();
         
             window.addEvent('domready', function() {
+                $('reX_closebutton').addEvent('click', function() {});
+                
+                $('reX_minimizebutton').addEvent('click', function() {});
+            
+                $('reX_maximizebutton').addEvent('click', function() {});
+            
 				reX.state.controls = new reX.Controls();
                 reX.load('home.html');
             }.bind(this)); 
@@ -74,7 +87,7 @@
                     reX.state.section.selectionIndex  = i;
                 }
             }.bind(this));
-             
+            
         </script>
 	</body>
 <html>
