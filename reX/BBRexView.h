@@ -2,24 +2,21 @@
 //  BBRexView.h
 //  reX
 //
-//  Created by Bastian Brodbeck on 27.02.11.
+//  Created by Bastian Brodbeck on 12.11.11.
 //  Copyright 2011 dmc digital media center GmbH. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
-#import <VLCKit/VLCKit.h>
 #import <WebKit/WebKit.h>
-
+#import <VLCKit/VLCKit.h>
+#import "BBWebView.h"
 
 @interface BBRexView : NSView {
-@private
-    VLCMediaListPlayer *player;
-    
     VLCVideoView *videoView;
-    WebView *webView;
+    BBWebView *webView;
 }
 
-- (VLCMediaListPlayer *)player;
-- (WebView *)webView;
+-(BBWebView *)webView;
+-(VLCVideoView *)videoView;
 
 @end

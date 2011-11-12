@@ -7,19 +7,17 @@
 //
 
 #import "reXAppDelegate.h"
-#import "global.h"
 
 @implementation reXAppDelegate
 
 @synthesize window;
-@synthesize overlayWindow;
-@synthesize webView;
-@synthesize videoView;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
-    [overlayWindow attachToView:videoView];
-    [webView setWindow:overlayWindow];
+    globalRexView = rexView;
+    
+   // [overlayWindow attachToView:videoView];
+   // [webView setWindow:overlayWindow];
     
     // init windows
     [window setBackgroundColor:[NSColor blackColor]];
@@ -31,24 +29,16 @@
     NSNumber *no = [NSNumber numberWithBool:NO];
     [defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                 no, @"", nil]];
+                                
+    [defaults registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"WebKitDeveloperExtras"]];
+[defaults synchronize];
     
-    
-    // init Resources
-    bundle = [NSBundle mainBundle];
-    
-    // init webview
-	[webView setApplicationNameForUserAgent:@"reX"];
-	[webView setDrawsBackground:NO];
-	[webView loadURL:[NSURL URLWithString: [NSString stringWithFormat:@"%@/interface/reX.html", [bundle resourcePath]]]];
-	[[[webView mainFrame] frameView] setAllowsScrolling:NO];
-	[webView setVideoView: videoView];
-    
-    CGDisplayHideCursor( kCGDirectMainDisplay );
+    //CGDisplayHideCursor( kCGDirectMainDisplay );
     skinManager = [[BBSkinManager alloc] init];
 	floatingOnTop = false;
 	
     [window makeFirstResponder:window];     
-	[window setNextResponder:overlayWindow];
+	//[window setNextResponder:overlayWindow];
     [window setDelegate:self];
     
     // Set up remote control
@@ -71,7 +61,7 @@
 }
 
 - (IBAction)setSizeTo720p:(id)sender {
-	NSRect r = NSMakeRect([window frame].origin.x, [window frame].origin.y - (720 - [webView frame].size.height), 1280, 720 + [self titleBarHeight]);
+	NSRect r = NSMakeRect([window frame].origin.x, [window frame].origin.y - (720 - [[globalRexView webView] frame].size.height), 1280, 720 + [self titleBarHeight]);
 	[window setFrame:r display:YES animate:YES];
 }
 

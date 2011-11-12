@@ -63,7 +63,7 @@
 };
 
 - (void)loadHome {
-    [[self mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[resources pathForResource:@"interface/home" ofType:@"html"]]]];
+	[self loadURL:[NSURL URLWithString: [NSString stringWithFormat:@"%@/interface/reX.html", [bundle resourcePath]]]];
 };
 
 /*
@@ -136,6 +136,11 @@
 		
 	if (state == VLCMediaPlayerStatePlaying) {
 		NSLog(@"PlayState: playing");
+        
+        [[globalRexView webView] removeFromSuperviewWithoutNeedingDisplay];
+        [globalRexView addSubview:[globalRexView webView]];
+        [globalRexView setNeedsDisplay:YES];
+        
 		[[self windowScriptObject] evaluateWebScript:@"stateChanged('beginPlaying')"];
 	} 
 	else if (state == VLCMediaPlayerStatePaused) {

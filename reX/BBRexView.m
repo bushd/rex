@@ -2,12 +2,12 @@
 //  BBRexView.m
 //  reX
 //
-//  Created by Bastian Brodbeck on 27.02.11.
+//  Created by Bastian Brodbeck on 12.11.11.
 //  Copyright 2011 dmc digital media center GmbH. All rights reserved.
 //
 
 #import "BBRexView.h"
-
+#import "global.h"
 
 @implementation BBRexView
 
@@ -21,56 +21,41 @@
     return self;
 }
 
-- (void)awakeFromNib {
-    videoView = [[VLCVideoView alloc] initWithFrame:NSMakeRect(0,0,self.frame.size.width, self.frame.size.height)];
-    [self addSubview:videoView];
-    
-    player = [[VLCMediaListPlayer alloc] init];
-    [[player mediaPlayer] setVideoView:videoView];
-    
-    webView = [[NSView alloc] initWithFrame:NSMakeRect(0,0,self.frame.size.width, self.frame.size.height)];
-    [self addSubview:webView];
-    [webView setWantsLayer:YES];
-    [webView.layer setBackgroundColor:CGColorCreateGenericRGB(1.0, 0.0, 0.0, 0.5)];   
-    
-    [videoView release];
-    [webView release];
-    [player release];
-}
-
-- (VLCMediaListPlayer *)player {
-    return player;
-}
-
-- (WebView *)webView {
-    return webView;
-}
-
-
-- (void)dealloc
-{
-    [videoView release];
-    [webView release];
-    [player release];
-    [super dealloc];
-}
-
 - (void)drawRect:(NSRect)dirtyRect
 {
     // Drawing code here.
 }
 
+- (void)awakeFromNib {
+    [self setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+    [self setAutoresizesSubviews:YES];
 
-- (void)mouseDown:(NSEvent *)theEvent {  
-    NSLog(@"down");
+    videoView = [[VLCVideoView alloc] initWithFrame:NSMakeRect(0,0,self.frame.size.width, self.frame.size.height)];
+    [videoView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    [self addSubview:videoView];
+    [videoView release];
+
+    // init webview
+    webView = [[BBWebView alloc] initWithFrame:NSMakeRect(0,0,self.frame.size.width, self.frame.size.height) frameName:nil groupName:nil];
+    [webView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    [self addSubview:webView];
+    [webView setVideoView:videoView];
+    [webView setWantsLayer:YES];
+	[webView setApplicationNameForUserAgent:@"reX"];
+	[webView setDrawsBackground:NO];
+    
+    // init Resources
+    bundle = [NSBundle mainBundle];
+    [webView loadHome];
+	[[[webView mainFrame] frameView] setAllowsScrolling:NO];
+}
+   
+-(BBWebView *)webView {
+    return webView;
 }
 
-- (void)mouseDragged:(NSEvent *)theEvent {
-	NSLog(@"drag");
-}
-
-- (BOOL)acceptsFirstResponder {
-    return NO;
+-(VLCVideoView *)videoView {
+    return videoView;
 }
 
 @end

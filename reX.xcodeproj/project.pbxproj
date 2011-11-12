@@ -13,6 +13,7 @@
 		914906581440924B00833A3B /* HIDRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = 914906571440924B00833A3B /* HIDRemote.m */; };
 		9149065A1440934000833A3B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 914906591440934000833A3B /* IOKit.framework */; };
 		9149065C1440934800833A3B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9149065B1440934700833A3B /* Carbon.framework */; };
+		915F6650146EC946009EFAD8 /* BBRexView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915F664F146EC946009EFAD8 /* BBRexView.m */; };
 		91B779BC145E18CE0005F20A /* VLCKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91B779BB145E18CE0005F20A /* VLCKit.framework */; };
 		91B779BF145E190D0005F20A /* VLCKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91B779BB145E18CE0005F20A /* VLCKit.framework */; };
 		91C5D155131A34DB00D4DD73 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91C5D154131A34DB00D4DD73 /* Cocoa.framework */; };
@@ -22,7 +23,6 @@
 		91C5D168131A34DB00D4DD73 /* reXAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C5D167131A34DB00D4DD73 /* reXAppDelegate.m */; };
 		91C5D16B131A34DB00D4DD73 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91C5D169131A34DB00D4DD73 /* MainMenu.xib */; };
 		91C5D172131A350500D4DD73 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91C5D171131A350500D4DD73 /* WebKit.framework */; };
-		91C5D1A5131A6C5200D4DD73 /* BBRexView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C5D1A4131A6C5200D4DD73 /* BBRexView.m */; };
 		91C5D1FD131A95BD00D4DD73 /* BBOverlayWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C5D1FC131A95BC00D4DD73 /* BBOverlayWindow.m */; };
 		91C5D200131AA50700D4DD73 /* BBWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C5D1FF131AA50700D4DD73 /* BBWebView.m */; };
 		91CF1AD9142F531800DE9140 /* BBSkinManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 91CF1AD8142F531800DE9140 /* BBSkinManager.m */; };
@@ -53,6 +53,8 @@
 		914906571440924B00833A3B /* HIDRemote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HIDRemote.m; sourceTree = "<group>"; };
 		914906591440934000833A3B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		9149065B1440934700833A3B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		915F664E146EC946009EFAD8 /* BBRexView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBRexView.h; sourceTree = "<group>"; };
+		915F664F146EC946009EFAD8 /* BBRexView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBRexView.m; sourceTree = "<group>"; };
 		91B779BB145E18CE0005F20A /* VLCKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VLCKit.framework; path = Frameworks/VLCKit.framework; sourceTree = "<group>"; };
 		91C5D150131A34DB00D4DD73 /* reX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C5D154131A34DB00D4DD73 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -68,8 +70,8 @@
 		91C5D167131A34DB00D4DD73 /* reXAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = reXAppDelegate.m; sourceTree = "<group>"; };
 		91C5D16A131A34DB00D4DD73 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		91C5D171131A350500D4DD73 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		91C5D1A3131A6C5200D4DD73 /* BBRexView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBRexView.h; sourceTree = "<group>"; };
-		91C5D1A4131A6C5200D4DD73 /* BBRexView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBRexView.m; sourceTree = "<group>"; };
+		91C5D1A3131A6C5200D4DD73 /* unused_BBRexView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unused_BBRexView.h; sourceTree = "<group>"; };
+		91C5D1A4131A6C5200D4DD73 /* unused_BBRexView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = unused_BBRexView.m; sourceTree = "<group>"; };
 		91C5D1FB131A95BC00D4DD73 /* BBOverlayWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBOverlayWindow.h; sourceTree = "<group>"; };
 		91C5D1FC131A95BC00D4DD73 /* BBOverlayWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBOverlayWindow.m; sourceTree = "<group>"; };
 		91C5D1FE131AA50600D4DD73 /* BBWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBWebView.h; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				91C5D177131A3A5D00D4DD73 /* Windows */,
 				91C5D201131AA51700D4DD73 /* Views */,
 				3C7BE7C8133E263500D0EDEA /* Additional */,
+				91D24ED2146E739000B70BAF /* Deprecated */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -237,12 +240,21 @@
 		91C5D201131AA51700D4DD73 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				91C5D1A3131A6C5200D4DD73 /* BBRexView.h */,
-				91C5D1A4131A6C5200D4DD73 /* BBRexView.m */,
 				91C5D1FE131AA50600D4DD73 /* BBWebView.h */,
 				91C5D1FF131AA50700D4DD73 /* BBWebView.m */,
+				915F664E146EC946009EFAD8 /* BBRexView.h */,
+				915F664F146EC946009EFAD8 /* BBRexView.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		91D24ED2146E739000B70BAF /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				91C5D1A3131A6C5200D4DD73 /* unused_BBRexView.h */,
+				91C5D1A4131A6C5200D4DD73 /* unused_BBRexView.m */,
+			);
+			name = Deprecated;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -329,13 +341,13 @@
 			files = (
 				91C5D162131A34DB00D4DD73 /* main.m in Sources */,
 				91C5D168131A34DB00D4DD73 /* reXAppDelegate.m in Sources */,
-				91C5D1A5131A6C5200D4DD73 /* BBRexView.m in Sources */,
 				91C5D1FD131A95BD00D4DD73 /* BBOverlayWindow.m in Sources */,
 				91C5D200131AA50700D4DD73 /* BBWebView.m in Sources */,
 				3C7BE7CD133E26FD00D0EDEA /* BBRexPlaylist.m in Sources */,
 				3C59D9EE1351BB11005A69FB /* BBWindowController.m in Sources */,
 				91CF1AD9142F531800DE9140 /* BBSkinManager.m in Sources */,
 				914906581440924B00833A3B /* HIDRemote.m in Sources */,
+				915F6650146EC946009EFAD8 /* BBRexView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

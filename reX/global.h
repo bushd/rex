@@ -9,11 +9,17 @@
 #ifndef reX_global_h
 #define reX_global_h
 
+#import <WebKit/WebKit.h>
+#import <VLCKit/VLCKit.h>
 #include <asl.h>
 #include "BBSkinManager.h"
+#include "BBRexView.h"
+#include "BBWebView.h"
 
 aslclient _client;
 NSBundle *bundle;
 BBSkinManager *skinManager;
+
+BBRexView *globalRexView;
 
 #endif

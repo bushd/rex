@@ -7,12 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <WebKit/WebKit.h>
-#import <VLCKit/VLCKit.h>
 #import "BBOverlayWindow.h"
 #import "BBWebView.h"
 #import "BBSkinManager.h"
 #import "HIDRemote.h"
+#import "global.h"
 
 @class BBWindowController;
 
@@ -20,14 +19,10 @@
 @private
 	BBWindowController *windowController;
 	
-    IBOutlet BBOverlayWindow *overlayWindow;
     IBOutlet NSWindow *window;
-    IBOutlet BBWebView *webView;
-    IBOutlet VLCVideoView *videoView;
+    IBOutlet BBRexView *rexView;
 	IBOutlet NSMenuItem *toggleFullscreen;
-	
-	BBOverlayWindow *dragWindow;
-	
+
 	BOOL floatingOnTop;
 	NSMenuItem *setSizeToFullscreen;
 	NSWindow *fullscreenWindow;
@@ -36,9 +31,6 @@
 }
 
 @property (assign) IBOutlet NSWindow *window;
-@property (assign) IBOutlet BBOverlayWindow *overlayWindow;
-@property (assign) IBOutlet BBWebView *webView;
-@property (assign) IBOutlet VLCVideoView *videoView;
 
 - (IBAction)setSizeTo480p:(id)sender;
 - (IBAction)setSizeTo720p:(id)sender;
