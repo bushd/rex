@@ -27,11 +27,14 @@
 }
 
 - (void)awakeFromNib {
-    [self setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
-    [self setAutoresizesSubviews:YES];
+    //[self setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+    //[self setAutoresizesSubviews:YES];
 
     videoView = [[VLCVideoView alloc] initWithFrame:NSMakeRect(0,0,self.frame.size.width, self.frame.size.height)];
-    [videoView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+   
+   [videoView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+   [videoView setAutoresizesSubviews:YES];
+   [videoView setFillScreen:YES];
     [self addSubview:videoView];
     [videoView release];
 

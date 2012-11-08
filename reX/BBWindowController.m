@@ -20,9 +20,15 @@
     return self;
 }
 
-- (void)windowDidLoad {
-	[[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"WebKitDeveloperExtras"];
-	[[NSUserDefaults standardUserDefaults] synchronize];
+
+- (BOOL)canBecomeKeyWindow
+{
+    return YES;
+}
+
+- (BOOL)canBecomeMainWindow
+{
+    return YES;
 }
 
 @end

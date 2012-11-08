@@ -10,10 +10,15 @@
 		3C59D9EE1351BB11005A69FB /* BBWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C59D9ED1351BB11005A69FB /* BBWindowController.m */; };
 		3C7BE7CD133E26FD00D0EDEA /* BBRexPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7BE7CC133E26FD00D0EDEA /* BBRexPlaylist.m */; };
 		910EE01B145EB4720098C257 /* interface in Resources */ = {isa = PBXBuildFile; fileRef = 910EE01A145EB4720098C257 /* interface */; };
+		9125C96A14DEB641007408BD /* reX.resourcemanager.js in Sources */ = {isa = PBXBuildFile; fileRef = 9125C96914DEB641007408BD /* reX.resourcemanager.js */; };
 		914906581440924B00833A3B /* HIDRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = 914906571440924B00833A3B /* HIDRemote.m */; };
 		9149065A1440934000833A3B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 914906591440934000833A3B /* IOKit.framework */; };
 		9149065C1440934800833A3B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9149065B1440934700833A3B /* Carbon.framework */; };
+		915B4EE6148A9812004154D0 /* BBVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915B4EE5148A9812004154D0 /* BBVideoView.m */; };
+		915B4EEA148A9916004154D0 /* BBVideoLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 915B4EE9148A9916004154D0 /* BBVideoLayoutManager.m */; };
+		915B4F111493850B004154D0 /* reX.appletrailers.plugin.js in Sources */ = {isa = PBXBuildFile; fileRef = 915B4F101493850B004154D0 /* reX.appletrailers.plugin.js */; };
 		915F6650146EC946009EFAD8 /* BBRexView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915F664F146EC946009EFAD8 /* BBRexView.m */; };
+		915F6661146F1963009EFAD8 /* CustomWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 915F6660146F1963009EFAD8 /* CustomWindow.m */; };
 		91B779BC145E18CE0005F20A /* VLCKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91B779BB145E18CE0005F20A /* VLCKit.framework */; };
 		91B779BF145E190D0005F20A /* VLCKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91B779BB145E18CE0005F20A /* VLCKit.framework */; };
 		91C5D155131A34DB00D4DD73 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91C5D154131A34DB00D4DD73 /* Cocoa.framework */; };
@@ -26,6 +31,8 @@
 		91C5D1FD131A95BD00D4DD73 /* BBOverlayWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C5D1FC131A95BC00D4DD73 /* BBOverlayWindow.m */; };
 		91C5D200131AA50700D4DD73 /* BBWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C5D1FF131AA50700D4DD73 /* BBWebView.m */; };
 		91CF1AD9142F531800DE9140 /* BBSkinManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 91CF1AD8142F531800DE9140 /* BBSkinManager.m */; };
+		91D0B15214811CFA00BEF8F5 /* chapterize.html in Resources */ = {isa = PBXBuildFile; fileRef = 91D0B15114811CFA00BEF8F5 /* chapterize.html */; };
+		91ED132114D5910400BED90C /* WebInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 91ED132014D5910400BED90C /* WebInspector.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,13 +55,21 @@
 		3C7BE7CB133E26FD00D0EDEA /* BBRexPlaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBRexPlaylist.h; sourceTree = "<group>"; };
 		3C7BE7CC133E26FD00D0EDEA /* BBRexPlaylist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBRexPlaylist.m; sourceTree = "<group>"; };
 		910EE01A145EB4720098C257 /* interface */ = {isa = PBXFileReference; lastKnownFileType = folder; path = interface; sourceTree = "<group>"; };
+		9125C96914DEB641007408BD /* reX.resourcemanager.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = reX.resourcemanager.js; path = Resources/interface/js/reX/reX.resourcemanager.js; sourceTree = "<group>"; };
 		9131585E142CDF4000697418 /* global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = global.h; sourceTree = "<group>"; };
 		914906561440924B00833A3B /* HIDRemote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HIDRemote.h; sourceTree = "<group>"; };
 		914906571440924B00833A3B /* HIDRemote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HIDRemote.m; sourceTree = "<group>"; };
 		914906591440934000833A3B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		9149065B1440934700833A3B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		915B4EE4148A9812004154D0 /* BBVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBVideoView.h; sourceTree = "<group>"; };
+		915B4EE5148A9812004154D0 /* BBVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBVideoView.m; sourceTree = "<group>"; };
+		915B4EE8148A9916004154D0 /* BBVideoLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBVideoLayoutManager.h; sourceTree = "<group>"; };
+		915B4EE9148A9916004154D0 /* BBVideoLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBVideoLayoutManager.m; sourceTree = "<group>"; };
+		915B4F101493850B004154D0 /* reX.appletrailers.plugin.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = reX.appletrailers.plugin.js; path = "Resources/interface/plugins/apple trailers/js/reX.appletrailers.plugin.js"; sourceTree = "<group>"; };
 		915F664E146EC946009EFAD8 /* BBRexView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBRexView.h; sourceTree = "<group>"; };
 		915F664F146EC946009EFAD8 /* BBRexView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBRexView.m; sourceTree = "<group>"; };
+		915F665F146F1963009EFAD8 /* CustomWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomWindow.h; sourceTree = "<group>"; };
+		915F6660146F1963009EFAD8 /* CustomWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomWindow.m; sourceTree = "<group>"; };
 		91B779BB145E18CE0005F20A /* VLCKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VLCKit.framework; path = Frameworks/VLCKit.framework; sourceTree = "<group>"; };
 		91C5D150131A34DB00D4DD73 /* reX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C5D154131A34DB00D4DD73 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -78,6 +93,9 @@
 		91C5D1FF131AA50700D4DD73 /* BBWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBWebView.m; sourceTree = "<group>"; };
 		91CF1AD7142F531800DE9140 /* BBSkinManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBSkinManager.h; sourceTree = "<group>"; };
 		91CF1AD8142F531800DE9140 /* BBSkinManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBSkinManager.m; sourceTree = "<group>"; };
+		91D0B15114811CFA00BEF8F5 /* chapterize.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = chapterize.html; path = Resources/interface/chapterize.html; sourceTree = "<group>"; };
+		91ED131F14D5910400BED90C /* WebInspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebInspector.h; sourceTree = "<group>"; };
+		91ED132014D5910400BED90C /* WebInspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebInspector.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +121,8 @@
 				3C7BE7CA133E269800D0EDEA /* Media */,
 				91CF1AD7142F531800DE9140 /* BBSkinManager.h */,
 				91CF1AD8142F531800DE9140 /* BBSkinManager.m */,
+				91ED131F14D5910400BED90C /* WebInspector.h */,
+				91ED132014D5910400BED90C /* WebInspector.m */,
 			);
 			name = Additional;
 			sourceTree = "<group>";
@@ -144,6 +164,9 @@
 		91C5D145131A34DA00D4DD73 = {
 			isa = PBXGroup;
 			children = (
+				9125C96914DEB641007408BD /* reX.resourcemanager.js */,
+				915B4F101493850B004154D0 /* reX.appletrailers.plugin.js */,
+				91D0B15114811CFA00BEF8F5 /* chapterize.html */,
 				91C5D15A131A34DB00D4DD73 /* reX */,
 				3C7BE7CE133E280400D0EDEA /* Resources */,
 				91C5D153131A34DB00D4DD73 /* Frameworks */,
@@ -233,6 +256,8 @@
 				91C5D1FC131A95BC00D4DD73 /* BBOverlayWindow.m */,
 				3C59D9EC1351BB11005A69FB /* BBWindowController.h */,
 				3C59D9ED1351BB11005A69FB /* BBWindowController.m */,
+				915F665F146F1963009EFAD8 /* CustomWindow.h */,
+				915F6660146F1963009EFAD8 /* CustomWindow.m */,
 			);
 			name = Windows;
 			sourceTree = "<group>";
@@ -251,6 +276,10 @@
 		91D24ED2146E739000B70BAF /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				915B4EE4148A9812004154D0 /* BBVideoView.h */,
+				915B4EE5148A9812004154D0 /* BBVideoView.m */,
+				915B4EE8148A9916004154D0 /* BBVideoLayoutManager.h */,
+				915B4EE9148A9916004154D0 /* BBVideoLayoutManager.m */,
 				91C5D1A3131A6C5200D4DD73 /* unused_BBRexView.h */,
 				91C5D1A4131A6C5200D4DD73 /* unused_BBRexView.m */,
 			);
@@ -268,7 +297,7 @@
 				91C5D14C131A34DB00D4DD73 /* Sources */,
 				91C5D14D131A34DB00D4DD73 /* Frameworks */,
 				91C5D14E131A34DB00D4DD73 /* Resources */,
-				910EE019145EB3920098C257 /* ShellScript */,
+				910EE019145EB3920098C257 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -313,19 +342,21 @@
 				91C5D165131A34DB00D4DD73 /* Credits.rtf in Resources */,
 				91C5D16B131A34DB00D4DD73 /* MainMenu.xib in Resources */,
 				910EE01B145EB4720098C257 /* interface in Resources */,
+				91D0B15214811CFA00BEF8F5 /* chapterize.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		910EE019145EB3920098C257 /* ShellScript */ = {
+		910EE019145EB3920098C257 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,6 +379,12 @@
 				91CF1AD9142F531800DE9140 /* BBSkinManager.m in Sources */,
 				914906581440924B00833A3B /* HIDRemote.m in Sources */,
 				915F6650146EC946009EFAD8 /* BBRexView.m in Sources */,
+				915F6661146F1963009EFAD8 /* CustomWindow.m in Sources */,
+				915B4EE6148A9812004154D0 /* BBVideoView.m in Sources */,
+				915B4EEA148A9916004154D0 /* BBVideoLayoutManager.m in Sources */,
+				915B4F111493850B004154D0 /* reX.appletrailers.plugin.js in Sources */,
+				91ED132114D5910400BED90C /* WebInspector.m in Sources */,
+				9125C96A14DEB641007408BD /* reX.resourcemanager.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

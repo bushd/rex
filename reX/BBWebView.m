@@ -11,18 +11,22 @@
 
 @implementation BBWebView
 
-- (id)init
+- (id)initWithFrame:(NSRect)rect frameName:(NSString *)name groupName:(NSString *)group;
 {
-    self = [super init];
-    return self;
+    self = [super initWithFrame:rect frameName:name groupName:group];
     playlistIndex = 0;
-}
-
--(void)awakeFromNib {	
-	[self setFrameLoadDelegate: self];
+    
+    [self setFrameLoadDelegate: self];
 	[self setPolicyDelegate:self];
 	[self setDownloadDelegate:self];
 	[self setUIDelegate: self];
+    
+    [[self window] setIgnoresMouseEvents:NO];
+    
+    trackingArea = [[NSTrackingArea alloc] initWithRect:[self frame] options:(NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways) owner:self userInfo:nil];
+    [self addTrackingArea:trackingArea];
+
+    return self;
 }
 
 - (void)setVideoView:aView {
@@ -46,11 +50,46 @@
 
 - (void)setWindow:(NSWindow *)w {
 	window = w;
-	[window setAcceptsMouseMovedEvents:YES];
 }
 
 - (BOOL)acceptsFirstResponder {
     return YES;
+}
+
+- (BOOL)mouseDownCanMoveWindow
+{
+    return NO;
+}
+
+- (BOOL)acceptsFirstMouse:(NSEvent *)event
+{
+    return YES;
+}
+
+-(void)updateTrackingAreas {
+    if(trackingArea != nil) {
+        [self removeTrackingArea:trackingArea];
+        [trackingArea release];
+    }
+
+    int opts = (NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways);
+    trackingArea = [ [NSTrackingArea alloc] initWithRect:[self bounds]
+                                            options:opts
+                                            owner:self
+                                            userInfo:nil];
+    [self addTrackingArea:trackingArea];
+}
+
+- (void)mouseEntered:(NSEvent *)theEvent
+{
+    [[self window] setIgnoresMouseEvents:NO];
+    [[self windowScriptObject] evaluateWebScript:@"showTitlebar();"];
+}
+
+- (void)mouseExited:(NSEvent *)theEvent
+{
+    [[self window] setIgnoresMouseEvents:YES];
+    [[self windowScriptObject] evaluateWebScript:@"hideTitlebar();"];
 }
 
 - (void)dealloc
@@ -133,14 +172,12 @@
 
 - (void)mediaPlayerStateChanged:(NSNotification *)aNotification {
 	VLCMediaPlayerState state = [player state];
-		
+     [[self windowScriptObject] evaluateWebScript:@"hideTitlebar()"];
+     [globalRexView addSubview:self];
+     [globalRexView setNeedsDisplay:YES];
+        
 	if (state == VLCMediaPlayerStatePlaying) {
 		NSLog(@"PlayState: playing");
-        
-        [[globalRexView webView] removeFromSuperviewWithoutNeedingDisplay];
-        [globalRexView addSubview:[globalRexView webView]];
-        [globalRexView setNeedsDisplay:YES];
-        
 		[[self windowScriptObject] evaluateWebScript:@"stateChanged('beginPlaying')"];
 	} 
 	else if (state == VLCMediaPlayerStatePaused) {
@@ -166,6 +203,12 @@
 	}
 	else if (state == VLCMediaPlayerStateBuffering) {		
 		NSLog(@"PlayState: buffering");
+        
+        if([self getProgress] >= 97) {
+			NSLog(@"PlayState: finished");
+			[[self windowScriptObject] evaluateWebScript:@"stateChanged('finishedPlaying')"];
+		}
+
 	}
 	else if (state == VLCMediaPlayerStateOpening) {		
 		NSLog(@"PlayState: opening");
@@ -203,7 +246,7 @@
 	[mediaListPlayer setRootMedia:[VLCMedia mediaWithPath:aPath]];
 
 //	[self loadURL:[NSURL URLWithString:[NSString stringWithFormat: @"%@/interface/video.html?key=%@", resourcePath, key]]];
-    [scriptObject evaluateWebScript:[NSString stringWithFormat:@"reX.load('video.html', '%@');", key]];
+    [scriptObject evaluateWebScript:[NSString stringWithFormat:@"reX.load('video', '%@');", key]];
 }
 
 - (void)playAudio:(NSString *)aPath {
@@ -299,6 +342,10 @@
 	return (int)(current*100.0);
 }
 
+- (void)setProgress:(int)p {
+	[player setTime:[VLCTime timeWithInt:p]];
+}
+
 - (NSString *)getSkins {
     return [skinManager skinDefinitionAsJSONString];
 };
@@ -313,10 +360,18 @@
 };
 
 - (void)setSubtitle:(NSUInteger)index {
+    NSLog(@"attempting to set Subtitle Index ...");
     if ([[player videoSubTitles] count] > 0) {
         if ([player state] == VLCMediaPlayerStatePlaying) {
             [player setCurrentVideoSubTitleIndex:index];
+            NSLog(@"   ... Index set to %lu", index);
         }
+        else {
+            NSLog(@"   ... it seems there is no media playing. ABORT");
+        }
+    }
+    else {
+        NSLog(@"   ... no subtitles found. IGNORED");
     }
 };
 
@@ -346,14 +401,20 @@
 	}
 }
 
+-(void)quitApp {
+    [NSApp terminate: nil];
+}
+
 - (void)setPlayerFramePositionX:(float)x positionY:(float)y width:(float)w height:(float)h {
     [videoView setFrame:NSMakeRect(x, y, w, h)];
 }
 
 -(BOOL) changeDisplaySettingsWithRefreshRate:(int)refresh {
-	CGDisplayConfigRef newConfig;
+    CGDirectDisplayID mainScreen = (CGDirectDisplayID)[[[[NSScreen mainScreen] deviceDescription] objectForKey:@"NSScreenNumber"] intValue];
+    	
+    CGDisplayConfigRef newConfig;
 	int i = 0;
-    CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(CGMainDisplayID());
+    CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(mainScreen /*CGMainDisplayID()*/);
  
     unsigned long w = CGDisplayModeGetWidth(currentMode);
     unsigned long h = CGDisplayModeGetHeight(currentMode);
@@ -361,7 +422,7 @@
 
 	NSLog(@"called change display settings with w:%lu h:%lu e:%@", w, h, e);
 		
-    CFArrayRef modes = CGDisplayCopyAllDisplayModes(kCGDirectMainDisplay, NULL);
+    CFArrayRef modes = CGDisplayCopyAllDisplayModes(mainScreen, NULL);
     
     for ( i = 0 ; i < CFArrayGetCount(modes) ; i++ )
     {
@@ -381,7 +442,7 @@
                 err = CGBeginDisplayConfiguration(&newConfig);
                 if ( err )
                     goto fail;
-                err = CGConfigureDisplayWithDisplayMode(newConfig, kCGDirectMainDisplay, m, NULL);
+                err = CGConfigureDisplayWithDisplayMode(newConfig, mainScreen, m, NULL);
                 if ( err )
                     goto fail;
                 err = CGCompleteDisplayConfiguration(newConfig, kCGConfigureForAppOnly);
@@ -401,7 +462,18 @@
 fail:
 	NSLog(@"Unable to set display to width: %lu height %lu refresh: %d", w, h, refresh);
 	return NO;
+    
 }
+
+- (void)savePreferences:(NSString *)prefs {
+    [preferences setObject:prefs forKey:@"reXSettings"];
+    [preferences synchronize];
+}
+
+- (NSString *)loadPreferences {
+    return [preferences objectForKey:@"reXSettings"];
+}
+
 - (int)getPlaytime {
     return [[player time] intValue];
 }
@@ -422,6 +494,7 @@ fail:
     else if (sel == @selector(jumpBackward)) return NO;
 	else if (sel == @selector(isPlaying)) return NO;
 	else if (sel == @selector(getProgress)) return NO;
+    else if (sel == @selector(setProgress:)) return NO;
     else if (sel == @selector(getSeekPosition)) return NO;
 	else if (sel == @selector(play)) return NO;
     else if (sel == @selector(getSkins)) return NO;
@@ -438,6 +511,9 @@ fail:
     else if (sel == @selector(getPlaytime)) return NO;
     else if (sel == @selector(setPlayerFramePositionX:positionY:width:height:)) return NO;
     else if (sel == @selector(changeDisplaySettingsWithRefreshRate:)) return NO;
+    else if (sel == @selector(quitApp)) return NO;
+    else if (sel == @selector(setPreferences:)) return NO;
+    else if (sel == @selector(loadPreferences)) return NO;
     else return YES;
 }
 
@@ -452,6 +528,7 @@ fail:
     else if (sel == @selector(jumpBackward)) return @"jumpBackward";
 	else if (sel == @selector(isPlaying)) return @"isPlaying";
 	else if (sel == @selector(getProgress)) return @"getProgress";
+    else if (sel == @selector(setProgress:)) return @"setProgress";
     else if (sel == @selector(getSeekPosition)) return @"getSeekPosition";
 	else if (sel == @selector(play)) return @"play";
     else if (sel == @selector(getSkins)) return @"getSkins";
@@ -468,6 +545,10 @@ fail:
     else if (sel == @selector(getPlaytime)) return @"getPlaytime";
     else if (sel == @selector(setPlayerFramePositionX:positionY:width:height:)) return @"setFrame";
     else if (sel == @selector(changeDisplaySettingsWithRefreshRate:)) return @"setRefreshRate";
+    else if (sel == @selector(quitApp)) return @"quitApp";
+    else if (sel == @selector(setPreferences:)) return @"setPreferences";
+    else if (sel == @selector(loadPreferences)) return @"loadPreferences";
+
     else return nil;
 }
 

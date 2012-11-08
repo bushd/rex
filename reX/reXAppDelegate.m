@@ -14,30 +14,39 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
+    windowFrame = [window frame];
+    
     globalRexView = rexView;
+    globalWindow = window;
+    allowResize = NO;
     
    // [overlayWindow attachToView:videoView];
    // [webView setWindow:overlayWindow];
     
     // init windows
+    [window setMovableByWindowBackground:YES];
     [window setBackgroundColor:[NSColor blackColor]];
-    [window setCollectionBehavior:[window collectionBehavior]+NSWindowCollectionBehaviorFullScreenPrimary];
+    [window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+    [NSApp setPresentationOptions: (NSApplicationPresentationFullScreen |
+                                    NSApplicationPresentationHideDock |
+                                    NSApplicationPresentationHideMenuBar)];
+    [[self window] toggleFullScreen:nil];
     
     //init preferences
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *yes = [NSNumber numberWithBool:YES];
-    NSNumber *no = [NSNumber numberWithBool:NO];
-    [defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-                                no, @"", nil]];
-                                
-    [defaults registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"WebKitDeveloperExtras"]];
-[defaults synchronize];
+    preferences = [NSUserDefaults standardUserDefaults];
+    [preferences registerDefaults:
+        [NSDictionary dictionaryWithObjectsAndKeys:
+            @"{}", @"reXSettings", 
+            nil /* terminate List */]];
+            
+    [preferences setBool:TRUE forKey:@"WebKitDeveloperExtras"];
+	[preferences synchronize];
     
     //CGDisplayHideCursor( kCGDirectMainDisplay );
     skinManager = [[BBSkinManager alloc] init];
 	floatingOnTop = false;
 	
-    [window makeFirstResponder:window];     
+    [window makeFirstResponder:[globalRexView webView]];     
 	//[window setNextResponder:overlayWindow];
     [window setDelegate:self];
     
@@ -46,28 +55,63 @@
     [self startRemoteControl];
 }
 
+- (void)windowDidResize:(NSNotification *)aNotification {
+    if(!allowResize) {
+        [window setFrame:windowFrame display:NO];
+    }
+}
+
+- (void)windowDidLoad {
+}
+
+
 - (void)windowWillClose:(NSNotification *)aNotification {
 	[NSApp terminate:self];
 }
     
 
 - (IBAction)toggleFullscreen:(id)sender {
-    [window toggleFullScreen:nil];
+    NSLog(@"toggle Fullscreen");
+    [self setSizeTo720p:nil];
+    [[self window] toggleFullScreen:nil];
+    /*
+    NSUInteger masks = [window styleMask];
+    if ( masks & NSFullScreenWindowMask) {
+        NSRect screen = [[NSScreen mainScreen] frame];
+        NSRect r = NSMakeRect(0, 0, screen.size.width, screen.size.height);
+        [window setFrame:r display:YES animate:YES];
+    }
+     */
 }
 
 - (IBAction)setSizeTo480p:(id)sender {
-	NSRect r = NSMakeRect([window frame].origin.x, [window frame].origin.y - (480 - [window frame].size.height), 854, 480 + [self titleBarHeight]);
-	[window setFrame:r display:YES animate:YES];
+    allowResize = YES;
+	windowFrame = NSMakeRect([window frame].origin.x, [window frame].origin.y - (480-[window frame].size.height), 854, 480);
+	[window setFrame:windowFrame display:YES animate:YES];
+    allowResize = NO;
 }
 
 - (IBAction)setSizeTo720p:(id)sender {
-	NSRect r = NSMakeRect([window frame].origin.x, [window frame].origin.y - (720 - [[globalRexView webView] frame].size.height), 1280, 720 + [self titleBarHeight]);
-	[window setFrame:r display:YES animate:YES];
+    allowResize = YES;
+    windowFrame = NSMakeRect([window frame].origin.x, [window frame].origin.y - (720 - [window frame].size.height), 1280, 720);
+	[window setFrame:windowFrame display:YES animate:YES];
+    allowResize = NO;
 }
 
 - (IBAction)setSizeTo1080p:(id)sender {
-	NSRect r = NSMakeRect([window frame].origin.x, [window frame].origin.y - (1080 - [window frame].size.height), 1920, 1080 + [self titleBarHeight]);
-	[window setFrame:r display:YES animate:YES];
+    allowResize = YES;
+	windowFrame = NSMakeRect([window frame].origin.x, [window frame].origin.y - (1080 - [window frame].size.height), 1920, 1080);
+	[window setFrame:windowFrame display:YES animate:YES];
+    allowResize = NO;
+}
+
+- (IBAction)fillscreen:(id)sender {
+    allowResize = YES;
+	windowFrame = NSMakeRect(0, 0, 1920, 1080);
+	[window setFrame:windowFrame display:YES animate:YES];
+    allowResize = NO;
+    [window setLevel:NSFloatingWindowLevel];
+    floatingOnTop = YES;
 }
 
 - (IBAction)toggleFloatOnTop:(id)sender {
@@ -106,7 +150,7 @@
 - (BOOL)startRemoteControl
 {
 	HIDRemoteMode remoteMode;
-	remoteMode = kHIDRemoteModeExclusiveAuto;
+	remoteMode = kHIDRemoteModeExclusive; //kHIDRemoteModeExclusiveAuto;
 	
 	// Check whether the installation of Candelair is required to reliably operate in this mode
 	if ([HIDRemote isCandelairInstallationRequiredForRemoteMode:remoteMode])
@@ -246,6 +290,22 @@
 	[[HIDRemote sharedHIDRemote] setDelegate:nil];
     asl_close(_client);
     [super dealloc];
+}
+
+-(void) windowWillEnterFullScreen:(NSNotification *)aNotification {
+    NSLog(@"will enter fullscreen");
+}
+
+-(void) windowDidEnterFullScreen:(NSNotification *)aNotification {
+    NSLog(@"did enter fullscreen");
+}
+
+-(void) windowWillExitFullScreen:(NSNotification *)aNotification {}
+
+-(void) windowDidExitFullScreen:(NSNotification *)aNotification {}
+
+- (void)windowDidFailToEnterFullScreen:(NSWindow *)window {
+     NSLog(@"failed to enter fullscreen");
 }
 
 

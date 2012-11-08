@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+  		<title>reX</title>
+  		
+  		<!-- mootools -->
+  		<script src="js/mootools/mootools.js"></script>
+  		<script src="js/mootools/mootools.more.js"></script>
+        <script src="js/mootools/mt.class.template.js"></script>
+  		<script src="js/mootools/mt.class.singleton.js"></script>
+        <script src="js/mootools/mt.class.skin.js"></script>
+  		<script src="js/mootools/mt.request.xml2json.js"></script>
+        <script src="js/mootools/mt.class.lazyload.js"></script>
+  		<script src="js/mootools/mt.overwrites.js"></script>
+  		
+  		<!-- reX -->
+  		<script src="js/reX/reX.js"></script>
+        <script src="js/reX/reX.utility.js"></script>
+        <script src="js/reX/reX.mediaplayer.js"></script>
+  		<script src="js/reX/reX.controls.js"></script>
+  		<script src="js/reX/reX.json2html.js"></script>
+  		<script src="js/reX/reX.mediamanager.js"></script>
+        <script src="js/reX/reX.skinmanager.js"></script>
+        <script src="js/reX/reX.preferencemanager.js"></script>
+  		<script src="js/reX/reX.menu.js"></script>
+  		<script src="js/reX/reX.plugin.js"></script>
+  		<script src="js/reX/reX.scrolllist.js"></script>
+        <script src="js/reX/reX.sortfilter.js"></script>
+  		
+  		<!-- JavaScript -->
+  		<script src="js/xml2json.js"></script>
+  		
+  		<!-- Cascading Style Sheets -->
+  		<link rel="stylesheet" href="css/reset.css" type="text/css">
+  	
+	</head>
+	<body>
+        <style>
+            body {
+                color: black;
+                overflow: scroll;
+            }
+            
+            div:focus {
+                color: blue;
+            }
+            
+            #chapters {
+                float: right;
+                width: 50%;
+                -webkit-user-select: text;
+                font-family: "courier";
+                font-size: 11px;
+            }
+            
+            #resultlist {
+                float: left;
+                width: 38%;
+            }
+            
+            #search {
+                width: 100%;
+                height: 30px;
+                background-color: #EEE;
+                padding: 20px 10px;
+            }
+        </style>
+    
+        <script>
+            var result;
+        
+            Request.CHAPTERDB = new Class({
+
+                Extends: Request,
+
+                options: {
+                    headers: {
+                        Accept: 'application/xml, text/xml',
+                        'User-Agent': 'MKV Chapterizer 2.1',
+                        'ApiKey': 'a784c7d08e5fe192ca247d1a2dd5c27f',
+                        'UserName': 'MKV Chapterizer'
+                    }
+                },
+
+                success: function(text, xml){
+                    reX.debug('[SUCCESS] in Request.XML2JSON', REX_DEBUG);
+                    var x2j = new XML.ObjTree();
+                    var json = x2j.parseXML(this.processScripts(text));
+                                    
+                    this.onSuccess(json);
+                },
+                
+                onFailure: function(xhr) {
+                    reX.debug('[FAILURE] in Request.XML2JSON', REX_WARN);
+                },
+                
+                onRequest: function() {
+                    reX.debug('[REQUEST] in Request.XML2JSON', REX_DEBUG);
+                },
+                
+                onTimeout: function() {
+                    reX.debug('[TIMEOUT] in Request.XML2JSON', REX_WARN);
+                },
+                
+                onComplete: function() {
+                    reX.debug('[COMPLETED] Request.XML2JSON', REX_DEBUG);
+                }
+
+            });
+            
+            function buildResultList(arr) {
+                var elems = [];
+                
+                $('resultlist').set('html', '');
+            
+                arr.each(function(item, index) {
+                    
+                    var tmp = '<div data-index="'+ index +'">'+ item.title +' ('+ item['@xml:lang'] +', '+ item.source.type +')</div>';
+                    elems.push(Elements.from(tmp, false));
+                    
+                });
+                
+                $('resultlist').adopt(elems);
+            }
+            
+            function buildChapterList(arr) {
+                var elems = [];
+            
+                $('chapters').set('html', '');
+            
+                Object.each(arr, function(item, index) {
+                    
+                    var idx = (index < 10 ? '0'+index : ''+index);
+                    
+                    var time = (item['@time'].indexOf('.') != -1 ? item['@time'] : item['@time']+'.000');
+                    time = (time.indexOf('.') == -4 ? time : time.substr(0, 12));
+                    var tmp = '<div>CHAPTER'+ idx +'='+ time +'</div>'
+                            + '<div>CHAPTER'+ idx +'NAME='+ (item['@name'] != undefined ? item['@name'] : '') +'</div>';
+                    elems.push(Elements.from(tmp, false));
+                    
+                });
+                
+                $('chapters').adopt(elems);
+            }
+            
+            function search() {
+                var value = $$('form input[type="text"]')[0].getProperty('value');
+                
+                 var requst = new Request.CHAPTERDB({
+                    url: 'http://chapterdb.org/chapters/search?title='+ encodeURIComponent(value) +'&chapterCount=0',
+                    onSuccess: function(json) {
+                        result = json;
+                        //console.log(result);
+                        
+                        buildResultList(result.results.chapterInfo);
+                    }
+                }).send();
+            }
+
+            window.addEvent('domready', function() {
+                $('resultlist').addEvent('click:relay(div)', function(event, target) {
+                    target.focus();
+                    
+                    var index = target.getProperty('data-index');
+
+                    buildChapterList(result.results.chapterInfo[index].chapters.chapter);
+                    
+                });
+                
+                $$('form').addEvent('submit', function(event) {
+                    event.preventDefault();
+                    search();
+                });
+            });
+        </script>
+        
+        
+        <div id="search">
+            <form action="">
+                <input type="text">
+                <input type="submit" value="Search">
+            </form>
+        </div>
+        <div id="resultlist"></div>
+        <div id="chapters"></div>
+    </body>
+</html>

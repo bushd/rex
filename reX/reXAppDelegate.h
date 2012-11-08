@@ -27,6 +27,8 @@
 	NSMenuItem *setSizeToFullscreen;
 	NSWindow *fullscreenWindow;
     
+    NSRect windowFrame;
+    
     HIDRemote *hidRemote;
 }
 
@@ -37,6 +39,7 @@
 - (IBAction)setSizeTo1080p:(id)sender;
 - (IBAction)toggleFullscreen:(id)sender;
 - (IBAction)toggleFloatOnTop:(id)sender;
+- (IBAction)fillscreen:(id)sender;
 - (double) titleBarHeight;
 
 - (void)setupRemote;

@@ -18,8 +18,12 @@
 
 aslclient _client;
 NSBundle *bundle;
-BBSkinManager *skinManager;
+NSUserDefaults *preferences;
 
+BOOL allowResize;
+
+BBSkinManager *skinManager;
 BBRexView *globalRexView;
+NSWindow *globalWindow;
 
 #endif

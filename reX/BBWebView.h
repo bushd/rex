@@ -18,6 +18,7 @@
     VLCMediaList *playlist;
     VLCAudio *audio;
 	NSBundle *resources;
+    NSTrackingArea *trackingArea;
     NSString *resourcePath;
     WebScriptObject *scriptObject;
 	NSWindow *window;
@@ -64,6 +65,7 @@
 - (NSUInteger)getVolume;
 - (BOOL)isPlaying;
 - (int)getProgress;
+- (void)setProgress:(int)p;
 - (NSString *)getSkins;
 - (NSArray *)getSubtitles;
 - (void)setSubtitle:(NSUInteger)index;
@@ -73,6 +75,9 @@
 - (void)setPlayerFramePositionX:(float)x positionY:(float)y width:(float)w height:(float)h;
 - (BOOL)changeDisplaySettingsWithRefreshRate:(int)refresh;
 - (int)getPlaytime;
+- (void)quitApp;
+- (void)savePreferences:(NSString *)prefs;
+- (NSString *)loadPreferences;
 
 
 + (NSString *) webScriptNameForSelector:(SEL)sel;
