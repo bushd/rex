@@ -1,0 +1,55 @@
+.verticalList {
+
+}
+
+.horizontalList {
+	li {
+		display: inline;
+	}
+}
+
+.modal {
+
+	background-color: #000;
+	opacity: 0.3;
+
+	 position: absolute;
+     left: 0px;
+     top: 0px;
+     width:100%;
+     height:100%;
+     text-align:center;
+     z-index: 1000;
+}
+
+.overlayboxwrapper {
+	position: absolute;
+    margin: 0 auto;
+    z-index: 2000;
+    left: 0px;
+     top: 0px;
+    width:100%;
+    height:100%;
+}
+ 
+.overlayboxwrapperCentered {
+	text-align: center !important;
+}
+
+/* The ghost, nudged to maintain perfect centering */
+.overlayboxwrapperCentered:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em; /* Adjusts for spacing */
+}
+
+/* The element to be centered, can
+   also be of any width and height */ 
+.overlayboxCentered {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+

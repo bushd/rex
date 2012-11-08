@@ -1,0 +1,147 @@
+#skin_defaultShow {
+	color: white;
+	font-family: Helvetica;
+}
+
+#skin_defaultShow #metadata {
+	position: absolute;
+    top:0;
+}
+
+#skin_defaultShow nav {
+	margin-top: 15px;
+}
+
+#skin_defaultShow nav .focus {
+	color: orange; /*#2abff9;*/
+	font-weight: bold;
+}
+
+#skin_defaultShow[data-medianame="TheSimpsons"] nav .focus {
+	color: yellow; /*#2abff9;*/
+}
+
+#skin_defaultShow nav li {
+	margin: 0px;
+	text-align: right;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#skin_defaultShow .poster {
+	position: absolute;
+}
+
+#skin_defaultShow .metadata {
+	position:absolute;
+	left:0;
+	bottom:0;
+}
+
+#skin_defaultShow .summary {
+	overflow-y:hidden;
+}
+
+#skin_defaultShow .fanart {
+	position: absolute;
+	left:0;
+	top:0;
+	z-index: -1;
+	background-color: black;
+}
+
+#skin_defaultShow .fanart img {
+	opacity: 0.3;
+}
+	
+#skin_defaultShow .focus {
+		height: 120px;
+	}
+	
+#skin_defaultShow nav li {
+		padding:30px;
+		font-size:45px;
+	}
+	
+#skin_defaultShow .poster {
+		bottom: 60px;
+		left:80px;
+	}
+	
+#skin_defaultShow .poster img {
+		height: 300px;
+        width: 204px;
+		-webkit-box-shadow: 0 0 10px #222;
+	}
+	
+#skin_defaultShow .metadata {
+		width: 620px;
+		margin: 30px;
+	}
+	
+#skin_defaultShow 	.summary {
+		width: 600px;
+        height: 300px;
+		font-size:26px;
+        position: absolute;
+        left: 310px;
+        bottom: 60px;
+        text-align: justify;
+        line-height: 30px;
+	}
+    
+  #skin_defaultShow   li:not(.focus) .year {
+        display: none;
+    }
+    
+  #skin_defaultShow   .year {
+        font-size: 25px;
+        color: white;
+    }
+    
+   #skin_defaultShow  .year:before {
+        content: '(';
+        margin-left:30px;
+    }
+    
+  #skin_defaultShow   .year:after {
+        content: ')';
+    }
+    
+  #skin_defaultShow   .metaGroup {
+        font-size: 25px;
+        color: white;
+    }
+    
+  #skin_defaultShow   .metaGroup .rating {
+        position: absolute;
+        left: 80px;
+        bottom: 450px;
+    }
+    
+  #skin_defaultShow   .metaGroup .releasedAt {
+        position: absolute;
+        left: 80px;
+        bottom: 415px;
+    }
+    
+  #skin_defaultShow   .watched, .unwatched {
+        position: absolute;
+        left: 80px;
+        bottom: 380px;
+    }
+    
+  #skin_defaultShow   .hidden {
+        display: none;
+    }
+	
+ #skin_defaultShow    #metadata,
+#skin_defaultShow 	.fanart,
+#skin_defaultShow 	.fanart img,
+#skin_defaultShow 	#main
+	{
+		width: 1920px;
+		height: 1080px;
+	}
+	

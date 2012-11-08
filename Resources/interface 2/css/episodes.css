@@ -1,0 +1,228 @@
+    body {
+        color: white;
+        font-family: Helvetica;
+    }
+        
+        .listwrap {
+			position: absolute;
+		}
+        
+		nav {
+			margin-top: 15px;
+		}
+        
+		.focus {
+			color: orange; /*#2abff9;*/
+			font-weight: bold;
+		}
+        
+		nav li {
+			float: left;
+			margin: 0px;
+			text-align: right;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		
+		.poster {
+			position: absolute;
+		}
+		
+		.metadata {
+			position:absolute;
+			left:0;
+			bottom:0;
+		}
+		
+		.summary {
+			overflow-y:hidden;
+		}
+		
+		.fanart {
+            position: absolute;
+            left:0;
+            top:0;
+            z-index: -1;
+            background-color: black;
+        }
+
+        .fanart img {
+            opacity: 0.35;
+        }
+		
+		#main {
+			background-color: rgba(60,60,60,0.8);
+			z-index:10;
+		}
+		
+		.band {
+			position:absolute;
+			left:0;
+			background-color: rgba(150,150,150, 0.7);
+		}
+        
+        @media all and (max-height: 1080px) {
+            .listwrap {
+                right: 60px;
+            }
+            
+            nav {
+                height: 750px;
+                width: 780px;
+            }
+            
+            .focus {
+                height: 120px;
+            }
+            
+            nav li {
+                width: 1700px;
+                padding: 30px;
+                font-size: 40px;
+            }
+            
+            .poster {
+                top: 60px;
+                left: 180px;
+            }
+            
+            .poster img {
+                height: 400px;
+                -webkit-box-shadow: 0 0 10px #222;
+            }
+            
+            .metadata {
+                width: 600px;
+                margin: 30px;
+            }
+            
+            .summary {
+                height: 320px;
+                font-size: 30px;
+            }
+            
+            .fanart,
+            .fanart img,
+            #main
+            {
+                width: 1920px;
+                height: 1080px;
+            }
+            
+            .band {
+                top:300px;
+                width: 1920px;
+                height: 150px;
+            }
+        }
+        
+        @media all and (max-height: 720px) {
+            .listwrap {
+                right: 50px;
+            }
+            
+            nav {
+                height: 680px;
+                width: 650px;
+            }
+            
+            .focus {
+                height: 100px;
+            }
+            
+            nav li {
+                width: 1700px;
+                padding:20px;
+                font-size:35px;
+            }
+            
+            .poster {
+                top: 40px;
+                left:150px;
+            }
+            
+            .poster img {
+                height: 350px;
+                -webkit-box-shadow: 0 0 7px #222;
+            }
+            
+            .metadata {
+                width: 550px;
+                margin: 20px;
+            }
+            
+            .summary {
+                height: 280px;
+                font-size:25px;
+            }
+            
+            .fanart,
+            .fanart img,
+            #main,
+            {
+                width: 1280px;
+                height: 720px;
+            }
+            
+            .band {
+                top:250px;
+                width: 1280px;
+                height: 120px;
+            }
+        }
+        
+        @media all and (max-height: 480px) {
+            .listwrap {
+                right: 36px;
+            }
+            
+            nav {
+                height: 510px;
+                width: 498px;
+            }
+            
+            .focus {
+                height: 75px;
+            }
+            
+            nav li {
+                width: 478px;
+                padding:15px;
+                font-size:26px;
+            }
+            
+            .poster {
+                top: 30px;
+                left:112px;
+            }
+            
+            .poster img {
+                height: 263px;
+                -webkit-box-shadow: 0 0 6px #222;
+            }
+            
+            .metadata {
+                width: 413px;
+                margin: 15px;
+            }
+            
+            .summary {
+                height: 210px;
+                font-size:16px;
+            }
+            
+            .fanart,
+            .fanart img,
+            #main
+            {
+                width: 854px;
+                height: 480px;
+            }
+            
+            .band {
+                top:188px;
+                width: 854px;
+                height: 90px;
+            }
+        }

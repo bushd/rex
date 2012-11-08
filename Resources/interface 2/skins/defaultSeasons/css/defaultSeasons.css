@@ -1,0 +1,72 @@
+#skin_defaultSeasons {
+	color: white;
+	font-family: Helvetica;
+}
+
+#skin_defaultSeasons #metadata {
+    position: absolute;
+    top:0;
+}
+
+#skin_defaultSeasons nav {
+	margin-top: 15px;
+}
+
+#skin_defaultSeasons nav .focus {
+	color: orange; /*#2abff9;*/
+	font-weight: bold;
+    text-align:left;
+    font-size:55px;
+    padding-right: 120px;
+    background: -webkit-linear-gradient(top, #ffd6a0 0%,#f99213 60%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#skin_defaultSeasons .poster {
+	position: absolute;
+}
+
+
+#skin_defaultSeasons .fanart {
+	position: absolute;
+	left:0;
+	top:0;
+	z-index: -1;
+	background-color: black;
+}
+
+#skin_defaultSeasons .fanart img {
+	opacity: 0.20;
+}	
+#skin_defaultSeasons 	nav li {
+        padding: 30px 60px 60px 1400px;
+		font-size:45px;
+        margin: 0px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+	}
+	
+#skin_defaultSeasons 	.poster {
+		top: 200px;
+		left:300px;
+        -webkit-perspective: 800;
+	}
+	
+#skin_defaultSeasons 	.poster img {
+		height: 600px;
+		-webkit-box-shadow: 0 0 10px #222;
+        -webkit-transform: rotate3d(0, 1, 0, 25deg);
+	}
+	
+  #skin_defaultSeasons   #metadata,
+#skin_defaultSeasons 	.fanart,
+#skin_defaultSeasons 	.fanart img,
+#skin_defaultSeasons 	#main
+	{
+		width: 1920px;
+		height: 1080px;
+	}
+

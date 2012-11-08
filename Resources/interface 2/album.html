@@ -1,0 +1,240 @@
+
+	<script type="text/javascript">
+	
+		var audio;
+		var covers;
+		var build = false;
+        
+        var skin = {}; 
+    var scrolllist, metadata, info;
+    var lazyload;
+    var type; 
+    var sectionInfo;
+    
+    var infoVisible = false;
+    
+    var preProc = {};
+    var postProc = {};
+	
+    reX.state.events = {
+
+        skinready: function() {	
+            // pre process functions
+            if (preProc.skinready) {
+                preProc.skinready.each(function(fn, index) {
+                    reX.debug('calling preProc SkinReady ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        /*
+            metadata = new Template({
+                templateURL: skin.path + skin.templates.metadata, 
+                update: 'metadata'
+            });
+            
+            if (skin.templates.info) {
+                info = new Template({
+                    templateURL: skin.path + skin.templates.info, 
+                    update: 'info'
+                });
+            }*/                            
+                                          
+            var menu = new reX.Menu(
+                Object.merge({
+                    templateURL: skin.path + skin.templates.navigation,
+                    sectionObject: reX.state.section.json,
+                    inject: 'nav#'+type
+                },
+                skin.menu)
+            );
+                            
+            menu.generateElements();
+            menu.build();
+
+            // post process functions
+            if (postProc.skinready) {
+                postProc.skinready.each(function(fn, index) {
+                    reX.debug('calling postProc SkinReady ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        },
+		
+		menuDone: function(event) {	
+            // pre process functions
+            if (preProc.menuDone) {
+                preProc.menuDone.each(function(fn, index) {
+                    reX.debug('calling preProc MenuDone ' + index, REX_DEBUG);
+                    fn(event);
+                });
+            }
+            
+          //  if(!build) {
+        
+                scrolllist = new reX.Scrolllist('nav#'+type, skin.scrolllist);
+                
+                if (reX.state.section.selectionIndex == undefined) { 
+                    reX.state.controls.select(1);
+                }
+                else {
+                    reX.state.controls.select( reX.state.section.selectionIndex );
+                }
+                
+                window.fireEvent('selectionChange', reX.state.controls.getSelection());
+                
+                lazyload = new LazyLoad({
+                    range: 500, 
+                    realSrcAttribute: "data-src", 
+                    useFade: false, 
+                    elements: 'img', 
+                    container: $$('nav#'+type)[0],
+                    mode: "horizontal",
+                });
+                
+				//reX.state.controls.select(4);
+			//	$$('nav  > ul > li[index]').each(function(element, i) {
+				/* if (element.getProperty('index') < 4) {
+				//		element.addClass('lower');
+				//	}
+			//		else if (element.getProperty('index') > 1) {
+			//			element.addClass('upper');
+			//		}
+			//	});*/
+		
+				//$$('nav').setStyle('left', 250);
+				//positionCovers();
+				
+			/*	build = true;
+                $$('nav  > ul > li')[0].addClass('focus');
+			}
+			else {
+				var i = $$('.focus')[0].getProperty('index');
+				reX.state.controls.select((i*10000)+1);
+			}*/
+            
+            // post process functions
+            if (postProc.menuDone) {
+                postProc.menuDone.each(function(fn, index) {
+                    reX.debug('calling postProc MenuDone ' + index, REX_DEBUG);
+                    fn(event);
+                });
+            }
+		},
+		
+		selectionChange: function(item) {
+            // pre process functions
+            if (preProc.selectionChange) {
+                preProc.selectionChange.each(function(fn, index) {
+                    reX.debug('calling preProc SelectionChange ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+            
+            scrolllist.move();
+            
+            // post process functions
+            if (postProc.selectionChange) {
+                postProc.selectionChange.each(function(fn, index) {
+                    reX.debug('calling postProc SelectionChange ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+		},
+		
+		selectionEnter: function(item) {
+			var i = item.getProperty('index');
+			var key = item.getProperty('idx');
+			
+			if(item.getParents('.flipped').length != 0) {
+				mediaManager.getMedia(this.audio[key]['@key'], function(media) {
+					if(media.Part[0] != undefined) {
+						Player.playAudio(media.Part[0]["@file"]);
+					}
+					else { 
+						Player.playAudio(media.Part["@file"]);
+					}
+				}.bind(this));
+			}
+			else if(item.getChildren('.flipped').length == 0) {
+				flip();
+				if($$('.focus .back .innerlist')[0].getChildren().length == 0) {
+					mediaManager.getTracks(reX.state.section.json[key]['@key'] ,function(sec) {
+						this.audio = sec;
+                        var innermenu = new reX.Menu({
+                            template: '<div>'
+								+		'<div>{@index}.</div>'
+								+		'<div>{@title}</div>'
+								+ '</div>',
+                            sectionObject: this.audio,
+                            wrap: false, 
+                            index: ((i*10000)+1), 
+                            inject: '.focus .back .innerlist',
+                            update: '.focus .back .innerlist'
+                        });
+						
+                        $$('.focus').addClass('hasSelectable');
+                        innermenu.generateElements();
+                        innermenu.build();
+					});
+				}
+				else {
+					reX.state.controls.select((i*10000)+1);
+					mediaManager.getTracks(reX.state.section.json[key]['@key'] ,function(sec) {
+						this.audio = sec;
+					});
+				}
+			}
+			else {
+			}
+			
+		},
+		
+		pressedBack: function() {
+			if($$('.flipped').length == 0) {
+				reX.back();
+			}
+			else {
+				flip();
+				reX.state.controls.select(parseInt($$('.focus')[0].getProperty('index'))/10000);
+			}
+		}
+    };
+    
+    window.addEvents(reX.state.events);
+    
+    mediaManager.getGroupedAlbums(reX.state.section.key ,function(sec) {
+                reX.state.section.json = sec;
+                reX.state.section.json.sort(Sort.sortByAfter('@title', '@parentTitle'));
+                type = reX.state.section.json[0]['@type'];
+                
+                
+                skin = skinManager.getCurrentSkinForSection(reX.state.section.key);
+                                
+                new Skin({
+                    templateURL: skin.path + skinManager.getCurrentSkinForSection().templates.skin, //'skins/movie/default/template.default.html',
+                    update: 'skin'
+                });
+  
+                $$('nav')[0].setProperty('id', type);
+                
+                reX.ResourceManager.setCSS( skin.css.split(','), function() {
+                    window.fireEvent('skinready');
+                });
+                /*
+                metadata = new Template({
+                    templateURL: skin.path + skin.templates.metadata, //'skins/movie/default/template.default.html',
+                    update: 'skin'
+                });
+                                
+                var menu = new reX.Menu(
+                    Object.merge({
+                        templateURL: skin.path + skin.templates.navigation, //'skins/movie/default/navigation.default.html',
+                        sectionObject: reX.state.section.json
+                    },
+                    skin.menu)
+                );
+                                
+                menu.generateElements();
+                menu.build();*/
+    }.bind(this));
+</script>

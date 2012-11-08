@@ -1,0 +1,329 @@
+<script type="text/javascript">  
+    var skin = reX.state.section.skin; 
+    var scrolllist, metadata, info;
+    var lazyload;
+    var type; 
+    var sectionInfo;
+    
+    var infoVisible = false;
+    
+    var preProc = {};
+    var postProc = {};
+    
+    reX.debug('entered media', REX_DEBUG);
+
+    reX.state.events = {
+        skinready: function() {	
+            reX.debug('[MEDIA] skinready', REX_DEBUG);
+            
+            // pre process functions
+            if (preProc.skinready) {
+                preProc.skinready.each(function(fn, index) {
+                    reX.debug('[MEDIA] calling preProc SkinReady ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        
+            metadata = new Template({
+                templateURL: skin.path + skin.templates.metadata, 
+                update: 'metadata'
+            });
+            
+            if (skin.templates.info) {
+                info = new Template({
+                    templateURL: skin.path + skin.templates.info, 
+                    update: 'info'
+                });
+            }
+    
+            var menu = new reX.Menu(
+                Object.merge({
+                    templateURL: skin.path + skin.templates.navigation,
+                    sectionObject: reX.state.section.json,
+                    inject: 'nav#'+type
+                },
+                skin.menu)
+            );
+                            
+            menu.generateElements();
+            menu.build();
+
+            // post process functions
+            if (postProc.skinready) {
+                postProc.skinready.each(function(fn, index) {
+                    reX.debug('calling postProc SkinReady ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        },
+        
+        menuDone: function(event) {	
+            reX.debug('[MEDIA] menuDone', REX_DEBUG);
+            
+            // pre process functions
+            if (preProc.menuDone) {
+                preProc.menuDone.each(function(fn, index) {
+                    reX.debug('calling preProc MenuDone ' + index, REX_DEBUG);
+                    fn(event);
+                });
+            }
+        
+           scrolllist = new reX.Scrolllist('nav#'+type, skin.scrolllist);
+            
+            if (reX.state.section.selectionIndex == undefined) { 
+                reX.state.controls.select(1);
+            }
+            else {
+                reX.state.controls.select( reX.state.section.selectionIndex );
+            }
+            
+            window.fireEvent('selectionChange', reX.state.controls.getSelection());
+            
+            lazyload = new LazyLoad({
+                range: 500, 
+                realSrcAttribute: "data-src", 
+                useFade: false, 
+                elements: 'img', 
+                container: $$('nav#'+type)[0],
+                mode: "horizontal",
+            });
+            
+            // post process functions
+            if (postProc.menuDone) {
+                postProc.menuDone.each(function(fn, index) {
+                    reX.debug('calling postProc MenuDone ' + index, REX_DEBUG);
+                    fn(event);
+                });
+            }
+        },
+    
+        selectionChange: function(item) {
+            // pre process functions
+            if (preProc.selectionChange) {
+                preProc.selectionChange.each(function(fn, index) {
+                    reX.debug('calling preProc SelectionChange ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+        
+            var i = item.getProperty('idx');
+            reX.debug('selecting ' + reX.state.section.json[i]['@key'] + ' with type ' + reX.state.section.json[i]['@type'], REX_DEBUG);
+
+            metadata.options.substitute = Object.merge({}, reX.state.section.json[i], reX.state.section.json[i].Media);
+            metadata.parse();
+            
+            scrolllist.move();
+
+            $$('[data-medianame]').setProperty('data-medianame', metadata.options.substitute['@title'].replace(/[^A-Za-z0-9]+/g, ""));
+            
+            // post process functions
+            if (postProc.selectionChange) {
+                postProc.selectionChange.each(function(fn, index) {
+                    reX.debug('calling postProc SelectionChange ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+        },
+        
+        selectionEnter: function(item) {
+            // pre process functions
+            if (preProc.selectionEnter) {
+                preProc.selectionEnter.each(function(fn, index) {
+                    reX.debug('calling preProc SelectionEnter ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+        
+            var i = item.getProperty('idx');
+            reX.debug('entering ' + reX.state.section.json[i]['@title'] + ' with key ' + reX.state.section.json[i]['@key'] + ' and type ' + reX.state.section.json[i]['@type'], REX_DEBUG);
+            switch (reX.state.section.json[i]['@type']) {
+                case 'movie': 
+                    reX.state.section.imdb = mediaManager.getIMDB(reX.state.section.json[i]['@ratingKey']);
+                case 'episode': 
+                    var i = item.getProperty('idx');
+		
+                    mediaManager.getMedia(reX.state.section.json[i]['@key'], function(media) {
+                        this.media = media;
+                        console.log('adding media to player')
+                        if(this.media.Media.Part[0] != undefined) {
+                            Player.playVideo(this.media.Media.Part[0]["@file"], this.media["@key"]);
+                        }
+                        else { 
+                            Player.playVideo(this.media.Media.Part["@file"], this.media["@key"]);
+                        }
+                    });
+                    break;
+                    
+                case 'season': 
+                    reX.state.section.season = reX.state.section.json[i]
+                    reX.load('episode',reX.state.section.json[i]['@key'], 'episode');
+                    break;
+                    
+                case 'show': 
+                    reX.state.section.show = reX.state.section.json[i]
+                    reX.state.section.tvdb = mediaManager.getTVDB(reX.state.section.json[i]['@ratingKey']);
+                    reX.load('season',reX.state.section.json[i]['@key'], 'season');
+                    break;
+            } 
+            
+            // post process functions
+            if (postProc.SelectionEnter) {
+                postProc.SelectionEnter.each(function(fn, index) {
+                    reX.debug('calling postProc SelectionEnter ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+        },
+        
+        pressedBack: function() {
+            // pre process functions
+            if (preProc.pressedBack) {
+                preProc.pressedBack.each(function(fn, index) {
+                    reX.debug('calling preProc PressedBack ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        
+            if (reX.state.section.key != undefined) {
+                    
+                if (reX.state.video == true) {
+                    reX.state.video = false;
+                    Player.stop();
+                }
+                reX.back();
+            }
+            
+            // post process functions
+            if (postProc.pressedBack) {
+                postProc.pressedBack.each(function(fn, index) {
+                    reX.debug('calling postProc PressedBack ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        },
+            
+        wPressed: function(item) {
+            // pre process functions
+            if (preProc.wPressed) {
+                preProc.wPressed.each(function(fn, index) {
+                    reX.debug('calling preProc wPressed ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+        
+            i = item.getProperty('idx');
+            mediaManager.toggleWatched(reX.state.section.json[i]['@key'], function(state){ 
+                if (state === 'watched') {
+                    reX.state.section.json[i]['@viewCount'] = '1';
+                }
+                else {
+                    reX.state.section.json[i]['@viewCount'] = '0';
+                }
+                
+                window.fireEvent('selectionChange', item);
+            });
+            
+            // pre process functions
+            if (postProc.wPressed) {
+                postProc.wPressed.each(function(fn, index) {
+                    reX.debug('calling postProc wPressed ' + index, REX_DEBUG);
+                    fn(item);
+                });
+            }
+        },
+        
+        infoKeyPressed: function() {
+            // pre process functions
+            if (preProc.infoKeyPressed) {
+                preProc.infoKeyPressed.each(function(fn, index) {
+                    reX.debug('calling preProc InfoKeyPressed ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        
+            if ($('info')) {
+                if (!infoVisible) {
+                    i = reX.state.controls.getSelectedItem().getProperty('idx');
+                    
+                    info.options.substitute = Object.merge({}, reX.state.section.json[i], reX.state.section.json[i].Media, reX.state.section.json[i].Media.Part);
+                    
+                    info.parse();
+                    
+                    $('info').fade('in');
+                    infoVisible = true;
+                }
+                else {
+                    $('info').fade('out');
+                    infoVisible = false;
+               } 
+           }
+           
+           // pre process functions
+            if (postProc.infoKeyPressed) {
+                postProc.infoKeyPressed.each(function(fn, index) {
+                    reX.debug('calling postProc InfoKeyPressed ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        },
+        
+        selectionLeave: function() {
+            // pre process functions
+            if (preProc.selectionLeave) {
+                preProc.selectionLeave.each(function(fn, index) {
+                    reX.debug('calling preProc SelectionLeave ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+            
+            if ($('info')) {
+                $('info').fade('hide');
+                infoVisible = false;
+            }
+            
+            // pre process functions
+            if (postProc.selectionLeave) {
+                postProc.selectionLeave.each(function(fn, index) {
+                    reX.debug('calling postProc SelectionLeave ' + index, REX_DEBUG);
+                    fn();
+                });
+            }
+        }
+    };
+
+    window.addEvents(reX.state.events);
+    
+            console.log(reX.state.section.type);
+
+    mediaManager.getByType(reX.state.section.type, reX.state.section.key ,function(sec) {
+        reX.state.section.json = sec;
+        type = reX.state.section.json[0]['@type'];
+    
+        if (reX.state.section.json.length == 1 && type != 'episode') {
+            reX.load('episode',reX.state.section.json[0]['@key'], 'episode');
+            return;
+        }
+        
+        //sectionInfo = mediaManager.getSectionInformations(reX.state.section.key);
+        
+        if (reX.state.section.type == undefined) {
+            type = 'media';
+        }
+        else {
+            type = reX.state.section.type;
+        }
+        
+        new Skin({
+            templateURL: skin.path + skin.templates.skin, 
+            update: 'skin'//,
+           // substitute: {'@sectionArt': sectionInfo['art']}
+        });
+            
+        $$('nav')[0].setProperty('id', type);
+                
+        resourceManager.setCSS( skin.css.split(','), function() {
+            window.fireEvent('skinready');
+        });
+    });
+
+</script>

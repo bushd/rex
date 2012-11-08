@@ -1,0 +1,20 @@
+{
+    name: 'Default Seasons',
+    version: '0.1',
+    authors: 'Bastian Brodbeck',
+    path: 'skins/defaultSeasons/',
+    type: 'movie,show,episode',
+    templates: {
+        skin: 'template.defaultSeasons.html',
+        navigation: 'navigation.defaultSeasons.html',
+        metadata: 'metadata.defaultSeasons.html'
+    },
+    javascript: '', // comma seperated list
+    css: 'skins/defaultSeasons/css/defaultSeasons.css', // comma seperated list
+    scrolllist: {
+        offset: 1
+    },
+    menu: {
+        vertical: true
+    }
+}

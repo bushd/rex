@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+  		<title>reX</title>
+  		
+  		<!-- bootsrap javascript -->
+      <script type="text/javascript" src="js/bootstrapJavaScript.js"></script>
+
+  		<!-- Cascading Style Sheets -->
+  		<link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/style.css" type="text/css">
+  	
+	</head>
+	<body>
+		<header id="titlebar">
+            <div id="reX_windowtitle">reX</div> 
+			<div id="reX_windowcontrols" class="reX_active">
+                <div id="reX_closebutton">&nbsp;</div>
+                <div id="reX_minimizebutton">&nbsp;</div>
+                <div id="reX_maximizebutton">&nbsp;</div>
+            </div>
+            <div id="reX_fullscreen"><span id="reX_fullscreenbutton"></div>
+		</header>
+		
+        <section id="skin">
+            <!-- skins / sections load here -->
+        </section>
+        
+        <aside>
+            <section id="widgets">
+                <!-- widgets go here -->
+            </section>
+        </aside>
+        
+        <section id="secondary">
+        </section>
+		
+		<footer>
+			<!-- footer goes here -->
+		</footer>
+        
+        <script type="text/javascript">
+            var resourceManager = new reX.ResourceManager();
+            var preferenceManager = new reX.PreferenceManager();
+            var mediaManager = new reX.MediaManager();
+            var skinManager = new reX.SkinManager();
+            var Player = new reX.MediaPlayer();
+        
+            window.addEvent('domready', function() {
+                $('reX_closebutton').addEvent('click', function() {
+                        js2objcBridge.quitApp();
+                        console.log('quitting');
+                });
+                
+                $('reX_minimizebutton').addEvent('click', function() {});
+            
+                $('reX_maximizebutton').addEvent('click', function() {});
+            
+				        reX.state.controls = new reX.Controls();
+                reX.load('home');
+            }.bind(this)); 
+            
+            window.addEvent('selectionChange', function(item) {
+                if (!reX.state.video) {
+                    var i = item.getProperty('index');
+                    reX.state.section.selectionIndex  = i;
+                }
+            }.bind(this));
+            
+            var titlebarVisible = true;
+            function showTitlebar() {
+                $('titlebar').fade('show');
+                titlebarVisible = true;
+
+            }
+            
+            function hideTitlebar() {
+                if (titlebarVisible) {
+                    $('titlebar').fade('hide');
+                    titlebarVisible = false;
+                }
+            }
+            
+            window.addEvent('mousemove', function(){
+                if (!titlebarVisible) {
+                    $('titlebar').fade('show');
+                    titlebarVisible = true;
+                }
+            });
+            
+        </script>
+	</body>
+<html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>reX</title>
+        
+        <!-- mootools -->
+        <script src="js/bootstrapJavaScript.js"></script>
+        
+        <!-- Cascading Style Sheets -->
+        <link rel="stylesheet" href="css/reset.css" type="text/css">
+    
+    </head>
+    <body>
+        <header>
+            <!-- header goes here -->
+        </header>
+        
+        <section id="outer">
+            <nav>
+                <!-- scrollable lists go here: homemenu, medialists, etc. -->
+            </nav>
+            
+            <section id="inner">
+                <!-- skins / sections load here -->
+
+        <div class="foo">ich bin ein roter text, hoffentlich</div>
+            </section>
+            
+            <aside>
+                <section id="widgets">
+                    <!-- widgets go here -->
+                </section>
+            </aside>
+        </section>
+        
+        <footer>
+            <!-- footer goes here -->
+        </footer>
+        
+        <script type="text/javascript">
+            // initialize basic Managers
+            var resourceManager = new reX.ResourceManager();
+            var mediaManager = new reX.MediaManager();
+
+            var user = new reX.User();
+
+            resourceManager.setLessCSS(['less/baseCSS.less', 'test.less']);
+
+            reX.state.controls = new reX.Controls();
+
+
+            data = {
+                    template: '{title}', 
+                    type:'horizontal', 
+                    itemTagAttributes: {
+                        'data-functions': 'submenu', 
+                        'data-media-key': '{id}',
+                        'data-type': '{type}'
+                    }
+                };
+
+            console.log(data);
+
+
+            ml = new Loader.Movie.PlexServer();
+
+            ml.get(-1, {'type': 'sections'}, function(json) {
+
+                console.log('sections:');
+                console.log(json);
+
+                json = user.applyRestrictions(json);
+
+                console.log(json);
+
+
+                var list = new Module.List('#outer nav', json, data);
+
+                var scroller = new Module.Scroller('#outer nav > ul', {type: 'horizontal'});
+
+                reX.state.controls.select(1);
+                //console.log(reX.filter(json, 'id', '>', 970));
+
+            } );
+/*
+
+            ml.get('3', {'filter': 'all', 'type': 'movielist'}, function(json) {
+
+                console.log(json);
+
+                console.log(reX.filter(json, 'id', '>', 970));
+
+            } );
+*/
+
+            ml.get('88', {'type': 'movie'}, function(json) {
+
+                console.log('movie:');
+                console.log(json);
+
+                //console.log(reX.filter(json, 'id', '>', 970));
+
+            } );
+/*
+            ml.get('2', {'filter': 'all', 'type': 'show'}, function(json) {
+
+                console.log('show:');
+                console.log(json);
+
+                //console.log(reX.filter(json, 'id', '>', 970));
+
+            } );
+
+            ml.get('423', {'type': 'seasonlist'}, function(json) {
+
+                console.log('seasonlist:');
+                console.log(json);
+
+                //console.log(reX.filter(json, 'id', '>', 970));
+
+            } );
+
+            ml.get('424', {'type': 'season'}, function(json) {
+
+                console.log('season:');
+                console.log(json);
+
+                //console.log(reX.filter(json, 'id', '>', 970));
+
+            } );
+
+            ml.get('425', {'type': 'episode'}, function(json) {
+
+                console.log('episode:');
+                console.log(json);
+
+                //console.log(reX.filter(json, 'id', '>', 970));
+
+            } );
+*/
+          /*  
+            var Player = {
+                getProgress: function() {return 1;},
+            
+                play: function() {//stateChanged('beginPlaying');
+                },
+                
+                stop: function() {stateChanged('finishedPlaying');
+                }
+            };
+        
+            window.addEvent('domready', function() {
+                reX.state.controls = new reX.Controls();
+                //reX.load('video.html', '/library/metadata/7835');
+
+                var homeGroupedData = (new Data.HomeGrouped()).get();
+                console.log(homeGroupedData);
+                console.log(homeGroupedData[0]['attributes']);
+                console.log(JSON.encode(homeGroupedData[0]['attributes']));
+
+                var text = "{#ifthenelse::0::ok::nicht ok} -- {#objectToAttribute::"+JSON.encode(homeGroupedData[0]['attributes'])+"}";
+                
+                obj = {
+                    transcode: function(arg) { // one paramenter
+                        if (!arg) return '';
+                        
+                        if (arg.length >= 3)
+                            return mediaManager.transcodeImage(arg[0], arg[1], arg[2]);
+                        else 
+                            return mediaManager.transcodeImage(arg[0]);
+                    },
+                    
+                    ifthenelse: function(args) { // three parameters
+                        if (args.length < 2) return '';
+                        
+                        var ifArgument = stringToBoolean(args[0]);
+                        var thenArgument = args[1];
+                        
+                        var elseArgument = '';
+                        if (args.length > 2) {
+                            elseArgument = args[2];
+                        }
+                        
+                        return (ifArgument ? thenArgument : elseArgument); 
+                    },
+                    
+                    exists: function(arg) {
+                        return ((arg && arg[0] !== "") ? 'true' : 'false');
+                    },
+                    
+                    notexists: function(arg) {
+                        return ((arg && arg[0] !== "") ? 'false' : 'true');
+                    },
+                    
+                    equals: function(args) { // two parameters
+                        if (args.length < 2) return 'false';
+                   
+                        var firstArgument = args[0];
+                        var secondArgument = args[1];
+                   
+                        return ((firstArgument == secondArgument) ? 'true' : 'false'); 
+                   },
+                   
+                    notequals: function(args) { // two parameters
+                        if (args.length < 2) return 'false';
+                   
+                        var firstArgument = args[0];
+                        var secondArgument = args[1];
+                   
+                        return ((firstArgument != secondArgument) ? 'true' : 'false'); 
+                    },
+                   
+                    not: function(arg) { // one parameter
+                        if (!arg) return 'false';
+                   
+                        return (stringToBoolean(arg[0]) ? 'false' : 'true');
+                    },
+                   
+                    toTime: function(arg) {
+                        if (!arg) return '';
+                        
+                        var time = arg[0];
+                        var seconds = parseInt((time/1000)%60);
+                        var minutes = parseInt((time/(1000*60))%60);
+                        var hours = parseInt((time/(1000*60*60))%24);
+                        
+                        seconds = seconds.toString();
+                        minutes = minutes.toString();
+                        
+                        return hours + ':' + ((minutes.length) < 2 ? '0'+minutes : minutes) + ':' + ((seconds.length) < 2 ? '0'+seconds : seconds);
+                    },
+                   
+                    implode: function(args) { // two parameters
+                        if (args.length < 1) return '';
+                   
+                        var key = args[0];
+                        var delimeter;               
+                   
+                        if (!args[1]) {
+                            delimeter = ', ';
+                        }
+                        else {
+                            delimeter = args[1];
+                        }
+                                            
+                        var result = '';
+                        if (this.options.substitute[key]) {
+                            
+                            if (this.options.substitute[key][0] == undefined) {
+                                result = this.options.substitute[key]['@tag'];
+                            }
+                            else {
+                                this.options.substitute[key].each(function(item, index) {
+                                    result += item['@tag'];
+                                    
+                                    console.log(item['@tag']);
+                                    
+                                    if (index < this.options.substitute[key].length-1) {
+                                        result += delimeter;
+                                    }
+                                });
+                            }
+                        }
+                        
+                        return result;
+                    },
+
+                    objectToAttribute: function(args) { // one argument: object
+                        if (args.length < 1) return '';
+                        var object = JSON.decode(args[0]);
+
+                        var result = '';
+                        Object.each(object, function(item, key) {
+                            result += key + '="' + item + '" ';
+                        });
+
+                        return result;
+
+                    }
+                };
+                
+                //mediaManager.getAlbums('3', function(result){console.log(result);}); 
+                
+
+                console.log(text.substituteFunction(obj));
+                                
+                //console.log('tracks');
+                mediaManager.getAlbumsAndTracks('3', function(r) {
+                console.log(r);
+                    elems = new Array();
+                    r.each(function(a) {
+                        //console.log(a);
+                        a['tracks'].each(function(item, index) {
+                            elems.push( new Element('li', {'data-index': index, html: item['@title']}) );
+                        });
+                    });
+                    
+                    $('list').adopt(elems);
+                
+                }); 
+
+                mediaManager.getSections(function(r) {
+                  console.log(r);
+                }); 
+
+                mediaManager.get(3, 'all', function(r) {
+                  console.log(r);
+                });
+                
+               // mediaManager.getOnDeck(2, function(result){console.log(result);}); 
+            });
+            
+            window.addEvent('pressedBack', function() {
+                console.log('backspace pressed');
+                if (reX.state.section.key != undefined) {
+                    console.log('going back');
+                    
+                    if (reX.state.video == true) {
+                        reX.state.video = false;
+                        Player.stop();
+                    }
+                    //reX.back();
+                }
+            });
+
+            var resourceManager = new reX.ResourceManager();
+*/
+        </script>
+        <style>
+          .focus {
+            color: red;
+          }
+        </style>
+    </body>
+<html>

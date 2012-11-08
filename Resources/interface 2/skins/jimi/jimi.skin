@@ -1,0 +1,22 @@
+{
+    name: 'Jimi',
+    version: '0.1',
+    authors: 'Bastian Brodbeck',
+    path: 'skins/jimi/',
+    type: 'movie',
+    templates: {
+        skin: 'template.jimiMovie.html',
+        navigation: 'navigation.jimiMovie.html',
+        metadata: 'metadata.jimiMovie.html',
+        info: 'info.jimiMovie.html'
+    },
+    javascript: 'skins/jimi/js/jimi.js', // comma seperated list
+    css: 'skins/jimi/css/jimiMovie.css', // comma seperated list
+   scrolllist: {
+        offset: 1,
+        vertical: true
+    },
+    menu: {
+        vertical: true
+    }
+}

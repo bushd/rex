@@ -1,0 +1,14 @@
+<html>
+	<head>
+		<script src="../../js/mootools/mootools.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../js/reX/reX.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/reX.appletrailers.plugin.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+            appletrailers.getJustAdded(function(json) {console.log(json)});
+                        
+            appletrailers.getTrailers('/trailers/universal/battleship/', function(json) {console.log(json)});
+		</script>
+	</body>
+</html>

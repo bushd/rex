@@ -1,0 +1,72 @@
+body {
+	color: white;
+	font-family: Helvetica;
+}
+
+#metadata {
+    position: absolute;
+    top:0;
+}
+
+nav {
+	margin-top: 15px;
+}
+
+nav .focus {
+	color: orange; /*#2abff9;*/
+	font-weight: bold;
+    text-align:left;
+    font-size:55px;
+    padding-right: 120px;
+    background: -webkit-linear-gradient(top, #ffd6a0 0%,#f99213 60%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.poster {
+	position: absolute;
+}
+
+
+.fanart {
+	position: absolute;
+	left:0;
+	top:0;
+	z-index: -1;
+	background-color: black;
+}
+
+.fanart img {
+	opacity: 0.20;
+}	
+	nav li {
+        padding: 30px 60px 60px 1400px;
+		font-size:45px;
+        margin: 0px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+	}
+	
+	.poster {
+		top: 200px;
+		left:300px;
+        -webkit-perspective: 800;
+	}
+	
+	.poster img {
+		height: 600px;
+		-webkit-box-shadow: 0 0 10px #222;
+        -webkit-transform: rotate3d(0, 1, 0, 25deg);
+	}
+	
+    #metadata,
+	.fanart,
+	.fanart img,
+	#main
+	{
+		width: 1920px;
+		height: 1080px;
+	}
+}

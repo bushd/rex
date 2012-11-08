@@ -1,0 +1,75 @@
+    body {
+        color: white;
+        font-family: Helvetica;
+    }
+
+.listwrap {
+			position: absolute;
+		}
+
+		.focus {
+			color: orange;
+		}
+
+		nav li {
+			float: left;
+			margin: 0px;
+			text-align: right;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+        
+         @media all and (max-height: 1080px) {
+            .listwrap {
+                right: 60px;
+            }
+            
+            nav {
+                margin-top: 20px;
+                height: 750px;
+                width: 780px;
+            }
+            
+            nav li {
+                width: 1700px;
+                padding:30px;
+                font-size: 40px;
+            }
+        }
+        
+        @media all and (max-height: 720px) {
+            .listwrap {
+                right: 50px;
+            }
+            
+            nav {
+                margin-top: 15px;
+                height: 680px;
+                width: 650px;
+            }
+            
+            nav li {
+                width: 610px;
+                padding:20px;
+                font-size: 35px;
+            }
+        }
+        
+        @media all and (max-height: 480px) {
+            .listwrap {
+                right: 42px;
+            }
+            
+            nav {
+                margin-top: 7px;
+                height: 510px;
+                width: 488px;
+            }
+            
+            nav li {
+                width: 458px;
+                padding:15px;
+                font-size: 26px;
+            }
+        }

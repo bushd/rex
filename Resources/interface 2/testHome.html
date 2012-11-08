@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+  		<title>reX</title>
+  		
+  		<script src="js/bootstrapavaScript.js"></script>
+  		
+  		<!-- Cascading Style Sheets -->
+  		<link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/home.css" type="text/css">
+  	
+	</head>
+	<body>
+        <style>
+        
+        body {
+	font-family: Helvetica;
+	color: #FFFFFF;
+}
+
+a, a:hover, a:visited, a:link, a:active {
+	font-variant: normal;
+	text-decoration: none;
+	font-weight: normal;
+	font-style: normal;
+} 
+
+li {
+	list-style-type: none;
+}
+
+.homemenu li > span {
+  background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 50%,rgba(181,198,208,1) 51%,rgba(224,239,249,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.homemenu li.focus > span{
+  background: -webkit-linear-gradient(top, #ffd6a0 15%,#f99213 70%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+li div {
+	font-weight: bold;
+	color: #48B1F8;
+	font-size: 30px;
+	overflow-x: hidden;
+	display: inline;
+	white-space: nowrap
+}
+
+nav {
+	margin-top:342px;
+	height: 50px;
+	font-size: 30px;
+	/*border-top: 3px solid white;
+	border-bottom: 3px solid white;
+	/*background: rgba(0,0,0,0.8);*/
+    background-image: url('../images/defaultdesktop.png');
+	-webkit-box-shadow: inset 0 0 30px #000;
+}
+
+.focus {
+	color: orange;
+}
+
+section#group, nav {
+    overflow-x: hidden;
+    width: 100000px;
+}
+
+nav li,
+section#group li {
+	display: inline-block;
+	min-width: 150px;
+	padding: 10px;
+	padding-right: 50px;
+	margin:0px;
+	text-align: center;
+    /*text-shadow: 0px 0px 20px #000;*/
+}
+
+li.preview img {
+	height: 200px;
+}
+
+li.preview {
+	float: left;
+	margin: 5px;
+}
+
+#metadata {
+	position: relative;
+}
+
+.reX_recently {
+	position: absolute;
+	top:0;
+	left:0;
+}
+
+.fanart {
+	position: absolute;
+	left:0;
+	top:0;
+	z-index: -1;
+	background: url('../images/background.jpg');
+}
+
+#main {
+	background-color: rgba(60,60,60,0.2);
+	z-index:10;
+}	
+	nav {
+		margin-top:0px;
+		height: 42px;
+		font-size: 18px;
+	}
+	
+	nav li {
+		min-width: 80px;
+		padding-right: 42px;
+	}
+	
+	.preview img {
+		height: 150px;
+        margin-right: 20px;
+	}
+    
+    .blub {
+        display: none;
+        overflow: hidden;
+        width: 800px;
+        height: 150px;
+        -webkit-mask-image: -webkit-gradient(linear, left top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    }
+    
+    .blub .preview.focus img {
+		border:  2px solid;
+        border-color: orange;
+	}
+    
+    section#group {
+        color: black;
+    }
+	
+        
+        </style>
+    
+		<header>
+			<!-- header goes here -->
+		</header
+		
+		<section id="outer">
+			<nav class="homemenu hasSelectable" down="1">
+                <ul>
+                    <li left="m5" right="m2" index="m1" data-type="group" data-media="movie"><span class="hasSelectable"><b>Movies</b></span></li>
+                    <li left="m1" right="m3" index="m2" data-type="group" data-media="show"><span class="hasSelectable"><b>Shows</b></span></li>
+                    <li left="m2" right="m4" index="m3" data-type="group" data-media="artist"><span class="hasSelectable"><b>Music</b></span></li>
+                    <li left="m3" right="m5" index="m4" data-type="group"><span class="hasSelectable"><b>Pictures</b></span></li>
+                    <li left="m4" right="m1" index="m5" data-type="settings"><span class=""><b>Settings</b></span></li>
+                </ul>
+            </nav>
+			
+			<section id="group" class="hasSelectable">
+			</section>
+            
+            <section id="preview" class="hasSelectable">
+                <aside class="rightPreview">
+                </aside>
+                
+                <aside class="leftPreview">
+                </aside>
+			</section>
+			
+			<aside>
+				<section id="widgets">
+					<!-- widgets go here -->
+				</section>
+			</aside>
+		</section>
+		
+		<footer>
+			<!-- footer goes here -->
+		</footer>
+        
+        <script type="text/javascript">
+            var mediaManager = new reX.MediaManager();
+            
+            var Player = {
+                getProgress: function() {return 1;},
+            
+                play: function() {//stateChanged('beginPlaying');
+                },
+                
+                stop: function() {stateChanged('finishedPlaying');
+                }
+            };
+        
+            window.addEvent('domready', function() {
+				reX.state.controls = new reX.Controls();
+                reX.state.controls.select('m1');
+            } );
+            
+            window.addEvent('selectionChange', function(item) {	
+				var i = item.getProperty('index');
+                rex.debug('[SELECT] index ' + i, REX_INFO);
+                
+                if(item.getProperty('data-type') == 'group' && item.getProperty('data-media')) {
+                    $('group').empty();
+                    mediaManager.getSectionsByType(item.getProperty('data-media'), function(medialist) {
+                        var menu = new reX.Menu({
+                            template: '{@title}',
+                            sectionObject: medialist,
+                            inject: '#group',
+                            noBuildEvent: true,
+                            vertical: false
+                        });
+                           
+                        $('group').setProperty('up', item.getProperty('index'));
+                                                                  
+                        menu.generateElements();
+                        menu.build();
+                    });
+                }
+                else if (item.getProperty('data-type') == 'preview' && item.getProperty('data-section')) {    
+                    item.show();
+                    if(item.getChildren('div')[0].getChildren().length == 0) {
+                        
+                        var key = item.getProperty('data-key');
+                        if (item.getProperty('data-key') == 'recentlyAddedNotViewed') {
+                            key = 'recentlyAdded';
+                        }
+                    
+                        mediaManager.get( item.getProperty('data-section'), key, function(list) {
+                                                            console.log(list);
+
+                            if (item.getProperty('data-key') == 'recentlyAddedNotViewed') { 
+                                list = list.filter(Filter.notViewed); 
+                                console.log(list);
+                            }
+                        
+                            var outer = new Element('div.abs').inject( item.getChildren('div')[0]);
+        
+                            var listSize = list.length;
+                            list.each(function(el, index) {
+                                var inner = new Element('div', {
+                                    'class': 'preview',
+                                    'index': item.getProperty('data-section') + '_' + item.getProperty('data-key') + '_' + index,
+                                     'left': item.getProperty('data-section') + '_' + item.getProperty('data-key') + '_' + (index <= 0 ? (listSize-1) : (index-1)),
+                                     'right': item.getProperty('data-section') + '_' + item.getProperty('data-key') + '_' + (index >= (listSize-1) ? 0 : (index+1)),
+                                     'idx': index
+                                }).inject(outer);
+                                
+                                (new Element('img', 
+                                    {src: 'http://localhost:32400{@thumb}'.substitute(el)
+                                })).inject(inner);
+                            });
+                            
+                            
+                            reX.state.controls.select(item.getProperty('data-section') + '_' + item.getProperty('data-key') + '_0');
+                        });
+                    }
+                    else {
+                        reX.state.controls.select(item.getProperty('data-section') + '_' + item.getProperty('data-key') + '_0');
+                    }
+                }
+	
+            });
+            
+            window.addEvent('leaveElement', function(item) {
+                console.log('leaving');
+                $$('.blub').hide();
+            });
+        </script>
+	</body>
+<html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+  		<title>reX</title>
+  		
+  		<!-- mootools -->
+  		<script src="js/mootools/mootools.js"></script>
+  		<script src="js/mootools/mootools.more.js"></script>
+        <script src="js/mootools/mt.class.template.js"></script>
+  		<script src="js/mootools/mt.class.singleton.js"></script>
+        <script src="js/mootools/mt.class.skin.js"></script>
+  		<script src="js/mootools/mt.request.xml2json.js"></script>
+  		<script src="js/mootools/mt.overwrites.js"></script>
+
+  		
+  		<!-- reX -->
+  		<script src="js/reX/reX.js"></script>
+
+<script src="js/mootools/mt.class.messagecenter.js"></script>
+      <script src="js/mootools/mt.class.publisher.js"></script>
+
+        <script src="js/reX/reX.utility.js"></script>
+  		<script src="js/reX/reX.controls.v2.js"></script>
+  		<script src="js/reX/reX.json2html.js"></script>
+  		<script src="js/reX/reX.mediamanager.js"></script>
+        <script src="js/reX/reX.skinmanager.js"></script>
+        <script src="js/reX/reX.preferencemanager.js"></script>
+  		<script src="js/reX/reX.menu.js"></script>
+  		<script src="js/reX/reX.plugin.js"></script>
+  		<script src="js/reX/reX.scrolllist.js"></script>
+        <script src="js/reX/reX.sortfilter.js"></script>
+
+  		
+  		<!-- JavaScript -->
+  		<script src="js/xml2json.js"></script>
+  		
+  		<!-- Cascading Style Sheets -->
+  		<link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/home.css" type="text/css">
+  	
+	</head>
+	<body>
+        <style>
+        
+        body {
+	font-family: Helvetica;
+	color: #FFFFFF;
+}
+
+a, a:hover, a:visited, a:link, a:active {
+	font-variant: normal;
+	text-decoration: none;
+	font-weight: normal;
+	font-style: normal;
+} 
+
+li {
+	list-style-type: none;
+}
+
+.homemenu {
+  background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 50%,rgba(181,198,208,1) 51%,rgba(224,239,249,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.focus .homemenu {
+  background: -webkit-linear-gradient(top, #ffd6a0 15%,#f99213 70%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+li div {
+	font-weight: bold;
+	color: #48B1F8;
+	font-size: 30px;
+	overflow-x: hidden;
+	display: inline;
+	white-space: nowrap
+}
+
+nav {
+	margin-top:342px;
+	height: 50px;
+	font-size: 30px;
+	/*border-top: 3px solid white;
+	border-bottom: 3px solid white;
+	/*background: rgba(0,0,0,0.8);*/
+    background-image: url('../images/defaultdesktop.png');
+	-webkit-box-shadow: inset 0 0 30px #000;
+}
+
+.focus {
+	color: orange;
+}
+
+nav li {
+	float: left;
+	min-width: 150px;
+	padding: 10px;
+	padding-right: 50px;
+	margin:0px;
+	text-align: center;
+    /*text-shadow: 0px 0px 20px #000;*/
+}
+
+li.preview img {
+	height: 200px;
+}
+
+li.preview {
+	float: left;
+	margin: 5px;
+}
+
+#metadata {
+	position: relative;
+}
+
+.reX_recently {
+	position: absolute;
+	top:0;
+	left:0;
+}
+
+.fanart {
+	position: absolute;
+	left:0;
+	top:0;
+	z-index: -1;
+	background: url('../images/background.jpg');
+}
+
+#main {
+	background-color: rgba(60,60,60,0.2);
+	z-index:10;
+}	
+	nav {
+		margin-top:0px;
+		height: 42px;
+		font-size: 18px;
+	}
+	
+	nav li {
+		min-width: 80px;
+		padding-right: 42px;
+	}
+	
+	.preview img {
+		height: 150px;
+        margin-right: 20px;
+	}
+    
+    .blub {
+        display: none;
+        overflow: hidden;
+        width: 800px;
+        height: 150px;
+        -webkit-mask-image: -webkit-gradient(linear, left top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    }
+    
+    .blub .preview.focus img {
+		border:  2px solid;
+        border-color: orange;
+	}
+	
+        
+        </style>
+    
+		<header>
+			<!-- header goes here -->
+		</header
+		
+		<section id="outer">
+			<nav>
+                <ul>
+                    <li left="7" right="2" index="1" idx="0" data-type="section"><span class="homemenu"><b>Deutsch</b></span></li>
+                    <li left="1" right="3" index="2" idx="1" data-type="section"><span class="homemenu"><b>Extras</b></span></li>
+                    <li left="2" right="4" index="3" idx="2" data-type="section"><span class="homemenu"><b>Movies</b></span></li>
+                    <li left="3" right="5" index="4" idx="3" data-type="section"><span class="homemenu"><b>Music</b></span></li>
+                    <li left="4" right="6" index="5" idx="4" data-type="section"><span class="homemenu"><b>Seasonal</b></span></li>
+                    <li left="5" right="7" index="6" idx="5" data-type="section"><span class="homemenu"><b>Shorts</b></span></li>
+                    <li left="6" right="1" index="7" down="a1" idx="6" data-type="section"><span class="homemenu"><b>TV Shows</b></span></li>
+                </ul>
+            </nav>
+			
+			<section id="skin">
+                <div>
+                    <ul>
+                        <li class="hasSelectable blub" up="7" down="a2" right="2_onDeck_0" index="a1" idx="0" data-type="section" data-section="2" data-key="onDeck"><span class="homemenu"><b>on Deck</b></span><div></div></li>
+                        <li class="hasSelectable blub" up="a1" down="a3" right="2_recentlyAddedNotViewed_0" index="a2" idx="1" data-type="section" data-section="2" data-key="recentlyAddedNotViewed"><span class="homemenu"><b>recently Added not yet viewed</b></span><div></div></li>
+                        <li class="hasSelectable blub" up="a2" down="a4" right="2_recentlyAdded_0" index="a3" idx="2" data-type="section" data-section="2" data-key="recentlyAdded"><span class="homemenu"><b>recently Added</b></span><div></div></li>
+                        <li class="hasSelectable blub" up="a3" down="7" right="2_recentlyViewedShows_0" index="a4" idx="3" data-type="section" data-section="2" data-key="recentlyViewedShows"><span class="homemenu"><b>recently Viewed Shows</b></span><div></div></li>
+                    </ul>
+                </div>
+			</section>
+			
+			<aside>
+				<section id="widgets">
+					<!-- widgets go here -->
+				</section>
+			</aside>
+		</section>
+		
+		<footer>
+			<!-- footer goes here -->
+		</footer>
+        
+        <script type="text/javascript">
+            var mediaManager = new reX.MediaManager();
+            
+            var Player = {
+                getProgress: function() {return 1;},
+            
+                play: function() {//stateChanged('beginPlaying');
+                },
+                
+                stop: function() {stateChanged('finishedPlaying');
+                }
+            };
+        
+            window.addEvent('domready', function() {
+				reX.state.controls = new reX.Controls();
+                reX.state.controls.select(1);
+            } );
+            
+            window.addEvent('selectionChange', function(item) {	
+				var i = item.getProperty('idx');
+                rex.debug('[SELECT] index ' + i, REX_INFO);
+                
+                if (item.getProperty('data-section')) {    
+                    item.show();
+                    if(item.getChildren('div')[0].getChildren().length == 0) {
+                        
+                        var key = item.getProperty('data-key');
+                        if (item.getProperty('data-key') == 'recentlyAddedNotViewed') {
+                            key = 'recentlyAdded';
+                        }
+                    
+                        mediaManager.get( item.getProperty('data-section'), key, function(list) {
+                                                            console.log(list);
+
+                            if (item.getProperty('data-key') == 'recentlyAddedNotViewed') { 
+                                list = list.filter(Filter.notViewed); 
+                                console.log(list);
+                            }
+                        
+                            var outer = new Element('div.abs').inject( item.getChildren('div')[0]);
+        
+                            var listSize = list.length;
+                            list.each(function(el, index) {
+                                var inner = new Element('div', {
+                                    'class': 'preview',
+                                    'index': item.getProperty('data-section') + '_' + item.getProperty('data-key') + '_' + index,
+                                     'left': item.getProperty('data-section') + '_' + item.getProperty('data-key') + '_' + (index <= 0 ? (listSize-1) : (index-1)),
+                                     'right': item.getProperty('data-section') + '_' + item.getProperty('data-key') + '_' + (index >= (listSize-1) ? 0 : (index+1)),
+                                     'idx': index
+                                }).inject(outer);
+                                
+                                (new Element('img', 
+                                    {src: 'http://localhost:32400{@thumb}'.substitute(el)
+                                })).inject(inner);
+                            });
+                            
+                            
+                            reX.state.controls.select(item.getProperty('data-section') + '_' + item.getProperty('data-key') + '_0');
+                        });
+                    }
+                    else {
+                        reX.state.controls.select(item.getProperty('data-section') + '_' + item.getProperty('data-key') + '_0');
+                    }
+                }
+	
+            });
+            
+            window.addEvent('leaveElement', function(item) {
+                console.log('leaving');
+                $$('.blub').hide();
+            });
+        </script>
+	</body>
+<html>

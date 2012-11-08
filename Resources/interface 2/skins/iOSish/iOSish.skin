@@ -1,0 +1,22 @@
+{
+    name: 'Default Album',
+    version: '0.1',
+    authors: 'Bastian Brodbeck',
+    path: 'skins/defaultAlbum/',
+    type: 'album',
+    templates: {
+        skin: 'template.defaultAlbum.html',
+        navigation: 'navigation.defaultAlbum.html',
+        metadata: 'metadata.defaultAlbum.html'
+    },
+    javascript: '', // comma seperated list
+    css: 'skins/defaultAlbum/css/defaultAlbum.css', // comma seperated list
+    scrolllist: {
+        offset: 0,
+        vertical:false
+    },
+    menu: {
+        vertical:false,
+        wrap: false
+    }
+}

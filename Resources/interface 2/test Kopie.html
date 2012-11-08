@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+  		<title>reX</title>
+  		
+  		<!-- mootools -->
+  		<script src="js/bootstrapJavaScript.js"></script>
+  		
+  		<!-- Cascading Style Sheets -->
+  		<link rel="stylesheet" href="css/reset.css" type="text/css">
+  	
+	</head>
+	<body>
+		<header>
+			<!-- header goes here -->
+		</header>
+		
+		<section id="outer">
+			<nav>
+				<!-- scrollable lists go here: homemenu, medialists, etc. -->
+			</nav>
+			
+			<section id="inner">
+				<!-- skins / sections load here -->
+
+        <div class="foo">ich bin ein roter text, hoffentlich</div>
+			</section>
+			
+			<aside>
+				<section id="widgets" data-func='test2'>
+					<!-- widgets go here -->
+				</section>
+			</aside>
+		</section>
+		
+		<footer>
+			<!-- footer goes here -->
+		</footer>
+        
+        <script type="text/javascript">
+            // initialize basic Managers
+            var resourceManager = new reX.ResourceManager();
+           // var mediaManager = new reX.MediaManager();
+
+            //var user = new reX.User();
+
+            resourceManager.setLessCSS(['less/baseCSS.less', 'test.less']);
+
+            //reX.state.controls = new reX.Controls();
+
+
+            function test() {
+                $('widgets').set('text', 'called');
+                console.log('called');
+            }
+
+            function test2() {
+                $('widgets').set('text', 'called again');
+                console.log('called again');
+            }
+
+            fnName = $('widgets').getProperty('data-func');
+
+            options = {func: test};
+
+            (options.func)();
+            
+            (eval(fnName))();
+
+            overlay = new Overlay();
+
+            overlay.show();
+
+            //overlay.hide();
+
+
+        </script>
+        <style>
+          .focus {
+            color: red;
+          }
+        </style>
+	</body>
+<html>

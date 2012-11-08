@@ -1,0 +1,18 @@
+<script type="text/javascript" src="js/bootstrapJavaScript.js"></script>
+
+<script type="text/javascript" src="js/test/testlistener.js"></script>
+
+<script>
+
+window.addEvent('domready', function() {
+
+	var list = new Module.List();
+
+	list.informListeners('testMsg', {'foo': 'bar'});
+
+	tester = new TestListener();
+
+	list.informListeners('another Message', {'red': 'green'});
+});
+
+</script>

@@ -1,0 +1,167 @@
+body {
+	background-color: #000000;
+}
+
+.animWrap {
+	overflow-x: hidden;
+	width: 1280px;
+	height: 720px;
+}
+
+.animWrap div > div {
+	/* We apply this property to the card so it can smoothly flip between its sides */
+	-webkit-transition-property: -webkit-transform, position, left, right;
+	/* Make the animation occur over a period of 1.0 seconds */
+	-webkit-transition-duration: 0.15s;
+}
+
+.listWrap {
+	-webkit-perspective: 2000;
+}
+
+.plex-list {
+	position:absolute;
+	top: 0;
+	width: 100000px;
+}
+
+.plex-list li {
+	position: relative;
+	top:70px;
+	width: 384px;
+	height: 384px;
+	display: inline-block;
+	/* We apply this property to the card so it can smoothly flip between its sides */
+	-webkit-transition-property: -webkit-transform, position, left, right;
+	/* Make the animation occur over a period of 1.0 seconds */
+	-webkit-transition-duration: 0.2s;
+}
+
+.plex-list li.lower {
+	-webkit-transform: scale(0.7) rotateY(45deg) translate(80px,-40px);
+}
+
+.plex-list li.upper {
+	-webkit-transform: scale(0.7) rotateY(-45deg) translate(-80px,-40px);
+}
+
+.cover {
+	position: absolute;
+	width: 384px;
+	height: 384px;
+
+	/* Ensure that the card lives correctly in 3D space */
+	-webkit-transform-style: preserve-3d;
+
+	/* We apply this property to the card so it can smoothly flip between its sides */
+	-webkit-transition-property: -webkit-transform;
+	/* Make the animation occur over a period of 1.0 seconds */
+	-webkit-transition-duration: 0.3s;
+
+}
+
+.cover.flipped
+{
+
+	/* Rotate the card 180 degrees along the y-axis. This animation allows the card to
+	  toggle between its regular and flipped states. */
+	-webkit-transform: rotateY(180deg) translate(-120px, -60px);
+}
+
+.face
+{
+	position: absolute;
+	top: 0;
+	left:0;
+
+	/* We create the card by stacking two div elements at the exact same location. The back of the card 
+	   is shown when we rotated the card 180 degrees along the y-axis. Setting this property to hidden
+	   ensures that the "back side" is hidden when the card is flipped
+	*/
+	-webkit-backface-visibility: hidden;
+}
+
+.front {
+	width: 400px;
+	height: 600;
+
+	-webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.8, transparent), to(rgba(255,255,255, 0.7))); 
+}
+
+.back 
+{
+	z-index:5;
+	width: 600px;
+	height:650px;
+
+	background-color: black;
+	border: 2px solid white;
+
+	/* Ensure the "back side" is flipped already */
+	-webkit-transform: rotateY(180deg);
+	-webkit-box-reflect: below 0px -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255,255,255, 0.3)), to(rgba(255,255,255, 0.6))); 
+}
+
+.innerheader {
+	display: inline-block;
+	padding: 10px;
+	float: right;
+	height: 108px;
+	width: 452px;
+	color: white;
+	font-size: 30px;
+	font-family: Arial;
+	background:-webkit-gradient(linear, left top, left bottom, from(#47608B), to(#29374F))
+}
+
+.innerheader p.title {
+	font-weight: bold;
+	margin-bottom: 2px;
+}
+
+.innerheader p.interpret {
+	margin-bottom: 2px;
+}
+
+.innerheader p.genre {
+	font-style: italic;
+}
+
+.innerlist {
+	width: 600px;
+	height: 474px;
+	font-size: 25px;
+	font-family: Arial;
+	color: white;
+	overflow: hidden;
+}
+
+.innerlist li {
+	position: relative;
+	top: 0;
+	padding:5px;
+	height: 25px;
+	width: 592px;
+}
+
+.innerlist li div > div {
+	margin-left:10px;
+	float:left;
+}
+
+.innerlist li div > div :first {
+	min-width: 50px;
+	max-width: 50px;
+}
+
+.innerlist li.focus {
+	background:-webkit-gradient(linear, left top, left bottom, from(#47608B), to(#29374F));
+}
+
+.innerlist li:nth-child(even) {
+	background-color: #1A1F25;
+}
+
+.innerlist li:nth-child(odd);{
+	background-color: black;
+}
